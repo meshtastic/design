@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2233 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-2661.02,-4559.14)">
+        <g id="ArtBoard8" transform="matrix(1.74421,0,0,1,2661.02,4559.14)">
+            <rect x="0" y="0" width="1280" height="1024" style="fill:none;"/>
+            <g transform="matrix(1,0,0,1,36.4739,-199.847)">
+                <g transform="matrix(0.973838,0,0,1.69858,-1.56777,-229.112)">
+                    <path d="M81.582,577.266L148.536,478.804" style="fill:none;stroke:black;stroke-width:14.11px;"/>
+                </g>
+                <g transform="matrix(0.961342,0,0,1.67678,882.45,-216.54)">
+                    <path d="M81.582,577.266L148.536,478.804" style="fill:none;stroke:black;stroke-width:14.86px;"/>
+                </g>
+                <g transform="matrix(12.0448,0,0,21.0595,-7445.39,-7644.88)">
+                    <text x="640.988px" y="399.072px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">ESHT</text>
+                </g>
+                <g transform="matrix(0.977299,0,0,1.70462,-43.6432,50.5292)">
+                    <path d="M187.032,410.85L250.896,317.192L314.907,410.702" style="fill:none;stroke:black;stroke-width:13.85px;"/>
+                </g>
+                <g transform="matrix(0.977299,0,0,1.70462,468.182,53.0697)">
+                    <path d="M187.032,410.85L250.896,317.192L314.907,410.702" style="fill:none;stroke:black;stroke-width:13.85px;"/>
+                </g>
+                <g transform="matrix(0.571939,0,0,1,784.482,759.924)">
+                    <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:252.715px;">ST</text>
+                </g>
+                <g transform="matrix(0.571939,0,0,1,1030.51,760.498)">
+                    <text x="0px" y="0px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:252.715px;">C</text>
+                </g>
+            </g>
+            <g transform="matrix(0.309708,0,0,0.540195,-506.609,36.705)">
+                <g transform="matrix(0.997582,0,0,1,6.63073,0)">
+                    <text x="2742.3px" y="1385.89px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:78.572px;">The Meshtastic logo forms incorporated with a typeface</text>
+                </g>
+                <g transform="matrix(0.997582,0,0,1,8.42163,0)">
+                    <text x="3482.97px" y="1467.03px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:78.572px;">(in progress)</text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

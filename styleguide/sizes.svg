@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2233 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-2661.02,-2213.17)">
+        <g id="ArtBoard6" transform="matrix(1.74421,0,0,1,2661.02,2213.17)">
+            <rect x="0" y="0" width="1280" height="1024" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="0" y="0" width="1280" height="1024"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1,0,0,1,17.9685,137.914)">
+                    <g transform="matrix(0.201804,0,0,0.351989,167.289,216.061)">
+                        <path d="M187.032,410.85L250.896,317.192L314.907,410.702" style="fill:none;stroke:black;stroke-width:19.71px;"/>
+                    </g>
+                    <g transform="matrix(0.205009,0,0,0.357578,174.224,154.227)">
+                        <path d="M81.582,577.266L148.698,478.845" style="fill:none;stroke:black;stroke-width:20.08px;"/>
+                    </g>
+                </g>
+                <g transform="matrix(0.308959,0,0,0.540195,-649.565,-1.9967)">
+                    <text x="2742.3px" y="1385.89px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:78.572px;">Small</text>
+                </g>
+                <g transform="matrix(0.308959,0,0,0.540195,-292.846,-1.99679)">
+                    <text x="2742.3px" y="1385.89px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:78.572px;">Standard</text>
+                </g>
+                <g transform="matrix(0.308959,0,0,0.540195,116.864,-1.9967)">
+                    <text x="2742.3px" y="1385.89px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:78.572px;">Large</text>
+                </g>
+                <g transform="matrix(1,0,0,1,17.9685,119.914)">
+                    <g transform="matrix(0.579082,0,0,1.01004,460.975,-39.6867)">
+                        <path d="M187.032,410.85L250.896,317.192L314.907,410.702" style="fill:none;stroke:black;stroke-width:14.75px;"/>
+                    </g>
+                    <g transform="matrix(0.582378,0,0,1.01579,485.019,-211.182)">
+                        <path d="M81.582,577.266L148.698,478.845" style="fill:none;stroke:black;stroke-width:14.67px;"/>
+                    </g>
+                </g>
+                <g transform="matrix(1,0,0,1,17.9685,119.914)">
+                    <g transform="matrix(1.40256,0,0,2.44636,669.626,-634.831)">
+                        <path d="M250.905,326.97L191.589,413.957L182.475,407.742L246.339,314.085C247.365,312.58 249.069,311.678 250.891,311.677C252.713,311.675 254.418,312.573 255.447,314.077L319.459,407.587L310.356,413.818L250.905,326.97Z"/>
+                    </g>
+                    <g transform="matrix(1.39424,0,0,2.43184,733.087,-1033.78)">
+                        <path d="M86.181,580.402L153.296,481.981L144.099,475.709L76.984,574.13L86.181,580.402Z"/>
+                    </g>
+                </g>
+                <g transform="matrix(0.573325,0,0,1,-1516.42,-2306.38)">
+                    <g transform="matrix(0.997582,0,0,1,6.92159,0)">
+                        <text x="2862.59px" y="3120.54px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">(Small <tspan x="2954.27px 2974.28px " y="3120.54px 3120.54px ">Ap</tspan>p Icons, Favicons,</text>
+                    </g>
+                    <g transform="matrix(0.997582,0,0,1,6.988,0)">
+                        <text x="2890.05px" y="3151.52px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">Small On-Device Icons)</text>
+                    </g>
+                </g>
+                <g transform="matrix(0.573325,0,0,1,-1151.9,-2307.4)">
+                    <g transform="matrix(0.997582,0,0,1,6.94631,0)">
+                        <text x="2872.82px" y="3120.54px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">(W<tspan x="2910.58px 2927.26px " y="3120.54px 3120.54px ">eb</tspan>site, Larger <tspan x="3100.7px 3120.71px " y="3120.54px 3120.54px ">Ap</tspan>p Icons,</text>
+                    </g>
+                    <g transform="matrix(0.997582,0,0,1,6.92159,0)">
+                        <text x="2862.59px" y="3151.52px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">Medium On-Device Icons like</text>
+                    </g>
+                    <g transform="matrix(0.997582,0,0,1,7.13872,0)">
+                        <text x="2952.39px" y="3182.5px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">Startup Screen)</text>
+                    </g>
+                </g>
+                <g transform="matrix(0.573325,0,0,1,-750.642,-2309.86)">
+                    <g transform="matrix(0.997582,0,0,1,7.07139,0)">
+                        <text x="2924.54px" y="3120.54px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">(Large Ornaments,</text>
+                    </g>
+                    <g transform="matrix(0.997582,0,0,1,6.92159,0)">
+                        <text x="2862.59px" y="3151.52px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">Overlays, Displays &gt; 30% of</text>
+                    </g>
+                    <g transform="matrix(0.997582,0,0,1,7.18,0)">
+                        <text x="2969.46px" y="3182.5px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:30px;">screen size)</text>
+                    </g>
+                </g>
+                <g transform="matrix(0.573325,0,0,1,-1522.51,-1930.1)">
+                    <path d="M2630.8,2604.21L4977.29,2604.21" style="fill:none;stroke:black;stroke-opacity:0.15;stroke-width:1.5px;stroke-linejoin:bevel;stroke-miterlimit:1.8;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
