@@ -2,7 +2,7 @@
 
 The meshtastic logo is derived from the appearance/aesthetics of physical LoRa modulation. 
 
-![Idea](idea.png)
+![Idea](styleguide/idea.png)
 
 Throughout an ongoing [community-driven design process on the meshtastic forum](https://meshtastic.discourse.group/t/design-guideline-logo/2022/41) it was refined and given additional meaning.
 
@@ -24,15 +24,15 @@ Despite those concerns, most of the people involved could imagine the "LoRa-M" a
 
 ## Margins and spacing
 
-![Margins](margins.png)
+![Margins](styleguide/margins.png)
 
 ## Sizes for different use cases
 
-![Sizes](sizes.png)
+![Sizes](styleguide/sizes.png)
 
 ## The typeface 
 
-![Typeface](typeface.png)
+![Typeface](styleguide/typeface.png)
 
 ## Colors
 
@@ -48,4 +48,4 @@ Secondary/Background/Accent color:
 
 `RGB 103 234 148`
 
-![Colors](colors.png)
+![Colors](styleguide/colors.png)
