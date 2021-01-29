@@ -49,3 +49,8 @@ Secondary/Background/Accent color:
 `RGB 103 234 148`
 
 ![Colors](styleguide/colors.png)
+
+## A note to developers
+
+If you are a developer using these images inside a Meshtastic® application, you can run bin/generate-pngs.sh to regenerate PNGs from the vector files.  This script will be updated as needed to generate appropriate
+'standard' sized/colored images for various platforms.
