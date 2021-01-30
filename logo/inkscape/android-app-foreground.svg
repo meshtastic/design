@@ -7,22 +7,22 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="512"
-   height="512"
-   viewBox="0 0 135.46666 135.46666"
+   width="108"
+   height="108"
+   viewBox="0 0 28.574999 28.574999"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="play-store-icon.svg">
+   sodipodi:docname="android-app-foreground.svg">
   <defs
      id="defs2">
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter188"
-       x="-0.0057465815"
+       x="-0.0057465816"
        width="1.0114932"
-       y="-0.0062768006"
+       y="-0.0062768008"
        height="1.0125536">
       <feGaussianBlur
          inkscape:collect="always"
@@ -37,9 +37,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="-238.57143"
-     inkscape:cy="217.14286"
+     inkscape:zoom="2.8"
+     inkscape:cx="-76.775201"
+     inkscape:cy="93.564961"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      inkscape:document-rotation="0"
@@ -65,7 +65,8 @@
   <g
      inkscape:label="backgroundlayer"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="display:none">
     <rect
        style="fill:#67ea94;fill-opacity:1;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter188)"
        id="rect186"
@@ -73,7 +74,7 @@
        height="116.0555"
        x="4.1115985"
        y="5.0839224"
-       transform="matrix(1.055972,0,0,1.1534033,-3.5377974,-5.0598771)"
+       transform="matrix(0.22285963,0,0,0.24316421,-0.75405188,-1.0589996)"
        sodipodi:insensitive="true" />
   </g>
   <g
@@ -81,36 +82,32 @@
      id="layer2"
      inkscape:label="iconlayer">
     <g
-       style="clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;fill:#2c2d3c;fill-opacity:1"
+       style="clip-rule:evenodd;fill:#2c2d3c;fill-opacity:1;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"
        id="g3378"
-       transform="matrix(1.2310738,0,0,1.2310738,6.180342,33.877823)">
+       transform="matrix(0.16227792,0,0,0.30756978,6.1738776,5.8293948)">
       <g
          transform="matrix(0.802386,0,0,0.460028,-421.748,-122.127)"
          id="g3363"
          style="fill:#2c2d3c;fill-opacity:1">
         <g
-   transform="matrix(0.579082,0,0,1.01004,460.975,-39.6867)"
-   id="g3357"
-   style="fill:#2c2d3c;fill-opacity:1">
-            <path
-   d="m 250.908,330.267 -57.782,84.738 -12.188,-8.311 63.864,-93.657 c 1.372,-2.013 3.651,-3.218 6.087,-3.221 2.437,-0.002 4.717,1.199 6.093,3.21 l 64.012,93.51 -12.173,8.333 z"
-   id="path3355"
-   style="fill:#2c2d3c;fill-opacity:1" />
-
+           transform="matrix(0.579082,0,0,1.01004,460.975,-39.6867)"
+           id="g3357"
+           style="fill:#2c2d3c;fill-opacity:1">
+          <path
+             d="m 250.908,330.267 -57.782,84.738 -12.188,-8.311 63.864,-93.657 c 1.372,-2.013 3.651,-3.218 6.087,-3.221 2.437,-0.002 4.717,1.199 6.093,3.21 l 64.012,93.51 -12.173,8.333 z"
+             id="path3355"
+             style="fill:#2c2d3c;fill-opacity:1" />
         </g>
-
         <g
-   transform="matrix(0.582378,0,0,1.01579,485.019,-211.182)"
-   id="g3361"
-   style="fill:#2c2d3c;fill-opacity:1">
-            <path
-   d="m 87.642,581.398 67.115,-98.421 -12.119,-8.264 -67.115,98.421 z"
-   id="path3359"
-   style="fill:#2c2d3c;fill-opacity:1" />
-
+           transform="matrix(0.582378,0,0,1.01579,485.019,-211.182)"
+           id="g3361"
+           style="fill:#2c2d3c;fill-opacity:1">
+          <path
+             d="m 87.642,581.398 67.115,-98.421 -12.119,-8.264 -67.115,98.421 z"
+             id="path3359"
+             style="fill:#2c2d3c;fill-opacity:1" />
         </g>
-
-    </g>
+      </g>
     </g>
   </g>
 </svg>

@@ -54,3 +54,15 @@ Secondary/Background/Accent color:
 
 If you are a developer using these images inside a Meshtastic® application, you can run bin/generate-pngs.sh to regenerate PNGs from the vector files.  This script will be updated as needed to generate appropriate
 'standard' sized/colored images for various platforms.
+
+## Notes for android developers
+
+#### App launcher icons
+
+The icons should be generated with a separate SVG for foreground and background.  The dimensions of the svg should be 108 pixels square.  The middle logo should be 58 pixels wide and high.
+
+If you need to regenerate android icons follow [this](https://developer.android.com/studio/write/image-asset-studio#create-adaptive) procedure.  It will also generate the play store icons.  You should name the icon ic_launcher2.
+
+#### Action bar icons
+
+To regenerate the action bar icons use the Image Asset tool to import logo/svg/Mesh_Logo_White.svg.  Use 0% padding, HOLO_DARK theme and name the generated asset "app_icon".
