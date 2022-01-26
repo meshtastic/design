@@ -24,15 +24,15 @@ Despite those concerns, most of the people involved could imagine the "LoRa-M" a
 
 ## Margins and spacing
 
-![Margins](styleguide/margins.png)
+![Margins](/styleguide/margins.png)
 
 ## Sizes for different use cases
 
-![Sizes](styleguide/sizes.png)
+![Sizes](/styleguide/sizes.png)
 
 ## The typeface 
 
-![Typeface](styleguide/typeface.png)
+![Typeface](/styleguide/typeface.png)
 
 ## Colors
 
@@ -48,4 +48,4 @@ Secondary/Background/Accent color:
 
 `RGB 103 234 148`
 
-![Colors](styleguide/colors.png)
+![Colors](/styleguide/colors.png)
