@@ -2,7 +2,7 @@
 
 The meshtastic logo is derived from the appearance/aesthetics of physical LoRa modulation. 
 
-![Idea](styleguide/idea.png)
+![Idea](/styleguide/idea.png)
 
 Throughout an ongoing [community-driven design process on the meshtastic forum](https://meshtastic.discourse.group/t/design-guideline-logo/2022/41) it was refined and given additional meaning.
 
