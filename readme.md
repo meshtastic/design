@@ -1,3 +1,5 @@
+[![CLA assistant](https://cla-assistant.io/readme/badge/meshtastic/meshtastic-design)](https://cla-assistant.io/meshtastic/meshtastic-design)
+
 # Meshtastic Styleguide
 
 The meshtastic logo is derived from the appearance/aesthetics of physical LoRa modulation. 
