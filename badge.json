@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "style": "for-the-badge",
+  "label": "",
+  "message": "Powered",
+  "color": "#67EA94",
+  "logoSvg": "https://raw.githubusercontent.com/meshtastic/design/master/logo/svg/Mesh_Logo_White.svg",
+}
