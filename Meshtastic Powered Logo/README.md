@@ -7,4 +7,8 @@ Indicate your project is powered by Meshtastic with this icon! There are 2 versi
 
 
 ![M-PWRD](https://user-images.githubusercontent.com/101295892/235377678-a547c929-840f-41dd-91aa-8780101b71e5.png)
+# Font Info
+The font used is Ubuntu Medium in Regular, you can find the font in the link below:
 
+https://design.ubuntu.com/font
+Ubuntu Font License: https://ubuntu.com/legal/font-licence
