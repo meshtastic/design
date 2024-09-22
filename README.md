@@ -4,6 +4,12 @@
 [![Fiscal Contributors](https://opencollective.com/meshtastic/tiers/badge.svg?label=Fiscal%20Contributors&color=deeppink)](https://opencollective.com/meshtastic/)
 [![Vercel](https://img.shields.io/static/v1?label=Powered%20by&message=Vercel&style=flat&logo=vercel&color=000000)](https://vercel.com?utm_source=meshtastic&utm_campaign=oss)
 
+## Logo Usage
+
+Please note that the use of the Meshtastic® logo is subject to restrictions as defined in our licensing and trademark guidelines. For more details, refer to:
+
+- [Licensing and Trademark Guidelines](https://meshtastic.org/docs/legal/licensing-and-trademark/)
+
 ## Overview
 
 The meshtastic logo is derived from the appearance/aesthetics of physical LoRa modulation.
