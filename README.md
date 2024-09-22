@@ -6,9 +6,7 @@
 
 ## Logo Usage
 
-Please note that the use of the Meshtastic® logo is subject to restrictions as defined in our licensing and trademark guidelines. For more details, refer to:
-
-- [Licensing and Trademark Guidelines](https://meshtastic.org/docs/legal/licensing-and-trademark/)
+Please note that the use of the Meshtastic® logo is subject to restrictions as defined in our licensing and trademark guidelines. For more details, refer to our [Licensing and Trademark Guidelines](https://meshtastic.org/docs/legal/licensing-and-trademark/).
 
 ## Overview
 
