@@ -5,9 +5,9 @@ Example:<br>
 
         Mini version:
 
-        / Λ
-       / / \
-      P W R D
+                / Λ
+               / / \
+              P W R D
 
                                    .-:.                    .....                                    
                                   :#@@%+.                .=@@@@#.                                   
