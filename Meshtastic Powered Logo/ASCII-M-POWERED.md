@@ -4,6 +4,7 @@ Example:<br>
 ![example image](../logo/ascii/example.png)
 
 Mini version:
+
         / Λ
        / / \
       P W R D
