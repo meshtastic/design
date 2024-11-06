@@ -4,10 +4,12 @@ Example (with added POWERED):<br>
 ![example image](example.png)
 
 
-Mini version:
-  / Λ
- / / \
+    Mini version:
 
+            / Λ
+           / / \
+          P W R D
+          
                                    .-:.                    .....                                    
                                   :#@@%+.                .=@@@@#.                                   
                                 .-%@@@@@@=              .*@@@@@@@-                                  
