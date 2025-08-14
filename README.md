@@ -72,9 +72,9 @@ If you are a developer using these images inside a Meshtastic® application, you
 
 #### App launcher icons
 
-The icons should be generated with a separate SVG for foreground and background. The dimensions of the svg should be 108 pixels square. The middle logo should be 58 pixels wide and high.
+The app launcher icon consists of a foreground and a background drawable. The forground drawable (`@drawable/ic_launcher_foreground`) should be generated from an SVG. The SVG should be 108 pixels square, with a center logo not exceeding 58 pixels square. The background is currently a solid color defined by `@color/ic_launcher_background`. For more information on adaptive icons, see Android's [official documentation](https://developer.android.com/develop/ui/views/launch/icon_design_adaptive).
 
-If you need to regenerate android icons follow [this](https://developer.android.com/studio/write/image-asset-studio#create-adaptive) procedure. It will also generate the play store icons. You should name the icon ic_launcher2.
+The SVG can be imported and converted to an Android vector drawable using Android Studio's `Vector Asset` tool. If you also need to regenerate Play Store assets, follow [this](https://developer.android.com/studio/write/image-asset-studio#create-adaptive) procedure. Just make sure to follow the existing app launcher icon implementation. Generated `.png` or `.webp` files are only needed for the Play Store, so please do not include them for the app launcher icon.
 
 #### Action bar icons
 
