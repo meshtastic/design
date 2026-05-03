@@ -124,7 +124,7 @@ Use these for status indicators, alerts, and feedback.
 
 ---
 
-### Agent Implementation Checklist (v1.2)
+### Agent Implementation Checklist (v1.0)
 - [ ] Are **Circular IDs** used only for the *other* party in chat views?
 - [ ] Are **List Rows** neutral (no colored backgrounds for the whole row)?
 - [ ] Does the UI strictly follow **Light OR Dark** mode without mixing?
