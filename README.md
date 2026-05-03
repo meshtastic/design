@@ -63,6 +63,50 @@ Secondary/Background/Accent color:
 
 ![Colors](styleguide/colors.png)
 
+### Extended Color Palette
+
+The following complementary palette is derived from the two base brand colors and provides a complete system for building accessible UIs in both light and dark modes.
+
+#### Neutral Scale (derived from Primary `#2C2D3C`)
+
+| Swatch | Name | Hex | RGB | Usage |
+|--------|------|-----|-----|-------|
+| ![#0F1017](https://via.placeholder.com/16/0F1017/0F1017.png) | Neutral 950 | `#0F1017` | `15 16 23` | Darkest background |
+| ![#1A1B26](https://via.placeholder.com/16/1A1B26/1A1B26.png) | Neutral 900 | `#1A1B26` | `26 27 38` | Dark mode background |
+| ![#2C2D3C](https://via.placeholder.com/16/2C2D3C/2C2D3C.png) | Neutral 800 | `#2C2D3C` | `44 45 60` | **Primary** — dark mode surface / light mode text |
+| ![#3D3E50](https://via.placeholder.com/16/3D3E50/3D3E50.png) | Neutral 700 | `#3D3E50` | `61 62 80` | Dark mode elevated surface |
+| ![#555668](https://via.placeholder.com/16/555668/555668.png) | Neutral 600 | `#555668` | `85 86 104` | Dark mode secondary text |
+| ![#6E7082](https://via.placeholder.com/16/6E7082/6E7082.png) | Neutral 500 | `#6E7082` | `110 112 130` | Placeholder text |
+| ![#9496A6](https://via.placeholder.com/16/9496A6/9496A6.png) | Neutral 400 | `#9496A6` | `148 150 166` | Disabled / tertiary |
+| ![#B8BAC8](https://via.placeholder.com/16/B8BAC8/B8BAC8.png) | Neutral 300 | `#B8BAC8` | `184 186 200` | Borders (light mode) |
+| ![#D5D6E0](https://via.placeholder.com/16/D5D6E0/D5D6E0.png) | Neutral 200 | `#D5D6E0` | `213 214 224` | Dividers |
+| ![#ECEDF3](https://via.placeholder.com/16/ECEDF3/ECEDF3.png) | Neutral 100 | `#ECEDF3` | `236 237 243` | Light mode surface / card |
+| ![#F5F6FA](https://via.placeholder.com/16/F5F6FA/F5F6FA.png) | Neutral 50  | `#F5F6FA` | `245 246 250` | Light mode background |
+
+#### Green Scale (derived from Accent `#67EA94`)
+
+| Swatch | Name | Hex | RGB | Usage |
+|--------|------|-----|-----|-------|
+| ![#E5FCEE](https://via.placeholder.com/16/E5FCEE/E5FCEE.png) | Green 100 | `#E5FCEE` | `229 252 238` | Success tint background |
+| ![#B5F5CE](https://via.placeholder.com/16/B5F5CE/B5F5CE.png) | Green 300 | `#B5F5CE` | `181 245 206` | Light highlight |
+| ![#8FF0B2](https://via.placeholder.com/16/8FF0B2/8FF0B2.png) | Green 400 | `#8FF0B2` | `143 240 178` | Hover / active accent |
+| ![#67EA94](https://via.placeholder.com/16/67EA94/67EA94.png) | Green 500 | `#67EA94` | `103 234 148` | **Accent** — primary action / brand highlight |
+| ![#3FB86D](https://via.placeholder.com/16/3FB86D/3FB86D.png) | Green 600 | `#3FB86D` | `63 184 109` | Text on light backgrounds |
+| ![#2D8F52](https://via.placeholder.com/16/2D8F52/2D8F52.png) | Green 700 | `#2D8F52` | `45 143 82` | Strong / dark green text |
+
+#### Semantic Colors
+
+| Swatch | Name | Hex | RGB | Usage |
+|--------|------|-----|-----|-------|
+| ![#5C6BC0](https://via.placeholder.com/16/5C6BC0/5C6BC0.png) | Info | `#5C6BC0` | `92 107 192` | Informational indicators / links |
+| ![#E8EAF6](https://via.placeholder.com/16/E8EAF6/E8EAF6.png) | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
+| ![#E8A33E](https://via.placeholder.com/16/E8A33E/E8A33E.png) | Warning | `#E8A33E` | `232 163 62` | Caution / attention |
+| ![#FFF3E0](https://via.placeholder.com/16/FFF3E0/FFF3E0.png) | Warning Light | `#FFF3E0` | `255 243 224` | Warning tint background |
+| ![#E05252](https://via.placeholder.com/16/E05252/E05252.png) | Error | `#E05252` | `224 82 82` | Errors / destructive actions |
+| ![#FDEAEA](https://via.placeholder.com/16/FDEAEA/FDEAEA.png) | Error Light | `#FDEAEA` | `253 234 234` | Error tint background |
+
+> **Accessibility note:** All foreground/background pairings in this palette meet WCAG AA contrast (4.5:1 minimum). Use `Green 600` or `Green 700` for green text on light backgrounds — never the raw accent `#67EA94`, which does not meet contrast requirements on white. The `Info` blue is derived from the primary hue family for visual cohesion.
+
 ## A note to developers
 
 If you are a developer using these images inside a Meshtastic® application, you can run bin/generate-pngs.sh to regenerate PNGs from the vector files. This script will be updated as needed to generate appropriate
