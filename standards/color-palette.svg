@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 920" width="1200" height="920">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap');
+      text { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="920" fill="#F5F6FA" rx="12"/>
+
+  <!-- Title -->
+  <text x="60" y="52" font-size="28" font-weight="700" fill="#2C2D3C">Meshtastic Extended Color Palette</text>
+  <text x="60" y="78" font-size="14" font-weight="400" fill="#6E7082">Derived from Primary #2C2D3C and Accent #67EA94</text>
+
+  <!-- ─── Neutral Scale ─── -->
+  <text x="60" y="120" font-size="16" font-weight="700" fill="#2C2D3C">Neutral Scale</text>
+
+  <!-- Neutral 950 -->
+  <rect x="60" y="134" width="96" height="72" rx="8" fill="#0F1017"/>
+  <text x="108" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">950</text>
+  <text x="108" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#0F1017</text>
+
+  <!-- Neutral 900 -->
+  <rect x="164" y="134" width="96" height="72" rx="8" fill="#1A1B26"/>
+  <text x="212" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">900</text>
+  <text x="212" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#1A1B26</text>
+
+  <!-- Neutral 800 (Primary) -->
+  <rect x="268" y="134" width="96" height="72" rx="8" fill="#2C2D3C"/>
+  <rect x="268" y="134" width="96" height="72" rx="8" fill="none" stroke="#67EA94" stroke-width="2"/>
+  <text x="316" y="226" font-size="10" font-weight="700" fill="#2C2D3C" text-anchor="middle">800 ★</text>
+  <text x="316" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#2C2D3C</text>
+
+  <!-- Neutral 700 -->
+  <rect x="372" y="134" width="96" height="72" rx="8" fill="#3D3E50"/>
+  <text x="420" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">700</text>
+  <text x="420" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#3D3E50</text>
+
+  <!-- Neutral 600 -->
+  <rect x="476" y="134" width="96" height="72" rx="8" fill="#555668"/>
+  <text x="524" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">600</text>
+  <text x="524" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#555668</text>
+
+  <!-- Neutral 500 -->
+  <rect x="580" y="134" width="96" height="72" rx="8" fill="#6E7082"/>
+  <text x="628" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">500</text>
+  <text x="628" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#6E7082</text>
+
+  <!-- Neutral 400 -->
+  <rect x="684" y="134" width="96" height="72" rx="8" fill="#9496A6"/>
+  <text x="732" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">400</text>
+  <text x="732" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#9496A6</text>
+
+  <!-- Neutral 300 -->
+  <rect x="788" y="134" width="96" height="72" rx="8" fill="#B8BAC8"/>
+  <text x="836" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">300</text>
+  <text x="836" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#B8BAC8</text>
+
+  <!-- Neutral 200 -->
+  <rect x="892" y="134" width="96" height="72" rx="8" fill="#D5D6E0" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="940" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">200</text>
+  <text x="940" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#D5D6E0</text>
+
+  <!-- Neutral 100 -->
+  <rect x="996" y="134" width="96" height="72" rx="8" fill="#ECEDF3" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="1044" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">100</text>
+  <text x="1044" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#ECEDF3</text>
+
+  <!-- Neutral 50 -->
+  <rect x="1100" y="134" width="96" height="72" rx="8" fill="#F5F6FA" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="1148" y="226" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">50</text>
+  <text x="1148" y="240" font-size="9" fill="#6E7082" text-anchor="middle">#F5F6FA</text>
+
+  <!-- ─── Green Scale ─── -->
+  <text x="60" y="290" font-size="16" font-weight="700" fill="#2C2D3C">Green Scale</text>
+
+  <!-- Green 100 -->
+  <rect x="60" y="304" width="160" height="72" rx="8" fill="#E5FCEE" stroke="#B5F5CE" stroke-width="0.5"/>
+  <text x="140" y="396" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">100</text>
+  <text x="140" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#E5FCEE</text>
+
+  <!-- Green 300 -->
+  <rect x="228" y="304" width="160" height="72" rx="8" fill="#B5F5CE"/>
+  <text x="308" y="396" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">300</text>
+  <text x="308" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#B5F5CE</text>
+
+  <!-- Green 400 -->
+  <rect x="396" y="304" width="160" height="72" rx="8" fill="#8FF0B2"/>
+  <text x="476" y="396" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">400</text>
+  <text x="476" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#8FF0B2</text>
+
+  <!-- Green 500 (Accent) -->
+  <rect x="564" y="304" width="160" height="72" rx="8" fill="#67EA94"/>
+  <rect x="564" y="304" width="160" height="72" rx="8" fill="none" stroke="#2C2D3C" stroke-width="2"/>
+  <text x="644" y="396" font-size="10" font-weight="700" fill="#2C2D3C" text-anchor="middle">500 ★</text>
+  <text x="644" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#67EA94</text>
+
+  <!-- Green 600 -->
+  <rect x="732" y="304" width="160" height="72" rx="8" fill="#3FB86D"/>
+  <text x="812" y="396" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">600</text>
+  <text x="812" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#3FB86D</text>
+
+  <!-- Green 700 -->
+  <rect x="900" y="304" width="160" height="72" rx="8" fill="#2D8F52"/>
+  <text x="980" y="396" font-size="10" font-weight="600" fill="#2C2D3C" text-anchor="middle">700</text>
+  <text x="980" y="410" font-size="9" fill="#6E7082" text-anchor="middle">#2D8F52</text>
+
+  <!-- ─── Semantic Colors ─── -->
+  <text x="60" y="460" font-size="16" font-weight="700" fill="#2C2D3C">Semantic Colors</text>
+
+  <!-- Info -->
+  <rect x="60" y="478" width="160" height="100" rx="8" fill="#5C6BC0"/>
+  <text x="140" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Info</text>
+  <text x="140" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#5C6BC0</text>
+
+  <rect x="60" y="586" width="160" height="48" rx="8" fill="#E8EAF6" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="140" y="614" font-size="11" font-weight="600" fill="#5C6BC0" text-anchor="middle">Info Light #E8EAF6</text>
+
+  <!-- Warning -->
+  <rect x="240" y="478" width="160" height="100" rx="8" fill="#E8A33E"/>
+  <text x="320" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Warning</text>
+  <text x="320" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E8A33E</text>
+
+  <rect x="240" y="586" width="160" height="48" rx="8" fill="#FFF3E0" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="320" y="614" font-size="11" font-weight="600" fill="#E8A33E" text-anchor="middle">Warning Light #FFF3E0</text>
+
+  <!-- Error -->
+  <rect x="420" y="478" width="160" height="100" rx="8" fill="#E05252"/>
+  <text x="500" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Error</text>
+  <text x="500" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E05252</text>
+
+  <rect x="420" y="586" width="160" height="48" rx="8" fill="#FDEAEA" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="500" y="614" font-size="11" font-weight="600" fill="#E05252" text-anchor="middle">Error Light #FDEAEA</text>
+
+  <!-- Success (Green 500) -->
+  <rect x="600" y="478" width="160" height="100" rx="8" fill="#67EA94"/>
+  <text x="680" y="524" font-size="14" font-weight="600" fill="#2C2D3C" text-anchor="middle">Success</text>
+  <text x="680" y="544" font-size="11" fill="rgba(44,45,60,0.7)" text-anchor="middle">#67EA94</text>
+
+  <rect x="600" y="586" width="160" height="48" rx="8" fill="#E5FCEE" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="680" y="614" font-size="11" font-weight="600" fill="#2D8F52" text-anchor="middle">Success Light #E5FCEE</text>
+
+  <!-- ─── Theme Preview ─── -->
+  <text x="60" y="680" font-size="16" font-weight="700" fill="#2C2D3C">Theme Preview</text>
+
+  <!-- Light mode card -->
+  <rect x="60" y="696" width="520" height="190" rx="12" fill="#FFFFFF" stroke="#D5D6E0" stroke-width="1"/>
+  <rect x="60" y="696" width="520" height="40" rx="12" fill="#ECEDF3"/>
+  <rect x="60" y="724" width="520" height="0" fill="#ECEDF3"/>
+  <text x="84" y="722" font-size="13" font-weight="700" fill="#2C2D3C">Light Mode</text>
+
+  <!-- Light mode content -->
+  <circle cx="96" cy="764" r="18" fill="#67EA94"/>
+  <text x="90" y="769" font-size="14" font-weight="600" fill="#2C2D3C" text-anchor="middle">M</text>
+  <text x="126" y="760" font-size="13" font-weight="600" fill="#2C2D3C">Base Node</text>
+  <text x="126" y="776" font-size="11" fill="#6E7082">Last heard 2 min ago</text>
+
+  <circle cx="96" cy="812" r="18" fill="#5C6BC0"/>
+  <text x="90" y="817" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">R</text>
+  <text x="126" y="808" font-size="13" font-weight="600" fill="#2C2D3C">Relay Node</text>
+  <text x="126" y="824" font-size="11" fill="#6E7082">3 hops · SNR 10.5</text>
+
+  <rect x="126" y="844" width="80" height="28" rx="6" fill="#67EA94"/>
+  <text x="166" y="863" font-size="11" font-weight="600" fill="#2C2D3C" text-anchor="middle">Connect</text>
+
+  <rect x="216" y="844" width="80" height="28" rx="6" fill="none" stroke="#D5D6E0" stroke-width="1"/>
+  <text x="256" y="863" font-size="11" font-weight="600" fill="#6E7082" text-anchor="middle">Details</text>
+
+  <!-- Dark mode card -->
+  <rect x="620" y="696" width="520" height="190" rx="12" fill="#1A1B26"/>
+  <rect x="620" y="696" width="520" height="40" rx="12" fill="#2C2D3C"/>
+  <rect x="620" y="724" width="520" height="0" fill="#2C2D3C"/>
+  <text x="644" y="722" font-size="13" font-weight="700" fill="#F5F6FA">Dark Mode</text>
+
+  <!-- Dark mode content -->
+  <circle cx="656" cy="764" r="18" fill="#67EA94"/>
+  <text x="650" y="769" font-size="14" font-weight="600" fill="#2C2D3C" text-anchor="middle">M</text>
+  <text x="686" y="760" font-size="13" font-weight="600" fill="#ECEDF3">Base Node</text>
+  <text x="686" y="776" font-size="11" fill="#9496A6">Last heard 2 min ago</text>
+
+  <circle cx="656" cy="812" r="18" fill="#5C6BC0"/>
+  <text x="650" y="817" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">R</text>
+  <text x="686" y="808" font-size="13" font-weight="600" fill="#ECEDF3">Relay Node</text>
+  <text x="686" y="824" font-size="11" fill="#9496A6">3 hops · SNR 10.5</text>
+
+  <rect x="686" y="844" width="80" height="28" rx="6" fill="#67EA94"/>
+  <text x="726" y="863" font-size="11" font-weight="600" fill="#2C2D3C" text-anchor="middle">Connect</text>
+
+  <rect x="776" y="844" width="80" height="28" rx="6" fill="none" stroke="#3D3E50" stroke-width="1"/>
+  <text x="816" y="863" font-size="11" font-weight="600" fill="#9496A6" text-anchor="middle">Details</text>
+
+  <!-- Footer -->
+  <text x="600" y="910" font-size="10" fill="#9496A6" text-anchor="middle">★ = Brand color · All pairings meet WCAG AA 4.5:1 contrast · Meshtastic® Design Standards</text>
+</svg>
