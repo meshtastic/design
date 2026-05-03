@@ -56,7 +56,7 @@ Clients must provide full, uncompromising support for both Light and Dark themes
 
 ## 7. Color Palette
 
-All Meshtastic clients must use the official brand color palette defined below. The palette is derived from the two brand colors — **Primary `#3D3E50`** and **Accent `#67EA94`** — and provides a complete system for building accessible UIs in both light and dark modes.
+All Meshtastic clients must use the official brand color palette defined below. The palette is derived from the two brand colors — **Primary `#3D3E50`** and **Secondary `#67EA94`** — and provides a complete system for building accessible UIs in both light and dark modes.
 
 A visual reference is available at [color-palette.svg](color-palette.svg).
 
@@ -65,7 +65,7 @@ A visual reference is available at [color-palette.svg](color-palette.svg).
 | Role | Hex | RGB |
 |------|-----|-----|
 | **Primary** (Foreground) | `#3D3E50` | `61 62 80` |
-| **Accent** (Secondary/Highlight) | `#67EA94` | `103 234 148` |
+| **Secondary** (Brand Green) | `#67EA94` | `103 234 148` |
 
 ### 7.2 Neutral Scale (★ Brand Primary)
 
@@ -94,7 +94,7 @@ Use these for interactive elements, highlights, and success states.
 | Green 100 | `#E5FCEE` | `229 252 238` | Success tint background |
 | Green 300 | `#B5F5CE` | `181 245 206` | Light highlight |
 | Green 400 | `#8FF0B2` | `143 240 178` | Hover / active accent |
-| Green 500 | `#67EA94` | `103 234 148` | **Brand accent** — primary action buttons, brand highlight |
+| Green 500 | `#67EA94` | `103 234 148` | **Brand secondary** — primary action buttons, brand highlight |
 | Green 600 | `#3FB86D` | `63 184 109` | Green text on light backgrounds |
 | Green 700 | `#2D8F52` | `45 143 82` | Strong / dark green text |
 
@@ -125,7 +125,7 @@ These are the application-level color roles used across all Meshtastic clients.
 
 ### 7.6 Color Usage Rules
 
-* **Accent on white:** Never use the raw accent `#67EA94` for text on white or light backgrounds — it does not meet WCAG AA contrast. Use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
+* **Green on white:** Never use `#67EA94` (Brand Secondary) for text on white or light backgrounds — it does not meet WCAG AA contrast. Use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
 * **Semantic consistency:** Use Info/Warning/Error/Success colors consistently across all views. Do not repurpose semantic colors for decorative use.
 * **Node colors:** Individual node-computed colors are separate from this palette. They may use any hue but must still meet the 4.5:1 contrast ratio against their background.
 * **Dark mode mapping:** Swap light-mode backgrounds for their dark-mode counterparts from the neutral scale. Do not simply invert colors.
@@ -141,7 +141,7 @@ These are the application-level color roles used across all Meshtastic clients.
 - [ ] Do interactive elements meet the **44x44px** hit target?
 - [ ] Is the body text at least **16px** by default?
 - [ ] Are all UI colors drawn from the **official palette** (Sections 7.2–7.4)?
-- [ ] Is accent green **never used as text** on light backgrounds?
+- [ ] Is `#67EA94` (Brand Secondary) **never used as text** on light backgrounds?
 - [ ] Do all foreground/background pairings meet **WCAG AA 4.5:1** contrast?
 - [ ] Are **semantic colors** (Info, Warning, Error, Success) used consistently and not repurposed?
 - [ ] Is **Success** using `Green 600` (`#3FB86D`) — not `Green 500` (`#67EA94`)?
