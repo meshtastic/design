@@ -56,7 +56,7 @@ Clients must provide full, uncompromising support for both Light and Dark themes
 
 ## 7. Color Palette
 
-All Meshtastic clients must use the official brand color palette defined below. The palette is derived from the two brand colors — **Primary `#2C2D3C`** and **Accent `#67EA94`** — and provides a complete system for building accessible UIs in both light and dark modes.
+All Meshtastic clients must use the official brand color palette defined below. The palette is derived from the two brand colors — **Primary `#3D3E50`** and **Accent `#67EA94`** — and provides a complete system for building accessible UIs in both light and dark modes.
 
 A visual reference is available at [color-palette.svg](color-palette.svg).
 
@@ -64,10 +64,10 @@ A visual reference is available at [color-palette.svg](color-palette.svg).
 
 | Role | Hex | RGB |
 |------|-----|-----|
-| **Primary** (Foreground) | `#2C2D3C` | `44 45 60` |
+| **Primary** (Foreground) | `#3D3E50` | `61 62 80` |
 | **Accent** (Secondary/Highlight) | `#67EA94` | `103 234 148` |
 
-### 7.2 Neutral Scale (derived from Primary)
+### 7.2 Neutral Scale (★ Brand Primary)
 
 Use these for backgrounds, surfaces, text, borders, and dividers.
 
@@ -75,8 +75,8 @@ Use these for backgrounds, surfaces, text, borders, and dividers.
 |------|-----|-----|------------------|-----------------|
 | Neutral 950 | `#0F1017` | `15 16 23` | — | Darkest background (OLED) |
 | Neutral 900 | `#1A1B26` | `26 27 38` | — | Default background |
-| Neutral 800 | `#2C2D3C` | `44 45 60` | Primary text | Surface / elevated card |
-| Neutral 700 | `#3D3E50` | `61 62 80` | — | Elevated surface |
+| Neutral 800 | `#2C2D3C` | `44 45 60` | — | Surface / elevated card |
+| Neutral 700 | `#3D3E50` | `61 62 80` | Primary text | Elevated surface |
 | Neutral 600 | `#555668` | `85 86 104` | — | Secondary text |
 | Neutral 500 | `#6E7082` | `110 112 130` | Placeholder text | Placeholder text |
 | Neutral 400 | `#9496A6` | `148 150 166` | Disabled / tertiary text | Disabled / tertiary text |
@@ -85,7 +85,7 @@ Use these for backgrounds, surfaces, text, borders, and dividers.
 | Neutral 100 | `#ECEDF3` | `236 237 243` | Surface / card | — |
 | Neutral 50 | `#F5F6FA` | `245 246 250` | Default background | — |
 
-### 7.3 Green Scale (derived from Accent)
+### 7.3 Green Scale (★ Brand Secondary)
 
 Use these for interactive elements, highlights, and success states.
 
@@ -104,8 +104,6 @@ Use these for status indicators, alerts, and feedback.
 
 | Name | Hex | RGB | Usage |
 |------|-----|-----|-------|
-| Accent | `#3949AB` | `57 73 171` | Darker info blue for active/pressed states, text on light backgrounds |
-| Accent Light | `#E0E3F8` | `224 227 248` | Accent tint background |
 | Info | `#5C6BC0` | `92 107 192` | Informational indicators, links |
 | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
 | Warning | `#E8A33E` | `232 163 62` | Caution / attention states |
@@ -115,7 +113,17 @@ Use these for status indicators, alerts, and feedback.
 | Success | `#3FB86D` | `63 184 109` | Success states, confirmations (Green 600) |
 | Success Light | `#E5FCEE` | `229 252 238` | Success tint background |
 
-### 7.5 Color Usage Rules
+### 7.5 Theme Colors
+
+These are the application-level color roles used across all Meshtastic clients.
+
+| Role | Hex | RGB | Source | Usage |
+|------|-----|-----|--------|-------|
+| **Primary** | `#2D8F52` | `45 143 82` | Green 700 | Main brand color, primary UI elements, navigation highlights |
+| **Secondary** | `#B8BAC8` | `184 186 200` | Neutral 300 | Secondary UI elements, borders, subtle backgrounds |
+| **Accent** | `#2855A8` | `40 85 168` | Cobalt | Interactive highlights, focused states, links on light backgrounds |
+
+### 7.6 Color Usage Rules
 
 * **Accent on white:** Never use the raw accent `#67EA94` for text on white or light backgrounds — it does not meet WCAG AA contrast. Use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
 * **Semantic consistency:** Use Info/Warning/Error/Success colors consistently across all views. Do not repurpose semantic colors for decorative use.
