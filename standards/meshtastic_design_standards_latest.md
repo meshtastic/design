@@ -1,4 +1,4 @@
-# Meshtastic Client Design Standards (v1.1)
+# Meshtastic Client Design Standards (v1.0)
 
 **Status:** Implementation Guide  
 **Primary Audience:** Client Developers & UI Agents  
@@ -104,23 +104,27 @@ Use these for status indicators, alerts, and feedback.
 
 | Name | Hex | RGB | Usage |
 |------|-----|-----|-------|
+| Accent | `#3949AB` | `57 73 171` | Darker info blue for active/pressed states, text on light backgrounds |
+| Accent Light | `#E0E3F8` | `224 227 248` | Accent tint background |
 | Info | `#5C6BC0` | `92 107 192` | Informational indicators, links |
 | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
 | Warning | `#E8A33E` | `232 163 62` | Caution / attention states |
 | Warning Light | `#FFF3E0` | `255 243 224` | Warning tint background |
 | Error | `#E05252` | `224 82 82` | Errors, destructive actions |
 | Error Light | `#FDEAEA` | `253 234 234` | Error tint background |
+| Success | `#3FB86D` | `63 184 109` | Success states, confirmations (Green 600) |
+| Success Light | `#E5FCEE` | `229 252 238` | Success tint background |
 
 ### 7.5 Color Usage Rules
 
 * **Accent on white:** Never use the raw accent `#67EA94` for text on white or light backgrounds — it does not meet WCAG AA contrast. Use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
-* **Semantic consistency:** Use Info/Warning/Error colors consistently across all views. Do not repurpose semantic colors for decorative use.
+* **Semantic consistency:** Use Info/Warning/Error/Success colors consistently across all views. Do not repurpose semantic colors for decorative use.
 * **Node colors:** Individual node-computed colors are separate from this palette. They may use any hue but must still meet the 4.5:1 contrast ratio against their background.
 * **Dark mode mapping:** Swap light-mode backgrounds for their dark-mode counterparts from the neutral scale. Do not simply invert colors.
 
 ---
 
-### Agent Implementation Checklist (v1.1)
+### Agent Implementation Checklist (v1.2)
 - [ ] Are **Circular IDs** used only for the *other* party in chat views?
 - [ ] Are **List Rows** neutral (no colored backgrounds for the whole row)?
 - [ ] Does the UI strictly follow **Light OR Dark** mode without mixing?
@@ -131,4 +135,5 @@ Use these for status indicators, alerts, and feedback.
 - [ ] Are all UI colors drawn from the **official palette** (Sections 7.2–7.4)?
 - [ ] Is accent green **never used as text** on light backgrounds?
 - [ ] Do all foreground/background pairings meet **WCAG AA 4.5:1** contrast?
-- [ ] Are **semantic colors** (Info, Warning, Error) used consistently and not repurposed?
+- [ ] Are **semantic colors** (Info, Warning, Error, Success) used consistently and not repurposed?
+- [ ] Is **Success** using `Green 600` (`#3FB86D`) — not `Green 500` (`#67EA94`)?

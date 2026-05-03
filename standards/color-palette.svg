@@ -109,37 +109,45 @@
   <!-- ─── Semantic Colors ─── -->
   <text x="60" y="460" font-size="16" font-weight="700" fill="#2C2D3C">Semantic Colors</text>
 
-  <!-- Info -->
-  <rect x="60" y="478" width="160" height="100" rx="8" fill="#5C6BC0"/>
-  <text x="140" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Info</text>
-  <text x="140" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#5C6BC0</text>
+  <!-- Accent -->
+  <rect x="60" y="478" width="160" height="100" rx="8" fill="#3949AB"/>
+  <text x="140" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Accent</text>
+  <text x="140" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#3949AB</text>
 
-  <rect x="60" y="586" width="160" height="48" rx="8" fill="#E8EAF6" stroke="#B8BAC8" stroke-width="0.5"/>
-  <text x="140" y="614" font-size="11" font-weight="600" fill="#5C6BC0" text-anchor="middle">Info Light #E8EAF6</text>
+  <rect x="60" y="586" width="160" height="48" rx="8" fill="#E0E3F8" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="140" y="614" font-size="11" font-weight="600" fill="#3949AB" text-anchor="middle">Accent Light #E0E3F8</text>
+
+  <!-- Info -->
+  <rect x="240" y="478" width="160" height="100" rx="8" fill="#5C6BC0"/>
+  <text x="320" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Info</text>
+  <text x="320" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#5C6BC0</text>
+
+  <rect x="240" y="586" width="160" height="48" rx="8" fill="#E8EAF6" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="320" y="614" font-size="11" font-weight="600" fill="#5C6BC0" text-anchor="middle">Info Light #E8EAF6</text>
 
   <!-- Warning -->
-  <rect x="240" y="478" width="160" height="100" rx="8" fill="#E8A33E"/>
-  <text x="320" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Warning</text>
-  <text x="320" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E8A33E</text>
+  <rect x="420" y="478" width="160" height="100" rx="8" fill="#E8A33E"/>
+  <text x="500" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Warning</text>
+  <text x="500" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E8A33E</text>
 
-  <rect x="240" y="586" width="160" height="48" rx="8" fill="#FFF3E0" stroke="#B8BAC8" stroke-width="0.5"/>
-  <text x="320" y="614" font-size="11" font-weight="600" fill="#E8A33E" text-anchor="middle">Warning Light #FFF3E0</text>
+  <rect x="420" y="586" width="160" height="48" rx="8" fill="#FFF3E0" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="500" y="614" font-size="11" font-weight="600" fill="#E8A33E" text-anchor="middle">Warning Light #FFF3E0</text>
 
   <!-- Error -->
-  <rect x="420" y="478" width="160" height="100" rx="8" fill="#E05252"/>
-  <text x="500" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Error</text>
-  <text x="500" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E05252</text>
+  <rect x="600" y="478" width="160" height="100" rx="8" fill="#E05252"/>
+  <text x="680" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Error</text>
+  <text x="680" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#E05252</text>
 
-  <rect x="420" y="586" width="160" height="48" rx="8" fill="#FDEAEA" stroke="#B8BAC8" stroke-width="0.5"/>
-  <text x="500" y="614" font-size="11" font-weight="600" fill="#E05252" text-anchor="middle">Error Light #FDEAEA</text>
+  <rect x="600" y="586" width="160" height="48" rx="8" fill="#FDEAEA" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="680" y="614" font-size="11" font-weight="600" fill="#E05252" text-anchor="middle">Error Light #FDEAEA</text>
 
-  <!-- Success (Green 500) -->
-  <rect x="600" y="478" width="160" height="100" rx="8" fill="#67EA94"/>
-  <text x="680" y="524" font-size="14" font-weight="600" fill="#2C2D3C" text-anchor="middle">Success</text>
-  <text x="680" y="544" font-size="11" fill="rgba(44,45,60,0.7)" text-anchor="middle">#67EA94</text>
+  <!-- Success (Green 600) -->
+  <rect x="780" y="478" width="160" height="100" rx="8" fill="#3FB86D"/>
+  <text x="860" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Success</text>
+  <text x="860" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#3FB86D</text>
 
-  <rect x="600" y="586" width="160" height="48" rx="8" fill="#E5FCEE" stroke="#B8BAC8" stroke-width="0.5"/>
-  <text x="680" y="614" font-size="11" font-weight="600" fill="#2D8F52" text-anchor="middle">Success Light #E5FCEE</text>
+  <rect x="780" y="586" width="160" height="48" rx="8" fill="#E5FCEE" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="860" y="614" font-size="11" font-weight="600" fill="#2D8F52" text-anchor="middle">Success Light #E5FCEE</text>
 
   <!-- ─── Theme Preview ─── -->
   <text x="60" y="680" font-size="16" font-weight="700" fill="#2C2D3C">Theme Preview</text>
