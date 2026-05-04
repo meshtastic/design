@@ -65,7 +65,9 @@ Secondary/Background/Accent color:
 
 ### Extended Color Palette
 
-The complete extended palette — including Neutral Scale, Green Scale, Semantic Colors, and Theme Colors — is documented visually in the [Color Palette SVG](standards/color-palette.svg) and defined in the [Meshtastic Client Design Standards](standards/meshtastic_design_standards_latest.md).
+The complete extended palette — including Neutral Scale, Green Scale, Semantic Colors, and Theme Colors — is defined in the [Meshtastic Client Design Standards](standards/meshtastic_design_standards_latest.md).
+
+![Extended Color Palette](standards/color-palette.svg)
 
 > **Accessibility note:** All foreground/background pairings meet WCAG AA contrast (4.5:1 minimum). Never use `#67EA94` for text on light backgrounds — use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
 
