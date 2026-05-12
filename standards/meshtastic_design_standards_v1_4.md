@@ -132,10 +132,10 @@ Used for tertiary/info elements and secondary call-to-action. The key color is `
 | Blue 700 | `#2855A8` | `40 85 168` | **Theme Accent** — tertiary light mode |
 | Blue 600 | `#5C6BC0` | `92 107 192` | Info indicators, links |
 | Blue 500 | `#7B8AD0` | `123 138 208` | Medium blue |
-| Blue 400 | `#9BA8E0` | `155 168 224` | — |
+| Blue 400 | `#9BA8E0` | `155 168 224` | **Link color** — hyperlinks, clickable URLs |
 | Blue 300 | `#B0BFF0` | `176 191 240` | Dark-mode tertiary |
 | Blue 200 | `#D0D8F5` | `208 216 245` | — |
-| Blue 100 | `#E0E3F8` | `224 227 248` | Accent tint background |
+| Blue 100 | `#E0E3F8` | `224 227 248` | Link tint background |
 | Blue 50 | `#E8EAF6` | `232 234 246` | Info tint background |
 
 ### 7.6 Error Scale
@@ -160,6 +160,8 @@ Use these for status indicators, alerts, and feedback.
 
 | Name | Hex | RGB | Usage |
 |------|-----|-----|-------|
+| Link | `#9BA8E0` | `155 168 224` | Hyperlinks, clickable URLs (Blue 400) |
+| Link Light | `#E0E3F8` | `224 227 248` | Link tint background |
 | Info | `#5C6BC0` | `92 107 192` | Informational indicators, links |
 | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
 | Warning | `#E8A33E` | `232 163 62` | Caution / attention states |
@@ -396,7 +398,6 @@ Some units are internationally standardized and must be displayed as-is regardle
 * Respect the user's calendar system (Gregorian, Buddhist, Japanese, etc.).
 
 ---
-
 ### Agent Implementation Checklist (v1.4)
 - [ ] Are **Circular IDs** used only for the *other* party in chat views?
 - [ ] Are **List Rows** neutral (no colored backgrounds for the whole row)?
@@ -408,7 +409,8 @@ Some units are internationally standardized and must be displayed as-is regardle
 - [ ] Are all UI colors drawn from the **official palette** (Sections 7.2–7.6)?
 - [ ] Is accent green **never used as text** on light backgrounds?
 - [ ] Do all foreground/background pairings meet **WCAG AA 4.5:1** contrast?
-- [ ] Are **semantic colors** (Info, Warning, Error, Success) used consistently and not repurposed?
+- [ ] Are **semantic colors** (Link, Info, Warning, Error, Success) used consistently and not repurposed?
+- [ ] Is the **Link** color using `Blue 400` (`#9BA8E0`) for hyperlinks and clickable URLs?
 - [ ] Is **Success** using `Green 600` (`#3FB86D`) — not `Green 500` (`#67EA94`)?
 - [ ] Does the M3 theme use **Section 8** role mappings (or dynamic color on Android 12+)?
 - [ ] Are **Fixed colors** (Section 8.4) used for theme-invariant elements?
