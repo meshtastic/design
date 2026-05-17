@@ -109,7 +109,7 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `tx_power` | Signed integer, no enforced range | `Stepper(in: 1...30)` | ⚠️ **Apple cannot set 0 dBm** (the proto "use firmware default" value) and cannot set negative dBm. Relates to [design#15 sub-issue](https://github.com/meshtastic/design/issues/15). |
+| `tx_power` | Signed integer, no enforced range | `Stepper(in: 0...30)` — 0 labelled "Max Transmit Power" | ✅ **Fixed May 2026.** Apple now allows 0 dBm (firmware default). Both platforms accept 0 as "use max legal continuous power." |
 | `spread_factor` | Numeric input | `Picker(ForEach 7..<13)` i.e. 7–12 | Android allows out-of-range entry; Apple enforces 7–12 |
 | `coding_rate` | Numeric input | `Picker(ForEach 5..<9)` i.e. 5–8 | Android allows out-of-range entry; Apple enforces 5–8 |
 | `bandwidth` | Numeric input | Picker (enum `BandwidthCodes`) | Android allows arbitrary integer; Apple is enum-constrained |
@@ -216,7 +216,7 @@ These module config screens are present in Android but have no equivalent in the
 
 | # | Area | Field | Issue |
 |---|------|-------|-------|
-| 1 | LoRa Config | `tx_power` | Apple `Stepper(in: 1...30)` cannot express 0 dBm (firmware default). Android has no range enforcement. Neither correctly communicates the 0 = "use default" semantic. |
+| ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | ~~Apple `Stepper(in: 1...30)` cannot express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
 | 2 | Bluetooth Config | `fixed_pin` | Apple strips ALL zero characters when the first digit is zero (e.g. `100200` → `12`). Should only strip leading zeros before the first non-zero digit. Known open issue Apple #1152. |
 | 3 | MQTT Config | `password` | Apple enforces 30-byte max; Android enforces 63-byte max (matching proto). A password between 31–63 bytes is valid on Android but silently truncated on Apple. |
 | 4 | MQTT Config | `address` | Apple enforces 62-byte max; Android enforces 63-byte max. |
