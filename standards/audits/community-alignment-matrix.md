@@ -202,7 +202,7 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 | Issue | Topic | Reason | Action |
 |-------|-------|--------|--------|
 | [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Close** |
-| [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors now implemented per @oscgonfer | **Close** (verify implementation, then close) |
+| [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors (and CO2, HCHO) now implemented per @oscgonfer | **Closed** |
 | [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | Design agreed — @garthvh mockup shows incomplete user icon with question mark | **Close** (design resolved; implementation follows) |
 | [#46](https://github.com/meshtastic/design/issues/46) | Bug: Service notification stats missing | Bug report, not a design standards question | **Redirect** to platform-specific repos |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | Branding/assets request, not a client UI design issue | **Redirect** to meshtastic/meshtastic or design team |
@@ -228,7 +228,7 @@ All 40 open issues with their consensus level, applicable standard section, verd
 | [#69](https://github.com/meshtastic/design/issues/69) | MQTT/UDP hops in traceroutes | enhancement | Strong | §4, §6 | ✅ | Blocked (firmware PR #10046) |
 | [#54](https://github.com/meshtastic/design/issues/54) | AQI display & calculation | [ALIGNMENT] | Strong on algorithm; divided on naming | §6 | ⚠️ | Needs Discussion (naming) |
 | [#53](https://github.com/meshtastic/design/issues/53) | Sensor telemetry UI/UX | [PARENT][ALIGNMENT] | — | §3, §6 | ✅ | Track |
-| [#51](https://github.com/meshtastic/design/issues/51) | Raw particulate sensor data | enhancement | Strong | §3 | ✅ | Close |
+| [#51](https://github.com/meshtastic/design/issues/51) | Raw particulate sensor data | enhancement | Strong | §3 | ✅ | Closed |
 | [#49](https://github.com/meshtastic/design/issues/49) | LoRa vs MQTT send toggle | [FEAT] | None | §3 | 🔇 | Needs Discussion |
 | [#48](https://github.com/meshtastic/design/issues/48) | Per-channel MQTT topic | enhancement | None | §6 | 🔇 | Blocked (firmware) |
 | [#47](https://github.com/meshtastic/design/issues/47) | Configurable node list info | [PARENT] | — | §1, §3 | ✅ | Track |
