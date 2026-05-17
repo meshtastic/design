@@ -214,16 +214,16 @@ These module config screens are present in Android but have no equivalent in the
 
 ### ⚠️ Bugs / Alignment Issues
 
-| # | Area | Field | Issue |
-|---|------|-------|-------|
-| ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | ~~Apple `Stepper(in: 1...30)` cannot express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
-| 2 | Bluetooth Config | `fixed_pin` | Apple strips ALL zero characters when the first digit is zero (e.g. `100200` → `12`). Should only strip leading zeros before the first non-zero digit. Known open issue Apple #1152. |
-| 3 | MQTT Config | `password` | Apple enforces 30-byte max; Android enforces 63-byte max (matching proto). A password between 31–63 bytes is valid on Android but silently truncated on Apple. |
-| 4 | MQTT Config | `address` | Apple enforces 62-byte max; Android enforces 63-byte max. |
-| 5 | Canned Messages | `messages` | Apple enforces 198-byte max; Android enforces 200-byte max. |
-| 6 | External Notification | `ringtone` | Apple enforces 228-byte max; Android enforces 230-byte max. |
-| 7 | Power Config | `adc_multiplier_override` | Android validates only > 0; Apple restricts to 2.0–6.0. The protobuf does not define a range — the correct constraint should be defined and aligned. |
-| 8 | Security Config | `is_managed` | Android guards this toggle behind a non-empty `admin_key`; Apple does not, allowing managed mode to be enabled with no admin key configured. |
+| # | Area | Field | Firmware limit (nanopb `.options`) | Android | Apple | Path to alignment |
+|---|------|-------|------------------------------------|---------|-------|-------------------|
+| ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | — | — | — | ~~Apple `Stepper(in: 1...30)` could not express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
+| 2 | Bluetooth Config | `fixed_pin` | `uint32` — no size constraint | ✅ Accepts any 6-digit number unchanged | ❌ When the first character is `"0"`, strips **all** `"0"` characters (e.g. `100200` → `12`). Open issue Apple #1152. | Apple: replace `fixedPin.replacing("0", with: "")` with logic that discards or reverts the input when it starts with `"0"`, rather than removing all zeros globally. |
+| 3 | MQTT Config | `password` | **`max_size:32` → 31 bytes max** | ❌ Enforces 63 bytes. Internal comment incorrectly reads `max_size:64`; the `.options` file specifies `max_size:32`. Passwords of 32–63 bytes are accepted by Android but silently truncated by firmware. | ❌ Enforces 30 bytes — off by 1 below firmware limit. | **Both** platforms should enforce 31 bytes. Android: change `maxSize = 63` → `31` and fix the comment. Apple: change `> 30` → `> 31`. |
+| 4 | MQTT Config | `address` | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ❌ Enforces 62 bytes (off by 1) | Apple: change `while totalBytes > 62` → `> 63`. |
+| 5 | Canned Messages | `messages` | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ❌ Enforces 198 bytes (off by 2) | Apple: change `while totalBytes > 198` → `> 200`. |
+| 6 | External Notification | `ringtone` | `max_size:231` → 230 bytes max | ✅ Enforces 230 bytes | ❌ Enforces 228 bytes (off by 2) | Apple: change `while totalBytes > 228` → `> 230`. |
+| 7 | Power Config | `adc_multiplier_override` | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ❌ Validates only `> 0.0`; any positive float accepted; no explicit UI for the `0 = disabled` semantic | ✅ `FloatField` restricted to `(2.0...6.0)`; ADC Override toggle sets field to `0` when off | Android: add range validation `2.0..6.0` and consider a toggle to express `0 = use firmware default`, matching Apple's approach. |
+| 8 | Security Config | `is_managed` | `repeated bytes admin_key` must be set before managed mode is meaningful | ✅ Toggle is `.enabled = formState.admin_key.isNotEmpty()` — disabled when no key present | ❌ Administration section visible when `adminKey.length > 0 \|\| UserDefaults.enableAdministration`; the `enableAdministration` UserDefault bypasses the key requirement, and no secondary guard prevents enabling the toggle without a key | Apple: require a valid `adminKey` regardless of `enableAdministration`; disable the toggle when `adminKey.length == 0`; remove or scope the `UserDefaults.enableAdministration` bypass. |
 
 ### Fields Present on Android but Missing from Apple
 
