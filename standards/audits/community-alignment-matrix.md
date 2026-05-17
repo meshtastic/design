@@ -28,10 +28,10 @@ This document maps every open issue in the design repository against community o
 ```mermaid
 pie title 42 Issues (May 17, 2026) - Recommended Action
     "Spec Ready" : 7
-    "Needs Discussion" : 15
+    "Needs Discussion" : 16
     "Blocked (upstream)" : 5
     "Parent / Tracking" : 6
-    "Close or Redirect" : 6
+    "Close or Redirect" : 5
     "Low Activity" : 3
 ```
 
@@ -153,6 +153,7 @@ Issues where the community broadly agrees and there is no significant counter-po
 | [#82](https://github.com/meshtastic/design/issues/82) | Auto-delete old messages | Configurable auto-delete threshold; Android PR exists (linked by @DaneEvans) | §3 Dynamic Layout (data management) | 🔇 Standards silent on retention policy | **Spec Ready** |
 | [#69](https://github.com/meshtastic/design/issues/69) | MQTT/UDP hops in traceroutes | Show "MQTT" / "UDP" labels instead of misleading 0.0 dB or ±31.75 dB values | §4 Iconography — text labels; §6 IA — remove ambiguous values | ✅ Aligned with §4 and §6 | Blocked (awaiting firmware PR #10046) |
 | [#40](https://github.com/meshtastic/design/issues/40) | Hide settings when node `is_managed` | Don't display settings that cannot be changed in managed mode | §3 Dynamic Layout — hide options for disabled features | ✅ Directly and unambiguously aligned with §3 | **Spec Ready** |
+| [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | Design agreed — person/question-mark icon + "Incomplete" label for nodes with `hw_model == UNSET`; iOS ✅ implemented; Android ⚠️ uses italic only — icon/label missing | §1 Circle Standard (node identity), §3 Dynamic Layout (conditional display), §4 Iconography (icon+text) | ⚠️ iOS aligns; Android gap identified May 17, 2026 | **Needs Discussion** (Android UI gap) |
 
 ---
 
@@ -208,7 +209,6 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 | [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | Closed — wind speed is locale-driven per OS settings; no in-app selector needed (decision recorded in [#99](https://github.com/meshtastic/design/issues/99)) | **Closed** |
 | [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors (and CO2, HCHO) now implemented per @oscgonfer | **Closed** |
 | [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Closed** |
-| [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | Design agreed — @garthvh mockup shows incomplete user icon with question mark | **Close** (design resolved; implementation follows) |
 | [#46](https://github.com/meshtastic/design/issues/46) | Bug: Service notification stats missing | Bug report, not a design standards question | **Redirect** to platform-specific repos |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | Branding/assets request, not a client UI design issue | **Redirect** to meshtastic/meshtastic or design team |
 
@@ -258,7 +258,7 @@ All 42 issues tracked (40 original + #99, #100 added May 17, 2026; #37, #51, #87
 | [#21](https://github.com/meshtastic/design/issues/21) | Cross-platform text messaging | [PARENT] | Active | §5, §6 | ✅ | Track |
 | [#20](https://github.com/meshtastic/design/issues/20) | Managed Mode updates | [PARENT] | — | §3 | ✅ | Track |
 | [#17](https://github.com/meshtastic/design/issues/17) | Custom notification sound | enhancement | Blocked | 🔇 | 🔇 | Blocked (asset) |
-| [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | — | Agreed | §1, §3 | ✅ | Close |
+| [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | — | Agreed | §1, §3 | ✅ | Needs Discussion (Android gap) |
 | [#15](https://github.com/meshtastic/design/issues/15) | Signal Meter | [PARENT] | SNR focus agreed | §4 | ✅ | Track |
 | [#9](https://github.com/meshtastic/design/issues/9) | Conditional GPS validation | — | Divided | §3 | ⚠️ | Needs Discussion |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | — | Positive | §7 | 🔇 | Redirect |
