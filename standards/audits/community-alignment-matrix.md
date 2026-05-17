@@ -26,7 +26,7 @@ This document maps every open issue in the design repository against community o
 ### Action Recommendations
 
 ```mermaid
-pie title 40 Open Issues — Recommended Action
+pie title 40 Open Issues - Recommended Action
     "Spec Ready" : 8
     "Needs Discussion" : 13
     "Blocked (upstream)" : 5
@@ -71,8 +71,8 @@ quadrantChart
     x-axis "Low Consensus" --> "High Consensus"
     y-axis "Standards Silent" --> "Directly Covered"
     quadrant-1 Act Now
-    quadrant-2 Standards Exist — Debate Needed
-    quadrant-3 Low Priority / Redirect
+    quadrant-2 Standards Exist - Debate Needed
+    quadrant-3 Low Priority - Redirect
     quadrant-4 Spec Needed
     "#80 MQTT labels": [0.92, 0.88]
     "#40 Hide managed settings": [0.88, 0.92]
