@@ -22,6 +22,7 @@
 | M3 Expressive Design System Adoption | [20260513-160000-m3-expressive-adoption](https://github.com/meshtastic/Meshtastic-Android/tree/20260513-160000-m3-expressive-adoption/specs/20260513-160000-m3-expressive-adoption) | 🔵 In Progress | _(not applicable)_ | — | Android-only; M3 Expressive APIs are Compose-specific. Branch `20260513-160000-m3-expressive-adoption`, 14/58 tasks done |
 | Docs Auto-Translation | _(not spec'd)_ | — | [008-docs-auto-translation](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/008-docs-auto-translation) | ✅ Implemented | Apple-only (Apple Translation framework); Android approach would differ |
 | Docs Translation Pipeline (CDN + crowd-source) | _(not spec'd)_ | — | [009-docs-translation-pipeline](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/009-docs-translation-pipeline) | ✅ Implemented | Apple-only; outputs to shared `meshtastic/translations` repo |
+| Voice Message | _(not spec'd)_ | — | _(not spec'd)_ | 🔵 In Progress | Apple: branch `voice-message`, work-in-progress (3 commits, last activity 2026-03-09). Bundles Codec2 iOS bindings (`AudioManager.swift`, `AudioMessageView.swift`, Codec2 codec2-ios C library). No Android equivalent spec or branch found |
 
 ### Status Key
 
@@ -50,8 +51,14 @@
 
 | Feature | Android Spec | Priority | Notes |
 |---------|-------------|----------|-------|
-| **TAK v2 Protocol** | [005-tak-v2-protocol](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/005-tak-v2-protocol) | Medium | Apple ships TAK v2 via `AccessoryManager.supportsTAKv2` (firmware ≥ 2.8.0) but has no formal spec. An Apple v2 spec would ensure full UX parity — especially zstd error recovery, CoT type coverage display, and legacy fallback behaviour. |
+| **TAK v2 Protocol** | [005-tak-v2-protocol](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/005-tak-v2-protocol) | Medium | Apple ships TAK v2 via `AccessoryManager.supportsTAKv2` (firmware ≥ 2.8.0) but has no formal spec. An Apple v2 spec would ensure full UX parity — especially zstd error recovery, CoT type coverage display, and legacy fallback behaviour. Active TAK enhancement work on Apple branch `copilot/sub-pr-1603` (read-only CoT mode, markers, telemetry — 5 commits, 7 files). |
 | **M3 Expressive Design System** | [20260513-160000-m3-expressive-adoption](https://github.com/meshtastic/Meshtastic-Android/tree/20260513-160000-m3-expressive-adoption/specs/20260513-160000-m3-expressive-adoption) | Low | Platform-specific by design; M3 Expressive is Android/Compose-only. Apple platform equivalent would use SwiftUI's native animation and component APIs. No action needed. |
+
+### Features in development without a spec (neither platform)
+
+| Feature | Apple Branch | Android Branch | Notes |
+|---------|-------------|---------------|-------|
+| **Voice Message** | `voice-message` (🔵 In Progress, last active 2026-03-09) | _(none)_ | Codec2-based voice over LoRa. Apple bundles `codec2-ios` C library, adds `AudioManager.swift`, `AudioMessageView.swift`, voice record button in `TextMessageField`. No SpecKit spec on either platform — strong candidate for a paired spec once the Apple prototype stabilises. |
 
 ### Features nearing merge on both platforms (high priority to monitor)
 
@@ -144,3 +151,5 @@ Protects unattended Meshtastic nodes from unauthorized physical access. When ena
 5. **Coordinate the translation pipeline across platforms.** The `meshtastic/translations` repo is populated by the Apple pipeline today. Once the Android docs feature merges, Android should adopt the same CDN-first / on-device-fallback strategy so both clients contribute translations that benefit all users.
 
 6. **Track M3 Expressive progress.** The Android branch is 14/58 tasks complete. While platform-specific, the interaction patterns (swipe-to-reveal, spring animations, expressive FABs) represent UX conventions that should inform how equivalent interactions are handled on Apple platforms even if the API layer differs.
+
+7. **Write a paired spec for Voice Message before the Apple prototype merges.** The Apple `voice-message` branch has a working Codec2-based implementation but no SpecKit spec. A shared spec would define the wire protocol (Codec2 bitrate, packet framing, message type field), UX (record/playback controls, waveform display, permission handling), and Android implementation approach before the two platforms diverge.
