@@ -21,7 +21,7 @@
 | Network Config | ✅ | ✅ | Apple exposes fewer fields — see §3 |
 | Display Config | ✅ | ✅ | — |
 | LoRa Config | ✅ | ✅ | Several constraint mismatches — see §3 |
-| Bluetooth Config | ✅ | ✅ | Fixed-PIN validation differs — see §3 |
+| Bluetooth Config | ⚠️ | ✅ | Apple fixed leading-zero bug (PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)); Android silently rejects leading-zero PINs with no error feedback |
 | Security Config | ✅ | ✅ | Minor structural differences |
 
 ### Module Config Screens
@@ -119,7 +119,7 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `fixed_pin` | Exactly 6 digits | Exactly 6 digits, **strips all `"0"` characters if the first character is `"0"`** | ⚠️ **Apple removes ALL zeros** rather than only leading zeros. A PIN like `100200` becomes `12` on Apple. Known bug — see Apple issue #1152. |
+| `fixed_pin` | Accepts any 6-digit **numeric** value; `EditTextPreference(Int)` converts typed string to `UInt` first, so input `000100` silently arrives as `100` (3 digits), fails the `length == 6` guard, and is **discarded with no error shown** | Exactly 6 digits; strips leading zeros only via `.drop(while: { $0 == "0" })`, shows "short pin" warning if result < 6 digits | ⚠️ Android silently rejects leading-zero PINs — see gap row below. Apple ✅ fixed in PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830). |
 
 ### Security Config
 
@@ -217,7 +217,8 @@ These module config screens are present in Android but have no equivalent in the
 | # | Area | Field | Firmware limit (nanopb `.options`) | Android | Apple | Path to alignment |
 |---|------|-------|------------------------------------|---------|-------|-------------------|
 | ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | — | — | — | ~~Apple `Stepper(in: 1...30)` could not express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
-| 2 | Bluetooth Config | `fixed_pin` | `uint32` — no size constraint | ✅ Accepts any 6-digit number unchanged | ❌ When the first character is `"0"`, strips **all** `"0"` characters (e.g. `100200` → `12`). Open issue Apple #1152. | Apple: replace `fixedPin.replacing("0", with: "")` with logic that discards or reverts the input when it starts with `"0"`, rather than removing all zeros globally. |
+| ~~2~~ | ~~Bluetooth Config~~ | ~~`fixed_pin`~~ | `uint32` — no size constraint | ✅ Accepts any 6-digit number unchanged | ✅ **Fixed in Apple PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)** (May 17, 2026) — now strips leading zeros only via `.drop(while: { $0 == "0" })` | ✅ Resolved |
+| 2b | Bluetooth Config | `fixed_pin` | `uint32` — no size constraint | ⚠️ `EditTextPreference(Int)` converts typed string to `UInt` before `onValueChanged`; a leading-zero input like `000100` becomes `100`, silently fails `length == 6`, and is **discarded with no error indicator**. User sees the typed value but it is never saved. | ✅ Shows "short pin" warning when stripped value < 6 digits | Android: add `isError` state to `EditTextPreference` when `it.toString().length < 6`; propagate error to `BluetoothConfigScreen`. |
 | 3 | MQTT Config | `password` | **`max_size:32` → 31 bytes max** | ❌ Enforces 63 bytes. Internal comment incorrectly reads `max_size:64`; the `.options` file specifies `max_size:32`. Passwords of 32–63 bytes are accepted by Android but silently truncated by firmware. | ❌ Enforces 30 bytes — off by 1 below firmware limit. | **Both** platforms should enforce 31 bytes. Android: change `maxSize = 63` → `31` and fix the comment. Apple: change `> 30` → `> 31`. |
 | 4 | MQTT Config | `address` | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ❌ Enforces 62 bytes (off by 1) | Apple: change `while totalBytes > 62` → `> 63`. |
 | 5 | Canned Messages | `messages` | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ❌ Enforces 198 bytes (off by 2) | Apple: change `while totalBytes > 198` → `> 200`. |
