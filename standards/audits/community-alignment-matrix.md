@@ -67,34 +67,27 @@ Issues plotted by *community consensus level* (x-axis) against *how directly the
 
 ```mermaid
 quadrantChart
-    title Consensus vs. Standards Coverage
+    title Consensus vs. Standards Coverage (representative sample)
     x-axis "Low Consensus" --> "High Consensus"
     y-axis "Standards Silent" --> "Directly Covered"
     quadrant-1 Act Now
-    quadrant-2 Standards Exist - Debate Needed
-    quadrant-3 Low Priority - Redirect
+    quadrant-2 Debate Needed
+    quadrant-3 Low Priority
     quadrant-4 Spec Needed
-    "#80 MQTT labels": [0.92, 0.88]
-    "#40 Hide managed settings": [0.88, 0.92]
-    "#16 Incomplete node icon": [0.85, 0.82]
-    "#69 Traceroute labels": [0.88, 0.82]
-    "#85 Node list sort": [0.78, 0.72]
-    "#84 SI prefixes": [0.80, 0.72]
-    "#87 Wind units": [0.80, 0.70]
-    "#15 Signal meter (SNR)": [0.72, 0.76]
-    "#43 Message status": [0.60, 0.68]
-    "#44 Satellite count": [0.48, 0.78]
-    "#86 Font size": [0.82, 0.58]
-    "#33 Relay node display": [0.38, 0.62]
-    "#54 AQI naming": [0.42, 0.58]
-    "#35 Reaction notifications": [0.30, 0.55]
-    "#82 Auto-delete messages": [0.82, 0.18]
-    "#75 Full-text search": [0.88, 0.15]
-    "#81 Regional settings": [0.72, 0.18]
-    "#79 Signal scope question": [0.28, 0.22]
-    "#83 Message translate": [0.25, 0.10]
-    "#7 Hexagon sticker": [0.55, 0.05]
+    "#80 MQTT labels": [0.88, 0.85]
+    "#40 Hide managed": [0.72, 0.92]
+    "#44 Satellite count": [0.35, 0.82]
+    "#43 Message status": [0.58, 0.65]
+    "#33 Relay display": [0.22, 0.58]
+    "#86 Font size": [0.80, 0.55]
+    "#75 Full-text search": [0.90, 0.20]
+    "#82 Auto-delete": [0.75, 0.10]
+    "#81 Regional settings": [0.60, 0.22]
+    "#83 Translate": [0.18, 0.12]
+    "#7 Sticker": [0.40, 0.05]
 ```
+
+> Representative sample only — 11 of 40 issues shown. See the full index in the Appendix for all issues with their consensus and verdict ratings.
 
 ---
 
