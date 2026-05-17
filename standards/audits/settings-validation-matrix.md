@@ -242,5 +242,6 @@ These module config screens are present in Android but have no equivalent in the
 
 | Area | Field | Notes |
 |------|-------|-------|
+| App Settings | Enable Administration | Apple-only toggle |
 | Network Config | `udp_enabled` | Apple-only toggle |
 | TAK Module | `enabled` | Apple shows an explicit enable toggle |
