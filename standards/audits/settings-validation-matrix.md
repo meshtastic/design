@@ -22,17 +22,17 @@
 | Display Config | ✅ | ✅ | — |
 | LoRa Config | ✅ | ✅ | Several constraint mismatches — see §3 |
 | Bluetooth Config | ⚠️ | ✅ | Apple fixed leading-zero bug (PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)); Android silently rejects leading-zero PINs with no error feedback |
-| Security Config | ✅ | ✅ | Minor structural differences |
+| Security Config | ✅ | ✅ | `is_managed` guard fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); minor structural differences remain |
 
 ### Module Config Screens
 
 | Screen | Android | Apple | Notes |
 |--------|---------|-------|-------|
-| MQTT | ✅ | ✅ | Byte-limit mismatches — see §3 |
+| MQTT | ⚠️ | ✅ | Apple byte limits fixed in PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); Android `password` still enforces 63 bytes (should be 31) |
 | Telemetry | ✅ | ✅ | Android has air quality fields; Apple does not |
-| Canned Messages | ✅ | ✅ | Max bytes differ |
+| Canned Messages | ✅ | ✅ | Byte limit aligned — fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833) |
 | Detection Sensor | ✅ | ✅ | Apple has sensor/client role picker |
-| External Notification | ✅ | ✅ | — |
+| External Notification | ✅ | ✅ | `ringtone` byte limit fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); screen placement differs (Android: inline, Apple: separate RTTTL screen) |
 | Store & Forward | ✅ | ✅ | Android: free-form inputs. Apple: fixed pickers |
 | Serial | ✅ | ✅ | — |
 | Range Test | ✅ | ✅ | — |
@@ -125,7 +125,7 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `is_managed` | Only enabled when `admin_key` list is non-empty | Free toggle (no guard) | Android enforces the dependency; Apple does not |
+| `is_managed` | Only enabled when `admin_key` list is non-empty | Disabled when `adminKey.length == 0`; shows warning "An admin key must be set before enabling managed mode." | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** (May 17, 2026) |
 | `admin_key` | Single list field, maxCount: 3 | Three separate fields (`adminKey`, `adminKey2`, `adminKey3`) | Different UX, same data model |
 | `admin_channel_enabled` | Toggle | Not present | Android-only field |
 
@@ -142,8 +142,8 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `address` | max **63** bytes | max **62** bytes | ⚠️ 1-byte mismatch — Android aligns with proto max_size (64) minus 1; Apple is off by 1 |
-| `password` | max **63** bytes | max **30** bytes | ⚠️ **Significant mismatch** — Apple enforces a much tighter limit than the proto (64 bytes) or Android |
+| `address` | max **63** bytes | max **63** bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** (May 17, 2026) |
+| `password` | max **31** bytes | max **31** bytes | ✅ **Both fixed** — Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833) corrected Apple (30→31); Android must also correct 63→31 (see gap row 3) |
 | `map_report_settings.position_precision` | Slider 12–15 bits | `Slider(in: 12...15, step: 1)` | ✅ Aligned |
 
 ### Telemetry Config
@@ -171,14 +171,14 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `messages` | max **200** bytes | max **198** bytes | ⚠️ 2-byte mismatch |
+| `messages` | max **200** bytes | max **200** bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** (May 17, 2026) |
 | `allow_input_source` | max 63 bytes (proto max_size: 16; UI intentionally larger) | Not present | Android-only field |
 
 ### External Notification / RTTTL Config
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `ringtone` | max **230** bytes (within External Notification screen) | max **228** bytes (separate RTTTL Config screen) | ⚠️ 2-byte mismatch; also different screen placement |
+| `ringtone` | max **230** bytes (within External Notification screen) | max **230** bytes (separate RTTTL Config screen) | ✅ **Apple byte limit fixed** in PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); screen placement difference remains (Android: inline; Apple: separate screen) |
 
 ### Ambient Lighting Config
 
@@ -219,12 +219,12 @@ These module config screens are present in Android but have no equivalent in the
 | ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | — | — | — | ~~Apple `Stepper(in: 1...30)` could not express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
 | ~~2~~ | ~~Bluetooth Config~~ | ~~`fixed_pin`~~ | `uint32` — no size constraint | ✅ Accepts any 6-digit number unchanged | ✅ **Fixed in Apple PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)** (May 17, 2026) — now strips leading zeros only via `.drop(while: { $0 == "0" })` | ✅ Resolved |
 | 2b | Bluetooth Config | `fixed_pin` | `uint32` — no size constraint | ⚠️ `EditTextPreference(Int)` converts typed string to `UInt` before `onValueChanged`; a leading-zero input like `000100` becomes `100`, silently fails `length == 6`, and is **discarded with no error indicator**. User sees the typed value but it is never saved. | ✅ Shows "short pin" warning when stripped value < 6 digits | Android: add `isError` state to `EditTextPreference` when `it.toString().length < 6`; propagate error to `BluetoothConfigScreen`. |
-| 3 | MQTT Config | `password` | **`max_size:32` → 31 bytes max** | ❌ Enforces 63 bytes. Internal comment incorrectly reads `max_size:64`; the `.options` file specifies `max_size:32`. Passwords of 32–63 bytes are accepted by Android but silently truncated by firmware. | ❌ Enforces 30 bytes — off by 1 below firmware limit. | **Both** platforms should enforce 31 bytes. Android: change `maxSize = 63` → `31` and fix the comment. Apple: change `> 30` → `> 31`. |
-| 4 | MQTT Config | `address` | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ❌ Enforces 62 bytes (off by 1) | Apple: change `while totalBytes > 62` → `> 63`. |
-| 5 | Canned Messages | `messages` | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ❌ Enforces 198 bytes (off by 2) | Apple: change `while totalBytes > 198` → `> 200`. |
-| 6 | External Notification | `ringtone` | `max_size:231` → 230 bytes max | ✅ Enforces 230 bytes | ❌ Enforces 228 bytes (off by 2) | Apple: change `while totalBytes > 228` → `> 230`. |
+| ~~3~~ | ~~MQTT Config~~ | ~~`password`~~ | **`max_size:32` → 31 bytes max** | ⚠️ Enforces 63 bytes. Internal comment incorrectly reads `max_size:64`; the `.options` file specifies `max_size:32`. Passwords of 32–63 bytes are accepted by Android but silently truncated by firmware. | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 31 bytes. | Android still enforces 63 bytes — change `maxSize = 63` → `31` and fix the comment. |
+| ~~4~~ | ~~MQTT Config~~ | ~~`address`~~ | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 63 bytes | ✅ Resolved |
+| ~~5~~ | ~~Canned Messages~~ | ~~`messages`~~ | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 200 bytes | ✅ Resolved |
+| ~~6~~ | ~~External Notification~~ | ~~`ringtone`~~ | `max_size:231` → 230 bytes max | ✅ Enforces 230 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 230 bytes | ✅ Resolved |
 | 7 | Power Config | `adc_multiplier_override` | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ❌ Validates only `> 0.0`; any positive float accepted; no explicit UI for the `0 = disabled` semantic | ✅ `FloatField` restricted to `(2.0...6.0)`; ADC Override toggle sets field to `0` when off | Android: add range validation `2.0..6.0` and consider a toggle to express `0 = use firmware default`, matching Apple's approach. |
-| 8 | Security Config | `is_managed` | `repeated bytes admin_key` must be set before managed mode is meaningful | ✅ Toggle is `.enabled = formState.admin_key.isNotEmpty()` — disabled when no key present | ❌ Administration section visible when `adminKey.length > 0 \|\| UserDefaults.enableAdministration`; the `enableAdministration` UserDefault bypasses the key requirement, and no secondary guard prevents enabling the toggle without a key | Apple: require a valid `adminKey` regardless of `enableAdministration`; disable the toggle when `adminKey.length == 0`; remove or scope the `UserDefaults.enableAdministration` bypass. |
+| ~~8~~ | ~~Security Config~~ | ~~`is_managed`~~ | `repeated bytes admin_key` must be set before managed mode is meaningful | ✅ Toggle is `.enabled = formState.admin_key.isNotEmpty()` | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — toggle disabled when `adminKey.length == 0`; warning shown | ✅ Resolved |
 
 ### Fields Present on Android but Missing from Apple
 
