@@ -26,9 +26,9 @@ This document maps every open issue in the design repository against community o
 ### Action Recommendations
 
 ```mermaid
-pie title 41 Issues (May 17, 2026) - Recommended Action
+pie title 42 Issues (May 17, 2026) - Recommended Action
     "Spec Ready" : 7
-    "Needs Discussion" : 14
+    "Needs Discussion" : 15
     "Blocked (upstream)" : 5
     "Parent / Tracking" : 6
     "Close or Redirect" : 6
@@ -38,9 +38,9 @@ pie title 41 Issues (May 17, 2026) - Recommended Action
 ### Standards Coverage
 
 ```mermaid
-pie title Standards Coverage Across All 41 Issues
+pie title Standards Coverage Across All 42 Issues
     "Directly covered by v1.4" : 12
-    "Partially covered by v1.4" : 9
+    "Partially covered by v1.4" : 10
     "Standards silent" : 20
 ```
 
@@ -104,6 +104,7 @@ These issues were explicitly filed to resolve cross-platform behavioral or displ
 | [#39](https://github.com/meshtastic/design/issues/39) | Auto-favorite nodes on DM | Implemented in Android with `manually_verified` + `CLIENT_BASE` guard (@jamesarich) | DM should not auto-favorite; risks silently favoriting uncontrolled router nodes (@aerodan) | 🔇 Standards silent on automatic node relationship behavior | ⚠️ Valid UX concern from @aerodan; no standard resolves this — needs a design decision |
 | [#35](https://github.com/meshtastic/design/issues/35) | Tapback/Reaction Notifications | _(No consensus — five open questions raised by @jamesarich; no answers yet)_ | — | §4 Iconography, §6 IA (notification text) | 🔇 Partially covered — notification wording should follow §6 plain language when implemented |
 | [#99](https://github.com/meshtastic/design/issues/99) | Units, Measurement & Locale | Follow OS Language & Region for all convertible units; no in-app unit controls (Apple reference implementation); wind speed = locale-driven (decided May 17) | Android had open request for in-app wind speed selector ([#87](https://github.com/meshtastic/design/issues/87), now closed) | §5 Vision-Centric (native OS patterns), §6 IA (plain language, localization) | ✅ OS locale delegation aligns with §5 native patterns and §6; 4 sub-questions still open (scaling thresholds, pressure unit, relative time format) |
+| [#100](https://github.com/meshtastic/design/issues/100) | "Translate this message" cross-platform standard | Context menu entry point; on-device OS translation API; translated text persisted and toggleable (iOS reference implementation via Apple Translation framework, iOS 17.4+) | Android (#83) proposed action bar icon; community divided on engine choice (OS-level vs. ML Kit) and persistence model | §3 Dynamic Layout (hide action when unavailable), §4 Iconography (icon+text redundancy), §6 IA (plain language labels) | ⚠️ §3/§4/§6 all partially apply; 5 open alignment questions before spec | **Needs Discussion** |
 
 ### Key Takeaways — ALIGNMENT Issues
 
@@ -113,6 +114,7 @@ These issues were explicitly filed to resolve cross-platform behavioral or displ
 - **#39:** Needs an explicit cross-platform design decision before this becomes a standard. Android implementation exists as a reference point.
 - **#35:** Cannot be specced until the five open questions in the issue body are answered.
 - **#99:** Wind speed is locale-driven — decided May 17, 2026; #87 closed. Four questions remain open: natural scaling thresholds, hPa confirmation as fixed pressure unit, in-app selector edge cases, and relative time vs absolute timestamp pattern for last-heard.
+- **#100:** iOS has a complete reference implementation (Apple Translation framework, long-press context menu, persisted toggle between original/translated). Tracks #83 (Android feature request). Five open questions: entry point pattern, engine choice, persistence model, availability gating, and language direction control.
 
 ---
 
@@ -124,7 +126,7 @@ Issues where commenters hold meaningfully different positions.
 |-------|-------|-----------|-----------|----------|---------|--------|
 | [#86](https://github.com/meshtastic/design/issues/86) | Adjustable font size in Conversations | Add per-app font size control or pinch-to-zoom (8 commenters) | §5 mandates OS Dynamic Type support, not a redundant in-app control (@garthvh → #21) | §5 Vision-Centric — Dynamic Type up to 200%; 16px default | ⚠️ §5 says *support* Dynamic Type, not add a redundant slider. Note: @d0ugak's contrast bug report (dark text on dark bubbles) is a §2 issue, separate from font size. | Needs Discussion |
 | [#33](https://github.com/meshtastic/design/issues/33) | Relay node message display | Fix it — improve beyond hop count; add last-seen time check (@NomDeTom) | Remove it entirely — ID guessing is inherently broken and actively misleads users; specific bug with 00-suffix nodes breaks DMs (@1nv, @teran1983, @DirectX, @timurey) | §3 Dynamic Layout — suppress misleading or null data; §6 IA — plain language | "Remove" ✅ directly aligned with §3; "Fix" ⚠️ valid goal but accuracy must be proven before display | Needs Discussion |
-| [#83](https://github.com/meshtastic/design/issues/83) | "Translate this message" feature | Useful; use offline models (Firefox NMT, ML Kit) to avoid API costs (@GTG3000, @neopiccolorat) | Not a priority; costs, complexity, edge use-case; OS-level translate action is sufficient (@jamesarich) | 🔇 Standards silent on feature scope | 🔇 Not covered | Needs Discussion |
+| [#83](https://github.com/meshtastic/design/issues/83) _(tracked by [#100](https://github.com/meshtastic/design/issues/100))_ | "Translate this message" feature | Useful; use offline models (Firefox NMT, ML Kit) to avoid API costs (@GTG3000, @neopiccolorat) | Not a priority; costs, complexity, edge use-case; OS-level translate action is sufficient (@jamesarich) | §3, §4, §6 (via parent #100) | ⚠️ Partially covered — see #100 for alignment standard | Needs Discussion |
 | [#79](https://github.com/meshtastic/design/issues/79) | Signal strength from incoming packets | Add table/chart to Settings → Advanced panel (reporter) | Too technically advanced for the main app; build a separate "Wireshark-type" tool (@DarkRanger935) | §4 Iconography, §5 Vision-Centric | 🔇 Standards silent on whether a feature belongs in the main app vs a separate tool | Needs Discussion |
 | [#81](https://github.com/meshtastic/design/issues/81) | Auto-detect regional community settings | Hierarchical config files (country/city); geo-filter option (@Sabering1, @pedjas, @jbouse) | Don't assume one community per region; granularity varies too much across the US (@shortwavesurfer2009, @pedjas) | §6 IA — plain language for onboarding flows | 🔇 Standards silent on onboarding and community infra | Needs Discussion |
 | [#9](https://github.com/meshtastic/design/issues/9) | GPS: phone GPS auto-fallback to device GPS | Auto-fallback when phone disconnects; smart position handles some cases (@garthvh) | Don't silently disable device GPS when phone GPS is lost (@b8b8) | §3 Dynamic Layout — conditional field visibility based on GPS state | ⚠️ §3 covers display logic (hide GPS fields when GPS unavailable) but fallback behavior itself is out of scope | Needs Discussion |
@@ -214,16 +216,17 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 
 ## Appendix: Full Issue Index
 
-All 41 issues tracked (40 original + #99 added May 17, 2026; #37, #51, #87 closed).
+All 42 issues tracked (40 original + #99, #100 added May 17, 2026; #37, #51, #87 closed).
 
 | # | Title (abbreviated) | Labels | Consensus | Standard | Verdict | Action |
 |---|---------------------|--------|-----------|----------|---------|--------|
+| [#100](https://github.com/meshtastic/design/issues/100) | "Translate this message" cross-platform standard | [ALIGNMENT] | Divided (iOS impl exists; 5 open questions) | §3, §4, §6 | ⚠️ | Needs Discussion |
 | [#99](https://github.com/meshtastic/design/issues/99) | Units, Measurement & Locale | [ALIGNMENT] | Partial (wind speed resolved) | §5, §6 | ✅ | Needs Discussion |
 | [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | enhancement | Resolved | §6 | ✅ | Closed |
 | [#86](https://github.com/meshtastic/design/issues/86) | Adjustable font size in Conversations | enhancement | Strong (but conflicts with §5) | §5 | ⚠️ | Needs Discussion |
 | [#85](https://github.com/meshtastic/design/issues/85) | Node list sort/filter improvements | enhancement | Strong | §1, §4 | ✅ | Spec Ready |
 | [#84](https://github.com/meshtastic/design/issues/84) | SI prefixes for env metrics | enhancement | Strong | §5, §6 | ✅ | In Progress |
-| [#83](https://github.com/meshtastic/design/issues/83) | "Translate this message" | enhancement | Divided | 🔇 | 🔇 | Needs Discussion |
+| [#83](https://github.com/meshtastic/design/issues/83) | "Translate this message" | enhancement | Divided | §3, §4, §6 | ⚠️ | Needs Discussion (see #100) |
 | [#82](https://github.com/meshtastic/design/issues/82) | Auto-delete old messages | enhancement | Strong | §3 | 🔇 | Spec Ready |
 | [#81](https://github.com/meshtastic/design/issues/81) | Auto-detect regional community settings | enhancement | Moderate, divided on granularity | §6 | 🔇 | Needs Discussion |
 | [#80](https://github.com/meshtastic/design/issues/80) | Rename "Uplink/Downlink Enabled" | enhancement | Strong | §6 | ✅ | Spec Ready |
