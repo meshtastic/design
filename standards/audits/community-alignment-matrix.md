@@ -26,19 +26,19 @@ This document maps every open issue in the design repository against community o
 ### Action Recommendations
 
 ```mermaid
-pie title 42 Issues (May 17, 2026) - Recommended Action
+pie title 41 Issues (May 17, 2026) - Recommended Action
     "Spec Ready" : 7
     "Needs Discussion" : 16
     "Blocked (upstream)" : 5
     "Parent / Tracking" : 6
-    "Close or Redirect" : 5
+    "Close or Redirect" : 4
     "Low Activity" : 3
 ```
 
 ### Standards Coverage
 
 ```mermaid
-pie title Standards Coverage Across All 42 Issues
+pie title Standards Coverage Across All 41 Issues
     "Directly covered by v1.4" : 12
     "Partially covered by v1.4" : 10
     "Standards silent" : 20
@@ -49,11 +49,13 @@ pie title Standards Coverage Across All 42 Issues
 ```mermaid
 xychart-beta
     title "Design Standard Sections Referenced by Open Issues"
-    x-axis ["§1 Node Identity", "§2 Light/Dark", "§3 Dynamic Layout", "§4 Iconography", "§5 Vision-Centric", "§6 Info Architecture", "§7 Color"]
+    x-axis ["§1", "§2", "§3", "§4", "§5", "§6", "§7"]
     y-axis "Number of Issues" 0 --> 16
     bar [5, 1, 14, 8, 5, 12, 1]
 ```
 
+> §1 Node Identity · §2 Light/Dark Mode · §3 Dynamic Layout · §4 Iconography · §5 Vision-Centric · §6 Information Architecture · §7 Color Palette
+>
 > **§3 Dynamic Layout** and **§6 Information Architecture** are referenced by the most open issues. Alignment work in these two sections will have the highest community impact.
 
 ### Consensus vs. Standards Coverage Map
@@ -209,14 +211,13 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 | [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | Closed — wind speed is locale-driven per OS settings; no in-app selector needed (decision recorded in [#99](https://github.com/meshtastic/design/issues/99)) | **Closed** |
 | [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors (and CO2, HCHO) now implemented per @oscgonfer | **Closed** |
 | [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Closed** |
-| [#46](https://github.com/meshtastic/design/issues/46) | Bug: Service notification stats missing | Bug report, not a design standards question | **Redirect** to platform-specific repos |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | Branding/assets request, not a client UI design issue | **Redirect** to meshtastic/meshtastic or design team |
 
 ---
 
 ## Appendix: Full Issue Index
 
-All 42 issues tracked (40 original + #99, #100 added May 17, 2026; #37, #51, #87 closed).
+All 41 issues tracked (40 original + #99, #100 added May 17, 2026; #37, #51, #87 closed; #46 transferred to Android).
 
 | # | Title (abbreviated) | Labels | Consensus | Standard | Verdict | Action |
 |---|---------------------|--------|-----------|----------|---------|--------|
@@ -239,7 +240,6 @@ All 42 issues tracked (40 original + #99, #100 added May 17, 2026; #37, #51, #87
 | [#49](https://github.com/meshtastic/design/issues/49) | LoRa vs MQTT send toggle | [FEAT] | None | §3 | 🔇 | Needs Discussion |
 | [#48](https://github.com/meshtastic/design/issues/48) | Per-channel MQTT topic | enhancement | None | §6 | 🔇 | Blocked (firmware) |
 | [#47](https://github.com/meshtastic/design/issues/47) | Configurable node list info | [PARENT] | — | §1, §3 | ✅ | Track |
-| [#46](https://github.com/meshtastic/design/issues/46) | Bug: service notification stats | bug | — | §4 | 🔇 | Redirect |
 | [#45](https://github.com/meshtastic/design/issues/45) | Allow message editing | enhancement | Blocked | 🔇 | 🔇 | Blocked (upstream) |
 | [#44](https://github.com/meshtastic/design/issues/44) | Satellite count display | [ALIGNMENT] | Move to detail view (not remove) | §3 | ✅ | Needs Discussion |
 | [#43](https://github.com/meshtastic/design/issues/43) | Message status indicators | [ALIGNMENT] | Text-only for acknowledged | §4 | ⚠️ | Needs Discussion |
