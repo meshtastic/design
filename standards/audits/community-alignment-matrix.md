@@ -208,7 +208,7 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 
 | Issue | Topic | Reason | Action |
 |-------|-------|--------|--------|
-| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented — Android PR #3633 merged; firmware issue #8226 merged (@ford-jones) | **Close** |
+| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Close** |
 | [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors now implemented per @oscgonfer | **Close** (verify implementation, then close) |
 | [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | Design agreed — @garthvh mockup shows incomplete user icon with question mark | **Close** (design resolved; implementation follows) |
 | [#46](https://github.com/meshtastic/design/issues/46) | Bug: Service notification stats missing | Bug report, not a design standards question | **Redirect** to platform-specific repos |
@@ -248,7 +248,7 @@ All 40 open issues with their consensus level, applicable standard section, verd
 | [#40](https://github.com/meshtastic/design/issues/40) | Hide settings when `is_managed` | [FEAT] | Strong | §3 | ✅ | Spec Ready |
 | [#39](https://github.com/meshtastic/design/issues/39) | Auto-favorite on DM | [ALIGNMENT] | Implemented in Android; concern raised | 🔇 | ⚠️ | Needs Discussion |
 | [#38](https://github.com/meshtastic/design/issues/38) | PKI notification for different key | [FEAT] | Design open | §4, §6 | ⚠️ | Needs Discussion |
-| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on reset | [FEAT] | Implemented | §1 | ✅ | Close |
+| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on reset | [FEAT] | Implemented (cross-platform) | §1 | ✅ | Close |
 | [#36](https://github.com/meshtastic/design/issues/36) | Backup/restore file format | [PARENT] | Blocked | §5, §6 | 🔇 | Blocked (firmware) |
 | [#35](https://github.com/meshtastic/design/issues/35) | Tapback/reaction notifications | [ALIGNMENT] | None yet | §4, §6 | 🔇 | Needs Discussion |
 | [#33](https://github.com/meshtastic/design/issues/33) | Relay node message display | — | Divided | §3, §6 | ⚠️ | Needs Discussion |
