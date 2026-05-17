@@ -306,6 +306,98 @@ On Android 12 and above, the system provides dynamic color palettes derived from
 
 ---
 
+## 10. Units, Measurement & Locale
+
+Meshtastic devices transmit all telemetry and position data in **metric SI units**. The client must never expose raw metric values to users who expect imperial or other regional units. Instead, the client must delegate unit conversion and formatting to the **operating system's locale and measurement system APIs**, which handle this automatically based on the user's device settings.
+
+Users must never need to manually convert units — the client adapts automatically.
+
+### 10.1 Device Data Is Always Metric
+
+All data received from a Meshtastic device over BLE, TCP, or serial arrives in the canonical metric units defined by the protobuf schema. These units must be preserved exactly as-is for internal storage and retransmission. Conversion to display units happens **only at the presentation layer**, immediately before rendering to the screen.
+
+| Quantity | Device Unit | Notes |
+|----------|------------|-------|
+| Altitude | meters (m) | Integer, from GPS |
+| Distance (sensor) | millimeters (mm) | Environment telemetry |
+| Ground Speed | km/h | Position telemetry |
+| Wind Speed | m/s | Environment telemetry |
+| Wind Gust | m/s | Environment telemetry |
+| Temperature | °C | Environment & soil telemetry |
+| Barometric Pressure | hPa | Environment telemetry |
+| Rainfall (1 h / 24 h) | mm | Environment telemetry |
+| Weight | kg | Environment telemetry |
+| Heading / Bearing | degrees (°) | 0–360, from GPS |
+| Radiation | µR/hr | Environment telemetry |
+| Coordinates | degrees × 10⁷ | Signed 32-bit integer |
+
+> **Key point:** The phone or desktop client never defines what unit to display. It tells the OS "this value is X meters" and the OS returns "Y feet" or "X meters" depending on the user's settings.
+
+### 10.2 Let the OS Handle Conversion
+
+Every major platform provides measurement formatting APIs that automatically convert and format values based on the user's locale and measurement system preference. Clients **must** use these APIs rather than implementing manual conversion logic.
+
+| Platform | API | Behavior |
+|----------|-----|----------|
+| **Apple (Swift)** | `Measurement` + `MeasurementFormatter` or `.formatted(.measurement(...))` | Automatically converts m→ft, °C→°F, km/h→mph, etc. based on device locale |
+| **Android (Kotlin)** | `MeasureFormat` / `LocaleData.getMeasurementSystem()` | Respects system locale for unit selection and number formatting |
+| **Web (JS/TS)** | `Intl.NumberFormat` with `style: 'unit'` | Uses browser locale for unit display and number formatting |
+
+**How it works:**
+1. Wrap the raw device value in the platform's measurement type, specifying the **source unit from the device** (e.g., meters, Celsius, km/h).
+2. Pass it to the formatter — the OS reads the user's locale/measurement-system setting and outputs the correct display unit and formatted string.
+3. Display the result. No manual `if metric … else imperial` branching is needed for most quantities.
+
+### 10.3 Display Conversion Table
+
+This table shows what the user sees after OS-level conversion. Clients do not implement these conversions manually — the OS APIs listed in Section 10.2 produce these results automatically.
+
+| Quantity | Metric Locale | Imperial Locale |
+|----------|--------------|-----------------|
+| Large distance | km | mi |
+| Small distance | m | ft |
+| Altitude | m | ft |
+| Ground speed | km/h | mph |
+| Wind speed | m/s or km/h | mph |
+| Temperature | °C | °F |
+| Rainfall | mm | in |
+| Weight | kg | lbs |
+| Sensor distance | mm | in |
+
+**Auto-scaling:** For distances, use the platform's "natural scale" option (e.g., `.naturalScale` on Apple, `MeasureFormat.FormatWidth.SHORT` on Android). This lets the OS pick the most readable magnitude — 500 m stays as "500 m", 2,500 m becomes "2.5 km" or "1.6 mi".
+
+### 10.4 Universal Units (No Conversion)
+
+Some units are internationally standardized and must be displayed as-is regardless of locale:
+
+| Quantity | Display Unit | Reason |
+|----------|-------------|--------|
+| Barometric Pressure | hPa | Standard meteorological unit worldwide |
+| Heading / Bearing | ° (degrees) | Universal navigation convention |
+| Radiation | µR/hr | Standard dosimetry unit |
+| Coordinates | decimal degrees | Universal geographic convention |
+| Percentage values (humidity, battery, soil moisture) | % | Universal |
+
+### 10.5 Implementation Rules
+
+1. **Construct measurements with the correct source unit.** Always specify the unit the device actually sends. `CLLocation.speed` returns m/s — wrap it as `metersPerSecond`, not `kilometersPerHour`. Protobuf `groundSpeed` is km/h — wrap it as `kilometersPerHour`. Getting the source unit wrong produces silently incorrect display values.
+
+2. **Never force-unwrap locale queries.** Locale keys (e.g., temperature-unit preference) may return nil on some OS versions or device configurations. Always provide a sensible default — Celsius for temperature, metric for distances.
+
+3. **Charts and graphs must also respect locale.** Axis labels, tooltips, annotations, and legend values must display in the user's preferred unit, not the internal metric unit.
+
+4. **Number formatting must be locale-aware.** Use locale-sensitive number formatters for decimal separators (`.` vs `,`), digit grouping (`,` vs `.` vs ` `), and precision. Never hardcode decimal separators or thousand separators.
+
+5. **Do not hardcode unit label strings.** Instead of string-concatenating `"kg"` or `"mm"`, use the platform's measurement formatter which returns the correct localized unit symbol automatically.
+
+### 10.6 Date, Time & Calendar
+
+* Always use the OS locale for date and time formatting.
+* Use relative time (e.g., "5 min ago") for recency indicators where appropriate.
+* Honor the user's 12-hour / 24-hour clock preference — never hardcode one or the other.
+* Respect the user's calendar system (Gregorian, Buddhist, Japanese, etc.).
+
+---
 ### Agent Implementation Checklist (v1.4)
 - [ ] Are **Circular IDs** used only for the *other* party in chat views?
 - [ ] Are **List Rows** neutral (no colored backgrounds for the whole row)?
@@ -324,3 +416,11 @@ On Android 12 and above, the system provides dynamic color palettes derived from
 - [ ] Are **Fixed colors** (Section 8.4) used for theme-invariant elements?
 - [ ] Does message text use **`onSurface`** — never raw node foreground colors?
 - [ ] Is the **Neutral Variant** scale (Section 7.3) used for outline and surfaceVariant roles?
+- [ ] Are all device values stored and transmitted in their **canonical metric units** (Section 10.1)?
+- [ ] Are display values converted using **OS measurement APIs** — not manual if/else branching or hardcoded unit strings (Section 10.2)?
+- [ ] Is every measurement object constructed with the **correct source unit** matching the data source (Section 10.5)?
+- [ ] Are locale lookups performed with **safe unwrapping** — no force-unwraps (Section 10.5)?
+- [ ] Do **charts and graph axes** display values in the user's locale unit (Section 10.5)?
+- [ ] Are **number formats** locale-aware — decimal separators, grouping, precision (Section 10.5)?
+- [ ] Are universal units (hPa, °, µR/hr) displayed **without conversion** (Section 10.4)?
+- [ ] Is date/time formatting delegated to the **OS locale** — no hardcoded formats (Section 10.6)?
