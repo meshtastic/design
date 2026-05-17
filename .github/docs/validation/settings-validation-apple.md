@@ -47,7 +47,7 @@ Protobuf message: `Config.LoRaConfig`
 | `modemPreset` | Picker (enum) | Values from `ModemPresets` enum; disabled when `usePreset` is false |
 | `hopLimit` | Picker (`ForEach 0..<8`) | Integer **0–7** inclusive. Proto: *"Maximum number of hops. This can't be greater than 7."* |
 | `txEnabled` | Toggle | Boolean |
-| `txPower` | `Stepper(in: 1...30, step: 1)` | Integer **1–30 dBm**. Proto: *"If zero, then use default max legal continuous power."* (0 = default; UI starts at 1 to prevent accidental override) |
+| `txPower` | `Stepper(in: 0...30, step: 1)` with label `txPower == 0 ? "Max Transmit Power" : "\(txPower)dBm Transmit Power"` | Integer **0–30 dBm**. 0 is explicitly allowed and labelled "Max Transmit Power" (firmware default / max legal continuous power). Fixed in May 2026. |
 | `channelNum` | `TextField` (integer `NumberFormatter`, no grouping separator) | `UInt32`; disabled when `overrideFrequency > 0` |
 | `bandwidth` | Picker (enum `BandwidthCodes`) | Enum-constrained |
 | `spreadFactor` | Picker (`ForEach 7..<13`) | Integer **7–12**. Proto: *"A number from 7 to 12. Indicates number of chirps per symbol as 1<<spread_factor."* Value 0 maps internally to 12 |
@@ -387,7 +387,7 @@ Protobuf message: `ModuleConfig.PaxcounterConfig`
 | Pattern | Where Used | Details |
 |---|---|---|
 | **UTF-8 byte truncation** | All string `TextField` fields | `.onChange` loop: `while utf8.count > limit { dropLast() }` |
-| **Numeric stepper range** | `txPower` (1–30), `current` (0–31) | Enforced by SwiftUI `Stepper(in:)` |
+| **Numeric stepper range** | `txPower` (0–30), `current` (0–31) | Enforced by SwiftUI `Stepper(in:)` |
 | **Enum picker** | All categorical fields | Statically typed; only valid enum cases selectable |
 | **Predefined interval picker** | All timing fields | `UpdateIntervalPicker` with `IntervalConfiguration`; out-of-range values shown with ⚠️ warning |
 | **Slider range** | `mapPositionPrecision` | `Slider(in: 12...15, step: 1)` |
