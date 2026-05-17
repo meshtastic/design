@@ -18,7 +18,7 @@
 | TAK v2 Protocol Integration | [005-tak-v2-protocol](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/005-tak-v2-protocol) | ✅ Implemented | _(not spec'd)_ | ✅ Implemented | Android: 80/80 tasks merged to `main`. Apple: ships TAK v2 (`supportsTAKv2`, firmware ≥ 2.8.0) but has no formal spec — gap to address |
 | Message Formatting Toolbar | _(not spec'd)_ | — | [004-message-formatting-toolbar](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/004-message-formatting-toolbar) | 🔵 Draft | Apple-led; strong candidate for Android spec — relates to design [#21](https://github.com/meshtastic/design/issues/21) |
 | Lockdown Mode | [20260513-075218-lockdown-mode](https://github.com/meshtastic/Meshtastic-Android/tree/features/lockdown-v2/specs/20260513-075218-lockdown-mode) | 🔴 Branch Complete | [007-lockdown-mode](https://github.com/meshtastic/Meshtastic-Apple/tree/007-lockdown-mode/specs/007-lockdown-mode) | 🔴 Branch Complete | Paired spec — Android `features/lockdown-v2` (53/53 tasks done); Apple `007-lockdown-mode` (27/28 tasks done); firmware protobuf PR #911 is the shared dependency |
-| Compose Preview Screenshot Testing | [20260511-211823-compose-screenshot-testing](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260511-211823-compose-screenshot-testing) | 🔴 Branch Complete | _(not applicable)_ | — | Android internal dev tooling; 51/51 tasks done on `feat/20260507-161858-app-docs-markdown` as a dependency of the docs feature; awaiting merge |
+| Compose Preview Screenshot Testing | [20260511-211823-compose-screenshot-testing](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260511-211823-compose-screenshot-testing) | 🔴 Branch Complete | _(not spec'd)_ | ✅ Implemented | Android: 51/51 tasks done on `feat/20260507-161858-app-docs-markdown`, awaiting merge. Apple: existing snapshot tests in production (developed without SpecKit, same pattern as TAK v2) |
 | M3 Expressive Design System Adoption | [20260513-160000-m3-expressive-adoption](https://github.com/meshtastic/Meshtastic-Android/tree/20260513-160000-m3-expressive-adoption/specs/20260513-160000-m3-expressive-adoption) | 🔵 In Progress | _(not applicable)_ | — | Android-only; M3 Expressive APIs are Compose-specific. Branch `20260513-160000-m3-expressive-adoption`, 14/58 tasks done |
 | Docs Auto-Translation | _(not spec'd)_ | — | [008-docs-auto-translation](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/008-docs-auto-translation) | ✅ Implemented | Apple-only (Apple Translation framework); Android approach would differ |
 | Docs Translation Pipeline (CDN + crowd-source) | _(not spec'd)_ | — | [009-docs-translation-pipeline](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/009-docs-translation-pipeline) | ✅ Implemented | Apple-only; outputs to shared `meshtastic/translations` repo |
@@ -110,7 +110,7 @@ Markdown documentation served as a GitHub Pages Jekyll site, bundled in-app for 
 | Web docs | GitHub Pages (Jekyll) | GitHub Pages (Jekyll) |
 | In-app AI assistant | Gemini Nano (on-device Q&A, "Chirpy") | Foundation Models (Apple Intelligence) |
 | CI generation | GitHub Actions (auto-regen on push) | GitHub Actions (auto-regen on push) |
-| Screenshot source | Compose Preview Screenshot Testing (51/51 tasks done, same branch) | Existing snapshot tests |
+| Screenshot source | Compose Preview Screenshot Testing (51/51 tasks done, same branch) | Existing snapshot tests (no SpecKit spec — implemented without formal spec process) |
 
 ### 4. Lockdown Mode
 
