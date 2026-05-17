@@ -26,21 +26,21 @@ This document maps every open issue in the design repository against community o
 ### Action Recommendations
 
 ```mermaid
-pie title 40 Open Issues - Recommended Action
-    "Spec Ready" : 8
-    "Needs Discussion" : 13
+pie title 41 Issues (May 17, 2026) - Recommended Action
+    "Spec Ready" : 7
+    "Needs Discussion" : 14
     "Blocked (upstream)" : 5
     "Parent / Tracking" : 6
-    "Close or Redirect" : 5
+    "Close or Redirect" : 6
     "Low Activity" : 3
 ```
 
 ### Standards Coverage
 
 ```mermaid
-pie title Standards Coverage Across All 40 Issues
+pie title Standards Coverage Across All 41 Issues
     "Directly covered by v1.4" : 12
-    "Partially covered by v1.4" : 8
+    "Partially covered by v1.4" : 9
     "Standards silent" : 20
 ```
 
@@ -103,6 +103,7 @@ These issues were explicitly filed to resolve cross-platform behavioral or displ
 | [#43](https://github.com/meshtastic/design/issues/43) | Message status indicators | Text-only for "Acknowledged"; better text for error states (@garthvh) | — (no counter-position, but §4 mandates icon+text redundancy) | §4 Iconography — icon+text for all status indicators | ⚠️ Text-only for acknowledged partially conflicts with §4 icon+text mandate |
 | [#39](https://github.com/meshtastic/design/issues/39) | Auto-favorite nodes on DM | Implemented in Android with `manually_verified` + `CLIENT_BASE` guard (@jamesarich) | DM should not auto-favorite; risks silently favoriting uncontrolled router nodes (@aerodan) | 🔇 Standards silent on automatic node relationship behavior | ⚠️ Valid UX concern from @aerodan; no standard resolves this — needs a design decision |
 | [#35](https://github.com/meshtastic/design/issues/35) | Tapback/Reaction Notifications | _(No consensus — five open questions raised by @jamesarich; no answers yet)_ | — | §4 Iconography, §6 IA (notification text) | 🔇 Partially covered — notification wording should follow §6 plain language when implemented |
+| [#99](https://github.com/meshtastic/design/issues/99) | Units, Measurement & Locale | Follow OS Language & Region for all convertible units; no in-app unit controls (Apple reference implementation); wind speed = locale-driven (decided May 17) | Android had open request for in-app wind speed selector ([#87](https://github.com/meshtastic/design/issues/87), now closed) | §5 Vision-Centric (native OS patterns), §6 IA (plain language, localization) | ✅ OS locale delegation aligns with §5 native patterns and §6; 4 sub-questions still open (scaling thresholds, pressure unit, relative time format) |
 
 ### Key Takeaways — ALIGNMENT Issues
 
@@ -111,6 +112,7 @@ These issues were explicitly filed to resolve cross-platform behavioral or displ
 - **#43:** §4 requires icon+text redundancy for status indicators. The acknowledged state should include a visual indicator alongside the text, not text alone.
 - **#39:** Needs an explicit cross-platform design decision before this becomes a standard. Android implementation exists as a reference point.
 - **#35:** Cannot be specced until the five open questions in the issue body are answered.
+- **#99:** Wind speed is locale-driven — decided May 17, 2026; #87 closed. Four questions remain open: natural scaling thresholds, hPa confirmation as fixed pressure unit, in-app selector edge cases, and relative time vs absolute timestamp pattern for last-heard.
 
 ---
 
@@ -144,7 +146,7 @@ Issues where the community broadly agrees and there is no significant counter-po
 | [#80](https://github.com/meshtastic/design/issues/80) | Rename "Uplink/Downlink Enabled" | → "MQTT Uplink/Downlink Enabled"; @infered5 notes UDP also uses this control and suggests "Network Uplink/Downlink" | §6 IA — plain language for technical settings | ✅ Aligned; UDP nuance from @infered5 is worth investigating before spec | **Spec Ready** |
 | [#85](https://github.com/meshtastic/design/issues/85) | Node list sort/filter improvements | Improve UX; @roberthadow: whatever is built must be consistent across iOS, Android, Web | §1 Circle Standard, §4 Iconography | ✅ Aligned | **Spec Ready** |
 | [#84](https://github.com/meshtastic/design/issues/84) | SI prefixes for large environment values | Use intelligent SI prefixes (hPa not kPa; m/s etc.); contributor @NeimadTL assigned | §5 Vision-Centric (readability), §6 IA | ✅ Aligned | In progress |
-| [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | User-selectable units (m/s, mph, km/h, knots); broken out from #84 | §6 IA — plain language, localization | ✅ Aligned | **Spec Ready** |
+| [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | ~~Closed~~ — wind speed follows OS locale, consistent with all other speed/measurement units; no in-app selector needed | §6 IA — plain language, localization | ✅ Aligned | **Closed** — see [#99](https://github.com/meshtastic/design/issues/99) |
 | [#75](https://github.com/meshtastic/design/issues/75) | Full-text search in messages | Add search similar to existing debug log search (@shalberd) | 🔇 Standards silent on search features | 🔇 Not covered | **Spec Ready** |
 | [#82](https://github.com/meshtastic/design/issues/82) | Auto-delete old messages | Configurable auto-delete threshold; Android PR exists (linked by @DaneEvans) | §3 Dynamic Layout (data management) | 🔇 Standards silent on retention policy | **Spec Ready** |
 | [#69](https://github.com/meshtastic/design/issues/69) | MQTT/UDP hops in traceroutes | Show "MQTT" / "UDP" labels instead of misleading 0.0 dB or ±31.75 dB values | §4 Iconography — text labels; §6 IA — remove ambiguous values | ✅ Aligned with §4 and §6 | Blocked (awaiting firmware PR #10046) |
@@ -187,7 +189,7 @@ Umbrella issues that should remain open until their sub-items complete.
 
 | Issue | Topic | Sub-item Status | Standard | Verdict | Keep Open? |
 |-------|-------|----------------|----------|---------|-----------|
-| [#53](https://github.com/meshtastic/design/issues/53) | Sensor Telemetry UI/UX | Sub-issues #54 (AQI), #51 (particulates) in progress | §3, §6 | ✅ | Yes — active work |
+| [#53](https://github.com/meshtastic/design/issues/53) | Sensor Telemetry UI/UX | Sub-issues #54 (AQI) in progress; #51 (particulates) closed | §3, §6 | ✅ | Yes — active work |
 | [#47](https://github.com/meshtastic/design/issues/47) | Configurable node list info | No sub-issues yet; concept aligns with §3 | §1, §3 | ✅ | Yes — needs spec |
 | [#21](https://github.com/meshtastic/design/issues/21) | Cross-platform text messaging features | Active — links to #86 (font size), enhanced markup proposals | §5, §6 | ✅ @garthvh's Dynamic Type position aligned with §5 | Yes — active |
 | [#20](https://github.com/meshtastic/design/issues/20) | Managed Mode Updates | Directly maps to §3; blocked on firmware | §3 Dynamic Layout | ✅ Directly aligned | Yes — blocked |
@@ -201,8 +203,9 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 
 | Issue | Topic | Reason | Action |
 |-------|-------|--------|--------|
-| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Close** |
-| [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors now implemented per @oscgonfer | **Close** (verify implementation, then close) |
+| [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | Closed — wind speed is locale-driven per OS settings; no in-app selector needed (decision recorded in [#99](https://github.com/meshtastic/design/issues/99)) | **Closed** |
+| [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors (and CO2, HCHO) now implemented per @oscgonfer | **Closed** |
+| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Closed** |
 | [#16](https://github.com/meshtastic/design/issues/16) | Visible info before NodeInfo arrives | Design agreed — @garthvh mockup shows incomplete user icon with question mark | **Close** (design resolved; implementation follows) |
 | [#46](https://github.com/meshtastic/design/issues/46) | Bug: Service notification stats missing | Bug report, not a design standards question | **Redirect** to platform-specific repos |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | Branding/assets request, not a client UI design issue | **Redirect** to meshtastic/meshtastic or design team |
@@ -211,11 +214,12 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 
 ## Appendix: Full Issue Index
 
-All 40 open issues with their consensus level, applicable standard section, verdict, and recommended action.
+All 41 issues tracked (40 original + #99 added May 17, 2026; #37, #51, #87 closed).
 
 | # | Title (abbreviated) | Labels | Consensus | Standard | Verdict | Action |
 |---|---------------------|--------|-----------|----------|---------|--------|
-| [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | enhancement | Strong | §6 | ✅ | Spec Ready |
+| [#99](https://github.com/meshtastic/design/issues/99) | Units, Measurement & Locale | [ALIGNMENT] | Partial (wind speed resolved) | §5, §6 | ✅ | Needs Discussion |
+| [#87](https://github.com/meshtastic/design/issues/87) | Configurable wind speed units | enhancement | Resolved | §6 | ✅ | Closed |
 | [#86](https://github.com/meshtastic/design/issues/86) | Adjustable font size in Conversations | enhancement | Strong (but conflicts with §5) | §5 | ⚠️ | Needs Discussion |
 | [#85](https://github.com/meshtastic/design/issues/85) | Node list sort/filter improvements | enhancement | Strong | §1, §4 | ✅ | Spec Ready |
 | [#84](https://github.com/meshtastic/design/issues/84) | SI prefixes for env metrics | enhancement | Strong | §5, §6 | ✅ | In Progress |
@@ -228,7 +232,7 @@ All 40 open issues with their consensus level, applicable standard section, verd
 | [#69](https://github.com/meshtastic/design/issues/69) | MQTT/UDP hops in traceroutes | enhancement | Strong | §4, §6 | ✅ | Blocked (firmware PR #10046) |
 | [#54](https://github.com/meshtastic/design/issues/54) | AQI display & calculation | [ALIGNMENT] | Strong on algorithm; divided on naming | §6 | ⚠️ | Needs Discussion (naming) |
 | [#53](https://github.com/meshtastic/design/issues/53) | Sensor telemetry UI/UX | [PARENT][ALIGNMENT] | — | §3, §6 | ✅ | Track |
-| [#51](https://github.com/meshtastic/design/issues/51) | Raw particulate sensor data | enhancement | Strong | §3 | ✅ | Close |
+| [#51](https://github.com/meshtastic/design/issues/51) | Raw particulate sensor data | enhancement | Strong | §3 | ✅ | Closed |
 | [#49](https://github.com/meshtastic/design/issues/49) | LoRa vs MQTT send toggle | [FEAT] | None | §3 | 🔇 | Needs Discussion |
 | [#48](https://github.com/meshtastic/design/issues/48) | Per-channel MQTT topic | enhancement | None | §6 | 🔇 | Blocked (firmware) |
 | [#47](https://github.com/meshtastic/design/issues/47) | Configurable node list info | [PARENT] | — | §1, §3 | ✅ | Track |
@@ -241,7 +245,7 @@ All 40 open issues with their consensus level, applicable standard section, verd
 | [#40](https://github.com/meshtastic/design/issues/40) | Hide settings when `is_managed` | [FEAT] | Strong | §3 | ✅ | Spec Ready |
 | [#39](https://github.com/meshtastic/design/issues/39) | Auto-favorite on DM | [ALIGNMENT] | Implemented in Android; concern raised | 🔇 | ⚠️ | Needs Discussion |
 | [#38](https://github.com/meshtastic/design/issues/38) | PKI notification for different key | [FEAT] | Design open | §4, §6 | ⚠️ | Needs Discussion |
-| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on reset | [FEAT] | Implemented (cross-platform) | §1 | ✅ | Close |
+| [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on reset | [FEAT] | Implemented (cross-platform) | §1 | ✅ | Closed |
 | [#36](https://github.com/meshtastic/design/issues/36) | Backup/restore file format | [PARENT] | Blocked | §5, §6 | 🔇 | Blocked (firmware) |
 | [#35](https://github.com/meshtastic/design/issues/35) | Tapback/reaction notifications | [ALIGNMENT] | None yet | §4, §6 | 🔇 | Needs Discussion |
 | [#33](https://github.com/meshtastic/design/issues/33) | Relay node message display | — | Divided | §3, §6 | ⚠️ | Needs Discussion |
