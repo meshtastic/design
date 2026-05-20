@@ -42,6 +42,13 @@ Proposed alignment moves the connection/device tab to the end (less frequently u
 | 4 | **Settings** | Configuration; infrequently accessed |
 | 5 | **Connect** | Device pairing; needed mainly at setup or when switching hardware |
 
+### Tracking
+
+| Platform | Issue |
+|----------|-------|
+| iOS (Meshtastic-Apple) | [#1840](https://github.com/meshtastic/Meshtastic-Apple/issues/1840) |
+| Android (Meshtastic-Android) | [#5543](https://github.com/meshtastic/Meshtastic-Android/issues/5543) |
+
 ---
 
 ## 2. Node List — Row Layout
