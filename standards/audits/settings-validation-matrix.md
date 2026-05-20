@@ -2,7 +2,7 @@
 
 **Status:** Reference Document  
 **Sources:** [settings-validation-android.md](../../.github/docs/validation/settings-validation-android.md) · [settings-validation-apple.md](../../.github/docs/validation/settings-validation-apple.md)  
-**Last Updated:** 2026-05-17  
+**Last Updated:** 2026-05-20  
 
 > **Purpose:** This document cross-references the Android and Apple settings validation references to surface missing screens, missing fields, and constraint mismatches that should be aligned.
 
@@ -21,7 +21,7 @@
 | Network Config | ✅ | ✅ | Apple exposes fewer fields — see §3 |
 | Display Config | ✅ | ✅ | — |
 | LoRa Config | ✅ | ✅ | Several constraint mismatches — see §3 |
-| Bluetooth Config | ⚠️ | ✅ | Apple fixed leading-zero bug (PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)); Android silently rejects leading-zero PINs with no error feedback |
+| Bluetooth Config | ✅ | ✅ | ✅ Both platforms fixed: Apple PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830); Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477) |
 | Security Config | ✅ | ✅ | `is_managed` guard fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); minor structural differences remain |
 
 ### Module Config Screens
@@ -110,8 +110,8 @@ These module config screens are present in Android but have no equivalent in the
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
 | `tx_power` | Signed integer, no enforced range | `Stepper(in: 0...30)` — 0 labelled "Max Transmit Power" | ✅ **Fixed May 2026.** Apple now allows 0 dBm (firmware default). Both platforms accept 0 as "use max legal continuous power." |
-| `spread_factor` | Numeric input | `Picker(ForEach 7..<13)` i.e. 7–12 | Android allows out-of-range entry; Apple enforces 7–12 |
-| `coding_rate` | Numeric input | `Picker(ForEach 5..<9)` i.e. 5–8 | Android allows out-of-range entry; Apple enforces 5–8 |
+| `spread_factor` | Numeric input; rejects values outside 7–12 with error indicator | `Picker(ForEach 7..<13)` i.e. 7–12 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 7–12. |
+| `coding_rate` | Numeric input; rejects values outside 5–8 with error indicator | `Picker(ForEach 5..<9)` i.e. 5–8 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 5–8. |
 | `bandwidth` | Numeric input | Picker (enum `BandwidthCodes`) | Android allows arbitrary integer; Apple is enum-constrained |
 | `pa_fan_disabled` | Shown when `hasPaFan = true` | Not present | Android-only field |
 
@@ -119,7 +119,7 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `fixed_pin` | Accepts any 6-digit **numeric** value; `EditTextPreference(Int)` converts typed string to `UInt` first, so input `000100` silently arrives as `100` (3 digits), fails the `length == 6` guard, and is **discarded with no error shown** | Exactly 6 digits; strips leading zeros only via `.drop(while: { $0 == "0" })`, shows "short pin" warning if result < 6 digits | ⚠️ Android silently rejects leading-zero PINs — see gap row below. Apple ✅ fixed in PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830). |
+| `fixed_pin` | String input with `KeyboardType.NumberPassword`; preserves leading zeros; shows error indicator for incomplete/invalid PINs | Exactly 6 digits; strips leading zeros only via `.drop(while: { $0 == "0" })`, shows "short pin" warning if result < 6 digits | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026) — now treats PIN as string, preserves leading zeros, shows error for invalid input. Apple ✅ fixed in PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830). |
 
 ### Security Config
 
@@ -184,8 +184,8 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `current` | Unrestricted numeric input | `Stepper(in: 0...31)` — **0–31** | Android allows values > 31; Apple restricts to 0–31 |
-| RGB values | Three separate numeric inputs (0–255 each) | Single `ColorPicker` | Same data, different UX |
+| `current` | Numeric input; rejects values outside 0–31 with error indicator | `Stepper(in: 0...31)` — **0–31** | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 0–31. |
+| RGB values | Three separate numeric inputs; rejects values outside 0–255 with error indicator | Single `ColorPicker` | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Same data, different UX; both enforce 0–255. |
 
 ### TAK Module Config
 
@@ -218,7 +218,7 @@ These module config screens are present in Android but have no equivalent in the
 |---|------|-------|------------------------------------|---------|-------|-------------------|
 | ~~1~~ | ~~LoRa Config~~ | ~~`tx_power`~~ | — | — | — | ~~Apple `Stepper(in: 1...30)` could not express 0 dBm.~~ **Fixed May 2026** — `Stepper(in: 0...30)` with 0 labelled "Max Transmit Power". |
 | ~~2~~ | ~~Bluetooth Config~~ | ~~`fixed_pin`~~ | `uint32` — no size constraint | ✅ Accepts any 6-digit number unchanged | ✅ **Fixed in Apple PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830)** (May 17, 2026) — now strips leading zeros only via `.drop(while: { $0 == "0" })` | ✅ Resolved |
-| 2b | Bluetooth Config | `fixed_pin` | `uint32` — no size constraint | ⚠️ `EditTextPreference(Int)` converts typed string to `UInt` before `onValueChanged`; a leading-zero input like `000100` becomes `100`, silently fails `length == 6`, and is **discarded with no error indicator**. User sees the typed value but it is never saved. | ✅ Shows "short pin" warning when stripped value < 6 digits | Android: add `isError` state to `EditTextPreference` when `it.toString().length < 6`; propagate error to `BluetoothConfigScreen`. |
+| ~~2b~~ | ~~Bluetooth Config~~ | ~~`fixed_pin`~~ | `uint32` — no size constraint | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026) — now uses string input with `KeyboardType.NumberPassword`, preserves leading zeros, shows error indicator for invalid PINs. | ✅ Shows "short pin" warning when stripped value < 6 digits | ✅ Resolved |
 | ~~3~~ | ~~MQTT Config~~ | ~~`password`~~ | **`max_size:32` → 31 bytes max** | ⚠️ Enforces 63 bytes. Internal comment incorrectly reads `max_size:64`; the `.options` file specifies `max_size:32`. Passwords of 32–63 bytes are accepted by Android but silently truncated by firmware. | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 31 bytes. | Android still enforces 63 bytes — change `maxSize = 63` → `31` and fix the comment. |
 | ~~4~~ | ~~MQTT Config~~ | ~~`address`~~ | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 63 bytes | ✅ Resolved |
 | ~~5~~ | ~~Canned Messages~~ | ~~`messages`~~ | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 200 bytes | ✅ Resolved |

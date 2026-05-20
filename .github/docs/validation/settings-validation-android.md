@@ -144,8 +144,8 @@ configuration settings screen. Constraints are sourced from two layers:
 | `use_preset` | Boolean | Toggle | Controls manual vs preset LoRa settings visibility |
 | `modem_preset` | Enum | Dropdown: `ChannelOption` entries | Visible only when `use_preset = true` |
 | `bandwidth` | Integer | Numeric input | Visible only when `use_preset = false` |
-| `spread_factor` | Integer | Numeric input | Visible only when `use_preset = false` |
-| `coding_rate` | Integer | Numeric input | Visible only when `use_preset = false` |
+| `spread_factor` | Integer | Numeric input; rejects values outside 7–12 with error indicator | Visible only when `use_preset = false` |
+| `coding_rate` | Integer | Numeric input; rejects values outside 5–8 with error indicator | Visible only when `use_preset = false` |
 | `hop_limit` | Integer | Dropdown: 0–7 | — |
 | `channel_num` | Integer | Numeric input; must be ≤ `numChannels` | — |
 | `tx_enabled` | Boolean | Toggle | — |
@@ -163,7 +163,7 @@ configuration settings screen. Constraints are sourced from two layers:
 |-------|------|------------|-------|
 | `enabled` | Boolean | Toggle | — |
 | `mode` | Enum | Dropdown: `PairingMode` entries (excl. UNRECOGNIZED) | — |
-| `fixed_pin` | String | Exactly 6 digits | — |
+| `fixed_pin` | String | Exactly 6 digits; `KeyboardType.NumberPassword`; preserves leading zeros; shows error indicator for incomplete/invalid PINs | — |
 
 ### Security (`Config.SecurityConfig`)
 
@@ -317,10 +317,10 @@ configuration settings screen. Constraints are sourced from two layers:
 | Field | Type | Validation | Notes |
 |-------|------|------------|-------|
 | `led_state` | Boolean | Toggle | — |
-| `current` | Integer | Numeric input | — |
-| `red` | Integer | Numeric input (0–255) | — |
-| `green` | Integer | Numeric input (0–255) | — |
-| `blue` | Integer | Numeric input (0–255) | — |
+| `current` | Integer | Numeric input; rejects values outside 0–31 with error indicator | — |
+| `red` | Integer | Numeric input; rejects values outside 0–255 with error indicator | — |
+| `green` | Integer | Numeric input; rejects values outside 0–255 with error indicator | — |
+| `blue` | Integer | Numeric input; rejects values outside 0–255 with error indicator | — |
 
 ### Detection Sensor (`ModuleConfig.DetectionSensorConfig`)
 
