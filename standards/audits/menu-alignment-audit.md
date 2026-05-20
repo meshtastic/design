@@ -145,7 +145,14 @@ Keeping the menu concise (4–6 items) while surfacing the most-used actions:
 | 3 | **Message** | Quick access to chat |
 | 4 | **Trace Route** | Frequently used diagnostic |
 | 5 | **Ignore / Remove from ignored** | Maintenance action |
-| 6 | **Delete / Remove** | Destructive; placed last |
+| 6 | **Remove** | Destructive; placed last. iOS renames "Delete Node" to match Android and firmware API |
+
+### Tracking
+
+| Platform | Issue |
+|----------|-------|
+| iOS (Meshtastic-Apple) | [#1841](https://github.com/meshtastic/Meshtastic-Apple/issues/1841) |
+| Android (Meshtastic-Android) | [#5544](https://github.com/meshtastic/Meshtastic-Android/issues/5544) |
 
 ---
 
