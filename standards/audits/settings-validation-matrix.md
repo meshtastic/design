@@ -171,7 +171,7 @@ Apple implementation added in PR [#1860](https://github.com/meshtastic/Meshtasti
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `adc_multiplier_override` | Must be > 0.0 | `FloatField(isValid: { (2.0...6.0).contains($0) })` — **2.0–6.0** | ⚠️ Android only validates > 0; Apple restricts to 2.0–6.0 |
+| `adc_multiplier_override` | Must be > 0.0 | `FloatField(isValid: { (2.0...6.0).contains($0) })` — **2.0–6.0** | ⚠️ **[ALIGNMENT]** Canonical validation is `> 0.0` — Apple should relax to match Android. Apple issue [#1865](https://github.com/meshtastic/Meshtastic-Apple/issues/1865). Apple's ADC Override toggle (0 = firmware default) should be retained. |
 | `is_power_saving` | Toggle | Shown only for ESP32/ESP32S3 or specific roles | Both platform-conditional but different conditions documented |
 
 ### Canned Messages Config
@@ -230,7 +230,7 @@ Apple implementation added in PR [#1860](https://github.com/meshtastic/Meshtasti
 | ~~4~~ | ~~MQTT Config~~ | ~~`address`~~ | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 63 bytes | ✅ Resolved |
 | ~~5~~ | ~~Canned Messages~~ | ~~`messages`~~ | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 200 bytes | ✅ Resolved |
 | ~~6~~ | ~~External Notification~~ | ~~`ringtone`~~ | `max_size:231` → 230 bytes max | ✅ Enforces 230 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 230 bytes | ✅ Resolved |
-| 7 | Power Config | `adc_multiplier_override` | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ❌ Validates only `> 0.0`; any positive float accepted; no explicit UI for the `0 = disabled` semantic | ✅ `FloatField` restricted to `(2.0...6.0)`; ADC Override toggle sets field to `0` when off | Android: add range validation `2.0..6.0` and consider a toggle to express `0 = use firmware default`, matching Apple's approach. |
+| 7 | Power Config | `adc_multiplier_override` | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ✅ Validates `> 0.0`; any positive float accepted | ❌ Restricts to `2.0...6.0` — too narrow. Apple issue [#1865](https://github.com/meshtastic/Meshtastic-Apple/issues/1865) to relax to `> 0.0`. Apple's toggle for `0 = firmware default` is the correct pattern and should be retained. | Apple: relax `FloatField` validator to `{ $0 > 0.0 }`. |
 | ~~8~~ | ~~Security Config~~ | ~~`is_managed`~~ | `repeated bytes admin_key` must be set before managed mode is meaningful | ✅ Toggle is `.enabled = formState.admin_key.isNotEmpty()` | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — toggle disabled when `adminKey.length == 0`; warning shown | ✅ Resolved |
 
 ### Fields Present on Android but Missing from Apple
