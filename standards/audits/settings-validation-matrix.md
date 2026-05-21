@@ -119,7 +119,7 @@ Apple implementation added in PR [#1860](https://github.com/meshtastic/Meshtasti
 | `spread_factor` | Numeric input; rejects values outside 7–12 with error indicator | `Picker(ForEach 7..<13)` i.e. 7–12 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 7–12. |
 | `coding_rate` | Numeric input; rejects values outside 5–8 with error indicator | `Picker(ForEach 5..<9)` i.e. 5–8 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 5–8. |
 | `bandwidth` | Numeric input | Picker (enum `BandwidthCodes`) | Android allows arbitrary integer; Apple is enum-constrained |
-| `pa_fan_disabled` | Shown when `hasPaFan = true` | Not present | Android-only field |
+| `pa_fan_disabled` | Shown when `hasPaFan = true` | Not present | Apple issue [#1864](https://github.com/meshtastic/Meshtastic-Apple/issues/1864) |
 
 ### Bluetooth Config
 
@@ -236,7 +236,7 @@ Apple implementation added in PR [#1860](https://github.com/meshtastic/Meshtasti
 
 | Area | Fields |
 |------|--------|
-| LoRa Config | `pa_fan_disabled` |
+| LoRa Config | `pa_fan_disabled` | Apple issue [#1864](https://github.com/meshtastic/Meshtastic-Apple/issues/1864) |
 | ~~Network Config~~ | ~~`ntp_server`, `rsyslog_server`, static IPv4~~  | ✅ Added to Apple in PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) |
 | ~~Security Config~~ | ~~`admin_channel_enabled`~~ | ✅ Removed from Android in PR [#5547](https://github.com/meshtastic/Meshtastic-Android/pull/5547) |
 | ~~Display Config~~ | ~~`compass_orientation`~~ | ✅ Added to Apple in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) |
