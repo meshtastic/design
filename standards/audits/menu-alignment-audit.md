@@ -44,10 +44,10 @@ Proposed alignment moves the connection/device tab to the end (less frequently u
 
 ### Tracking
 
-| Platform | Issue |
-|----------|-------|
-| iOS (Meshtastic-Apple) | [#1840](https://github.com/meshtastic/Meshtastic-Apple/issues/1840) |
-| Android (Meshtastic-Android) | [#5543](https://github.com/meshtastic/Meshtastic-Android/issues/5543) |
+| Platform | Issue | PR | Status |
+|----------|-------|----|--------|
+| iOS (Meshtastic-Apple) | [#1840](https://github.com/meshtastic/Meshtastic-Apple/issues/1840) | [#1851](https://github.com/meshtastic/Meshtastic-Apple/pull/1851) | ✅ Merged 2026-05-20 |
+| Android (Meshtastic-Android) | [#5543](https://github.com/meshtastic/Meshtastic-Android/issues/5543) | [#5551](https://github.com/meshtastic/Meshtastic-Android/pull/5551) | ✅ Merged 2026-05-20 |
 
 ---
 
@@ -149,10 +149,10 @@ Keeping the menu concise (4–6 items) while surfacing the most-used actions:
 
 ### Tracking
 
-| Platform | Issue |
-|----------|-------|
-| iOS (Meshtastic-Apple) | [#1841](https://github.com/meshtastic/Meshtastic-Apple/issues/1841) |
-| Android (Meshtastic-Android) | [#5544](https://github.com/meshtastic/Meshtastic-Android/issues/5544) |
+| Platform | Issue | PR | Status |
+|----------|-------|----|--------|
+| iOS (Meshtastic-Apple) | [#1841](https://github.com/meshtastic/Meshtastic-Apple/issues/1841) | [#1850](https://github.com/meshtastic/Meshtastic-Apple/pull/1850) | ✅ Merged 2026-05-21 |
+| Android (Meshtastic-Android) | [#5544](https://github.com/meshtastic/Meshtastic-Android/issues/5544) | [#5548](https://github.com/meshtastic/Meshtastic-Android/pull/5548) | ✅ Merged 2026-05-20 |
 
 ---
 
