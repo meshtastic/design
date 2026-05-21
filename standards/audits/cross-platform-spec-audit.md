@@ -139,7 +139,7 @@ Protects unattended Meshtastic nodes from unauthorized physical access. When ena
 
 2. **Monitor the Lockdown Mode protobufs dependency.** Both Android (`features/lockdown-v2`) and Apple (`007-lockdown-mode`) have near-complete implementations blocked on firmware protobufs PR #911. As soon as that merges, both client branches can be finalised and merged together.
 
-3. **Write an Apple spec for TAK v2.** Apple already ships TAK v2 (`supportsTAKv2`, firmware ≥ 2.8.0) but with no formal spec. The Android 80-task spec defines wire protocol, CoT type mappings, zstd compression, and legacy fallback. An Apple companion spec would scope the iOS/macOS UX surface differences and ensure ongoing parity as the protocol evolves.
+3. ~~**Write an Apple spec for TAK v2.**~~ ✅ **Done** — Apple spec added and merged via PR [#1838](https://github.com/meshtastic/Meshtastic-Apple/pull/1838) (2026-05-21). Cross-platform gap closed; both platforms now have paired specs and full implementations.
 
 4. **Write an Android spec for the Message Formatting Toolbar.** This feature is in Draft on Apple and aligns directly with design issue [#21](https://github.com/meshtastic/design/issues/21). The Android Compose text field is a natural host for a markdown formatting toolbar.
 
