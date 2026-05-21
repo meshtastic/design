@@ -1,8 +1,8 @@
 # Cross-Platform Settings Validation Matrix
 
 **Status:** Reference Document  
-**Sources:** [settings-validation-android.md](../../.github/docs/validation/settings-validation-android.md) · [settings-validation-apple.md](../../.github/docs/validation/settings-validation-apple.md)  
-**Last Updated:** 2026-05-20  
+**Sources:** [settings-validation-android.md](data/settings-validation-android.md) · [settings-validation-apple.md](data/settings-validation-apple.md)  
+**Last Updated:** 2026-05-21  
 
 > **Purpose:** This document cross-references the Android and Apple settings validation references to surface missing screens, missing fields, and constraint mismatches that should be aligned.
 
@@ -18,18 +18,18 @@
 | Device Config | ✅ | ✅ | — |
 | Position Config | ✅ | ✅ | — |
 | Power Config | ✅ | ✅ | — |
-| Network Config | ✅ | ✅ | Apple exposes fewer fields — see §3 |
-| Display Config | ✅ | ✅ | — |
+| Network Config | ✅ | ✅ | Apple now exposes all fields: Apple PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) added ntp_server, rsyslog_server, static IPv4; Android PR [#5549](https://github.com/meshtastic/Meshtastic-Android/pull/5549) renamed UDP toggle label |
+| Display Config | ✅ | ✅ | `compass_orientation` picker added to Apple via PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847); deprecated `compass_north_top` now gated on firmware version |
 | LoRa Config | ✅ | ✅ | Several constraint mismatches — see §3 |
 | Bluetooth Config | ✅ | ✅ | ✅ Both platforms fixed: Apple PR [#1830](https://github.com/meshtastic/Meshtastic-Apple/pull/1830); Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477) |
-| Security Config | ✅ | ✅ | `is_managed` guard fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); minor structural differences remain |
+| Security Config | ✅ | ✅ | `is_managed` guard fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); `admin_channel_enabled` removed from Android via PR [#5547](https://github.com/meshtastic/Meshtastic-Android/pull/5547) |
 
 ### Module Config Screens
 
 | Screen | Android | Apple | Notes |
 |--------|---------|-------|-------|
 | MQTT | ⚠️ | ✅ | Apple byte limits fixed in PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); Android `password` still enforces 63 bytes (should be 31) |
-| Telemetry | ✅ | ✅ | Android has air quality fields; Apple does not |
+| Telemetry | ✅ | ✅ | Air quality fields (`air_quality_enabled`, `air_quality_interval`) added to Apple via PR [#1848](https://github.com/meshtastic/Meshtastic-Apple/pull/1848) |
 | Canned Messages | ✅ | ✅ | Byte limit aligned — fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833) |
 | Detection Sensor | ✅ | ✅ | Apple has sensor/client role picker |
 | External Notification | ✅ | ✅ | `ringtone` byte limit fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833); screen placement differs (Android: inline, Apple: separate RTTTL screen) |
@@ -37,12 +37,12 @@
 | Serial | ✅ | ✅ | — |
 | Range Test | ✅ | ✅ | — |
 | RTTTL / Ringtone | ✅ (within Ext. Notification) | ✅ (separate screen) | Byte limit differs by 2 |
-| Ambient Lighting | ✅ | ✅ | Current range differs |
+| Ambient Lighting | ✅ | ✅ | ✅ Both platforms aligned: Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477) enforces 0–31 for current and 0–255 for RGB with error indicators |
 | TAK Module | ✅ | ✅ | Apple has `enabled` toggle; Android does not |
-| Paxcounter | ✅ | ✅ | Android has RSSI threshold fields; Apple does not |
-| Audio | ✅ | ❌ | Android only |
+| Paxcounter | ✅ | ✅ | RSSI threshold fields added to Apple via PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) |
+| Audio | ✅ | ✅ | Apple screen added via PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861) |
 | Remote Hardware | ✅ | ❌ | Android only |
-| Neighbor Info | ✅ | ❌ | Android only |
+| Neighbor Info | ✅ | ✅ | Apple screen added via PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860) |
 | Status Message | ✅ | ❌ | Android only |
 | Traffic Management | ✅ | ❌ | Android only |
 
@@ -52,7 +52,11 @@
 
 These module config screens are present in Android but have no equivalent in the Apple app.
 
-### Audio (`ModuleConfig.AudioConfig`)
+> **Note (May 2026):** Audio (PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861)) and Neighbor Info (PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860)) have been added to Apple. Remote Hardware, Status Message, and Traffic Management remain Android-only.
+
+### Audio (`ModuleConfig.AudioConfig`) — ✅ Now on both platforms
+
+Apple implementation added in PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861).
 
 | Field | Android Validation |
 |-------|--------------------|
@@ -69,7 +73,9 @@ These module config screens are present in Android but have no equivalent in the
 | `allow_undefined_pin_access` | Toggle |
 | `available_pins` | maxCount: 4; per-pin GPIO 0–255, name max 14 bytes, type enum |
 
-### Neighbor Info (`ModuleConfig.NeighborInfoConfig`)
+### Neighbor Info (`ModuleConfig.NeighborInfoConfig`) — ✅ Now on both platforms
+
+Apple implementation added in PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860).
 
 | Field | Android Validation |
 |-------|--------------------|
@@ -127,16 +133,16 @@ These module config screens are present in Android but have no equivalent in the
 |-------|---------|-------|-------------|
 | `is_managed` | Only enabled when `admin_key` list is non-empty | Disabled when `adminKey.length == 0`; shows warning "An admin key must be set before enabling managed mode." | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** (May 17, 2026) |
 | `admin_key` | Single list field, maxCount: 3 | Three separate fields (`adminKey`, `adminKey2`, `adminKey3`) | Different UX, same data model |
-| `admin_channel_enabled` | Toggle | Not present | Android-only field |
+| ~~`admin_channel_enabled`~~ | ~~Toggle~~ | Not present | ✅ **Removed from Android** in PR [#5547](https://github.com/meshtastic/Meshtastic-Android/pull/5547) (May 2026). Field no longer shown on either platform. |
 
 ### Network Config
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `ntp_server` | String, max 32 bytes | Not present | Android-only field |
-| `rsyslog_server` | String, max 32 bytes | Not present | Android-only field |
-| `address_mode` / `ipv4_config` (ip, gateway, subnet, dns) | Shown when `address_mode = STATIC` | Not present | Android-only: full static IPv4 configuration |
-| `udp_enabled` | Not present | Toggle | Apple-only field |
+| `ntp_server` | String, max 32 bytes | String, max 32 bytes | ✅ **Added to Apple** in PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) (May 2026) |
+| `rsyslog_server` | String, max 32 bytes | String, max 32 bytes | ✅ **Added to Apple** in PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) (May 2026) |
+| `address_mode` / `ipv4_config` (ip, gateway, subnet, dns) | Shown when `address_mode = STATIC` | Shown when `address_mode = STATIC` | ✅ **Added to Apple** in PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) (May 2026) |
+| `udp_enabled` | Toggle (label updated to match Apple via PR [#5549](https://github.com/meshtastic/Meshtastic-Android/pull/5549)) | Toggle | ✅ Aligned |
 
 ### MQTT Config
 
@@ -150,15 +156,15 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `air_quality_enabled` | Toggle | Not present | Android-only field |
-| `air_quality_interval` | Dropdown: `BROADCAST_SHORT` intervals | Not present | Android-only field |
+| `air_quality_enabled` | Toggle | Toggle | ✅ **Added to Apple** in PR [#1848](https://github.com/meshtastic/Meshtastic-Apple/pull/1848) (May 2026) |
+| `air_quality_interval` | Dropdown: `BROADCAST_SHORT` intervals | Interval picker | ✅ **Added to Apple** in PR [#1848](https://github.com/meshtastic/Meshtastic-Apple/pull/1848) (May 2026) |
 | `device_telemetry_enabled` | Shown when `canToggleTelemetryEnabled` capability | Shown when firmware ≥ 2.7.12 | Different visibility condition; functionally equivalent |
 
 ### Display Config
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `compass_orientation` | Dropdown: `CompassOrientation` enum | Not present | Android-only field |
+| `compass_orientation` | Dropdown: `CompassOrientation` enum | Picker (DEGREES / NORTH_UP / HEADING_UP); firmware ≥ 2.3.13 | ✅ **Added to Apple** in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) (May 2026); deprecated `compass_north_top` toggle shown only for firmware < 2.3.13 |
 
 ### Power Config
 
@@ -197,8 +203,8 @@ These module config screens are present in Android but have no equivalent in the
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `wifi_threshold` | Signed integer (RSSI dBm), default −80 | Not present | Android-only field |
-| `ble_threshold` | Signed integer (RSSI dBm), default −80 | Not present | Android-only field |
+| `wifi_threshold` | Signed integer (RSSI dBm), default −80 | Signed integer input (RSSI dBm), default −80 | ✅ **Added to Apple** in PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) (May 2026) |
+| `ble_threshold` | Signed integer (RSSI dBm), default −80 | Signed integer input (RSSI dBm), default −80 | ✅ **Added to Apple** in PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) (May 2026) |
 
 ### Store & Forward Config
 
@@ -231,20 +237,21 @@ These module config screens are present in Android but have no equivalent in the
 | Area | Fields |
 |------|--------|
 | LoRa Config | `pa_fan_disabled` |
-| Network Config | `ntp_server`, `rsyslog_server`, static IPv4 (`address_mode`, `ip`, `gateway`, `subnet`, `dns`) |
-| Security Config | `admin_channel_enabled` |
-| Display Config | `compass_orientation` |
-| Telemetry Config | `air_quality_enabled`, `air_quality_interval` |
-| Canned Messages | `allow_input_source` |
-| Paxcounter | `wifi_threshold`, `ble_threshold` |
-| Module screens | Audio, Remote Hardware, Neighbor Info, Status Message, Traffic Management |
+| ~~Network Config~~ | ~~`ntp_server`, `rsyslog_server`, static IPv4~~  | ✅ Added to Apple in PR [#1849](https://github.com/meshtastic/Meshtastic-Apple/pull/1849) |
+| ~~Security Config~~ | ~~`admin_channel_enabled`~~ | ✅ Removed from Android in PR [#5547](https://github.com/meshtastic/Meshtastic-Android/pull/5547) |
+| ~~Display Config~~ | ~~`compass_orientation`~~ | ✅ Added to Apple in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) |
+| ~~Telemetry Config~~ | ~~`air_quality_enabled`, `air_quality_interval`~~ | ✅ Added to Apple in PR [#1848](https://github.com/meshtastic/Meshtastic-Apple/pull/1848) |
+| Canned Messages | `allow_input_source` *(deprecated — should be removed from both)* |
+| ~~Paxcounter~~ | ~~`wifi_threshold`, `ble_threshold`~~ | ✅ Added to Apple in PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) |
+| ~~Module screens~~ | ~~Audio, Neighbor Info~~ | ✅ Added to Apple: Audio PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861), Neighbor Info PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860) |
+| Module screens | Remote Hardware, Status Message, Traffic Management | Still Android-only |
 
 ### Fields Present on Apple but Missing from Android
 
 | Area | Field | Notes |
 |------|-------|-------|
 | App Settings | Enable Administration | Apple-only toggle |
-| Network Config | `udp_enabled` | Apple-only toggle |
+| ~~Network Config~~ | ~~`udp_enabled`~~ | ✅ Android PR [#5549](https://github.com/meshtastic/Meshtastic-Android/pull/5549) added/aligned the UDP toggle label |
 | TAK Module | `enabled` | Apple shows an explicit enable toggle |
 ---
 
@@ -342,8 +349,8 @@ The firmware version is available as `DeviceMetadata.firmware_version` (proto fi
 | `DeviceConfig.is_managed` | **v2.4.3** | Same — ✅ both apps correct |
 | `PositionConfig.gps_enabled` write-back | **v2.7.4** | Write `pc.gpsEnabled` only when firmware < 2.7.4 as a backward-compat bridge; remove unconditional write otherwise. **Apple action required.** |
 | `PositionConfig.gps_attempt_time` | **v2.2.19** | Show for firmware < 2.2.19 — ✅ both apps already hide it |
-| `DisplayConfig.compass_north_top` | **v2.3.13** | Show old toggle only for firmware < 2.3.13; show `compass_orientation` picker for ≥ 2.3.13. **Both apps need updating.** |
-| `DisplayConfig.gps_format` | **v2.7.4** | Apple: remove dead `gpsFormat` state variable entirely |
+| `DisplayConfig.compass_north_top` | **v2.3.13** | Show old toggle only for firmware < 2.3.13; show `compass_orientation` picker for ≥ 2.3.13. ✅ **Apple fixed** in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) (May 2026) — shows picker for modern firmware, legacy toggle for old. Android still needs updating. |
+| `DisplayConfig.gps_format` | **v2.7.4** | ✅ **Apple fixed** in PR [#1857](https://github.com/meshtastic/Meshtastic-Apple/pull/1857) (May 2026) — dead `gpsFormat` state variable removed |
 | `CannedMessageConfig.enabled` | **v2.7.4** | Show toggle for firmware < 2.7.4; hide for ≥ 2.7.4. **Both apps need updating.** |
 | `CannedMessageConfig.allow_input_source` | **v2.7.4** | Show text field for firmware < 2.7.4; hide for ≥ 2.7.4. **Both apps need updating.** |
 
@@ -389,11 +396,11 @@ if (deviceVersion >= DeviceVersion("2.3.13")) {
 | A | `ROUTER_CLIENT` role | v2.3.15 | ✅ Filtered | ✅ Migrated | — Done |
 | B | `REPEATER` role | v2.7.15 | ✅ Filtered | ❌ No migration; nil rawValue | High |
 | C | `LONG_SLOW` preset | *(no stable yet)* | ✅ Filtered | ❌ Still selectable | High |
-| D | `compass_north_top` → `compass_orientation` | v2.7.15 | ❌ Still writable | ❌ Still writable | High |
+| D | `compass_north_top` → `compass_orientation` | v2.7.15 | ❌ Still writable | ✅ **Fixed** in Apple PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) — picker for ≥ 2.3.13, legacy toggle for older firmware | High (Android) |
 | E | `CannedMessageConfig.enabled` | v2.7.15 | ❌ Still writable | ❌ Still writable | Medium |
 | F | `CannedMessageConfig.allow_input_source` | v2.7.15 | ❌ Still writable (+size bug) | ❌ Still writable | Medium |
 | G | `PositionConfig.gps_enabled` write-back | v2.7.15 | ✅ Not written | ❌ Written unconditionally | Medium |
 | H | `VERY_LONG_SLOW` preset | v2.7.15 (comment: v2.5) | ✅ Filtered | ✅ Absent | — Done |
-| I | `gps_format` dead code | v2.7.15 | ✅ Not shown | ⚠️ Dead state var | Low |
+| I | `gps_format` dead code | v2.7.15 | ✅ Not shown | ✅ **Fixed** in Apple PR [#1857](https://github.com/meshtastic/Meshtastic-Apple/pull/1857) — dead state var removed | — Done |
 | J | `DeviceConfig.serial_enabled` / `is_managed` | v2.7.15 | ✅ Correctly hidden | ✅ Correctly hidden | — Done |
 | K | `gps_attempt_time` | v2.2.19 | ✅ Not shown | ✅ Not shown | — Done |
