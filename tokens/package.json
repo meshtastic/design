@@ -1,6 +1,6 @@
 {
   "name": "meshtastic-design-tokens",
   "private": true,
-  "scripts": { "build": "style-dictionary build" },
+  "scripts": { "build": "node build.mjs" },
   "devDependencies": { "style-dictionary": "^5.4.4" }
 }
