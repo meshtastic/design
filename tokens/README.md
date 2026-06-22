@@ -14,7 +14,8 @@ Outputs:
 |---|---|
 | `build/css/tokens.css` | the Claude Design web kit (`@import` from its `styles.css`) |
 | `build/compose/MeshtasticTokens.kt` | Meshtastic-Android theme |
-| `build/swift/MeshtasticTokens.swift` | Meshtastic-Apple |
+
+Meshtastic-Apple is **not** an output here: it already consumes the standards via SwiftUI named asset colorsets (`Color+Brand.swift`), not Swift color literals. A faithful Apple output = generated `.colorset` `Contents.json` (light+dark) — a custom-format follow-up.
 
 ## Scope (deliberate)
 

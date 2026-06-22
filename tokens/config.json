@@ -14,15 +14,6 @@
         "format": "compose/object",
         "options": { "className": "MeshtasticTokens", "packageName": "org.meshtastic.design.tokens" }
       }]
-    },
-    "ios-swift": {
-      "transformGroup": "ios-swift",
-      "buildPath": "build/swift/",
-      "files": [{
-        "destination": "MeshtasticTokens.swift",
-        "format": "ios-swift/class.swift",
-        "options": { "className": "MeshtasticTokens" }
-      }]
     }
   }
 }
