@@ -19,7 +19,8 @@ Outputs:
 ## Scope (deliberate)
 
 - **Colors only.** Proves the bridge end-to-end without the unit-transform footgun: the predefined `compose`/`ios-swift` transform groups multiply `rem`→dp/sp, which mangles bare numbers like radius `12`. Add sizing/typography tokens **with a custom transformGroup**, not into this seed.
-- **Seed values**, not the full palette. Expand the scales/semantic roles from `standards/meshtastic_design_standards_v1_4.md` (canonical) — the full set is already digested in the Claude Design project's `tokens/colors.css`, paste-able here.
-- Uses Style Dictionary **predefined** formats/transform groups. Known ceiling — fine for colors; revisit when adding dimensions/type.
+- **Full v1.4 color palette** (brand, tonal scales, semantic), authored in DTCG (`$value` + group `$type: color`) — predefined `compose`/`ios-swift` color transforms only fire on `$type`, not legacy `value`. Values from `standards/meshtastic_design_standards_v1_4.md` (canonical).
+- **Typography + dimensions deferred.** Font families don't quote correctly and size tokens get rem→dp/sp mangled by the predefined groups — both need a custom transformGroup.
+- Uses Style Dictionary **predefined** formats/transform groups. Fine for colors; that's the ceiling.
 
 `add when:` you want spacing/radius/type shared too → add a custom transformGroup and the size/font tokens. Until then, colors are the bridge.
