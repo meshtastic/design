@@ -192,10 +192,10 @@ Protobuf message: `ModuleConfig.MQTTConfig`
 |---|---|---|
 | `enabled` | Toggle | Boolean |
 | `proxyToClientEnabled` | Toggle | Boolean |
-| `address` | `TextField` | **Max 62 UTF-8 bytes.** `.onChange` trims trailing characters |
-| `username` | `TextField` | **Max 62 UTF-8 bytes.** `.onChange` trims trailing characters |
-| `password` | `TextField` | **Max 30 UTF-8 bytes.** `.onChange` trims trailing characters |
-| `root` | `TextField` | **Max 30 UTF-8 bytes.** `.onChange` trims trailing characters. Proto default: `"msh"` |
+| `address` | `TextField` | **Max 63 UTF-8 bytes.** `.onChange` trims trailing characters |
+| `username` | `TextField` | **Max 63 UTF-8 bytes.** `.onChange` trims trailing characters |
+| `password` | `TextField` | **Max 31 UTF-8 bytes.** `.onChange` trims trailing characters |
+| `root` | `TextField` | **Max 31 UTF-8 bytes.** `.onChange` trims trailing characters. Proto default: `"msh"` |
 | `encryptionEnabled` | Toggle | Boolean |
 | `jsonEnabled` | Toggle | Boolean |
 | `tlsEnabled` | Toggle | Boolean |
@@ -243,7 +243,7 @@ Protobuf message: `ModuleConfig.CannedMessageConfig`
 | `inputbrokerEventCw` | Picker (enum `InputEventSets`) | Enum-constrained |
 | `inputbrokerEventCcw` | Picker (enum `InputEventSets`) | Enum-constrained |
 | `inputbrokerEventPress` | Picker (enum `InputEventSets`) | Enum-constrained |
-| `messages` | `TextField` (multiline) | **Max 198 UTF-8 bytes.** `.onChange` trims trailing characters until `utf8.count <= 198` |
+| `messages` | `TextField` (multiline) | **Max 200 UTF-8 bytes.** `.onChange` trims trailing characters until `utf8.count <= 200` |
 
 ---
 
@@ -325,29 +325,39 @@ Protobuf message: `ModuleConfig.SerialConfig`
 
 ---
 
-### 8. Range Test Config (`Config/Module/RangeTestConfig.swift`)
+### 8. Status Message Config (`Config/Module/StatusMessageConfig.swift`)
+
+Protobuf message: `ModuleConfig.StatusMessageConfig`
+
+| Field | UI Control | Constraint / Validation |
+|---|---|---|
+| `nodeStatus` | Single-line `TextField` with clear button | **Max 80 UTF-8 bytes.** Screen is shown only when `AccessoryManager.supportsStatusMessage` is true (firmware **≥ 2.8.0**) |
+
+---
+
+### 9. Range Test Config (`Config/Module/RangeTestConfig.swift`)
 
 Protobuf message: `ModuleConfig.RangeTestConfig`
 
 | Field | UI Control | Constraint / Validation |
 |---|---|---|
-| `enabled` | Toggle | Boolean |
+| `enabled` | Toggle | Boolean; **no** public/default-channel safety guard is documented here (Android added one in June 2026) |
 | `sender` | `UpdateIntervalPicker(config: .rangeTestSender)` | Predefined options: 0, 15, 30, 45, 60, 300, 600, 900, 1800, 3600 seconds |
 | `save` | Toggle | Boolean |
 
 ---
 
-### 9. RTTTL Config (`Config/Module/RtttlConfig.swift`)
+### 10. RTTTL Config (`Config/Module/RtttlConfig.swift`)
 
 Protobuf: transmitted as a plain string via `saveRtttlConfig`.
 
 | Field | UI Control | Constraint / Validation |
 |---|---|---|
-| `ringtone` | `TextField` | **Max 228 UTF-8 bytes.** `.onChange` trims trailing characters until `utf8.count <= 228`. Value is stripped of leading/trailing whitespace before being sent |
+| `ringtone` | `TextField` | **Max 230 UTF-8 bytes.** `.onChange` trims trailing characters until `utf8.count <= 230`. Value is stripped of leading/trailing whitespace before being sent |
 
 ---
 
-### 10. Ambient Lighting Config (`Config/Module/AmbientLightingConfig.swift`)
+### 11. Ambient Lighting Config (`Config/Module/AmbientLightingConfig.swift`)
 
 Protobuf message: `ModuleConfig.AmbientLightingConfig`
 
@@ -359,7 +369,7 @@ Protobuf message: `ModuleConfig.AmbientLightingConfig`
 
 ---
 
-### 11. TAK Module Config (`Config/Module/TAKModuleConfig.swift`)
+### 12. TAK Module Config (`Config/Module/TAKModuleConfig.swift`)
 
 Protobuf message: `ModuleConfig.TAKConfig`
 
@@ -371,7 +381,7 @@ Protobuf message: `ModuleConfig.TAKConfig`
 
 ---
 
-### 12. Pax Counter Config (`Config/Module/PaxCounterConfig.swift`)
+### 13. Pax Counter Config (`Config/Module/PaxCounterConfig.swift`)
 
 Protobuf message: `ModuleConfig.PaxcounterConfig`
 
@@ -410,10 +420,10 @@ Protobuf message: `ModuleConfig.PaxcounterConfig`
 | `wifiSsid` | Network Config | 32 |
 | `wifiPsk` | Network Config | 63 |
 | `tzdef` | Device Config | 63 |
-| `address` (MQTT) | MQTT Config | 62 |
-| `username` (MQTT) | MQTT Config | 62 |
-| `root` (MQTT topic) | MQTT Config | 30 |
-| `password` (MQTT) | MQTT Config | 30 |
-| `messages` (canned) | Canned Messages Config | 198 |
+| `address` (MQTT) | MQTT Config | 63 |
+| `username` (MQTT) | MQTT Config | 63 |
+| `root` (MQTT topic) | MQTT Config | 31 |
+| `password` (MQTT) | MQTT Config | 31 |
+| `messages` (canned) | Canned Messages Config | 200 |
 | `name` (detection sensor) | Detection Sensor Config | 20 |
-| `ringtone` (RTTTL) | RTTTL Config | 228 |
+| `ringtone` (RTTTL) | RTTTL Config | 230 |

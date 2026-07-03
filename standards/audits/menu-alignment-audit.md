@@ -3,6 +3,7 @@
 **Status:** Reference Document  
 **Scope:** iOS (Meshtastic-Apple) vs Android (Meshtastic-Android)  
 **Areas Covered:** Bottom navigation, node list, node list context menu, node details, filters/sort, settings
+**Last Updated:** 2026-07-03
 
 > **Purpose:** This document audits the six common navigation surfaces shared by the iOS and Android Meshtastic clients, identifies ordering and structural mismatches, and recommends a canonical order for each surface to guide future alignment work.
 
@@ -60,16 +61,17 @@ Proposed alignment moves the connection/device tab to the end (less frequently u
 Row layout (fields hidden if data absent, top-to-bottom):
 1. Short-name circle + battery compact
 2. Lock/key icon + Long Name (+ star if favourite)
-3. "Connected" indicator (own node only)
-4. Last heard + online/offline dot
-5. Role icon + label
-6. Unmonitored badge / Store & Forward badge
-7. Distance + bearing (remote nodes with position)
-8. Channel number (if > 0)
-9. MQTT indicator
-10. Log availability icons
-11. Hops away
-12. LoRa signal meter (direct-link nodes)
+3. Status message (if set; clamped to 2 lines)
+4. "Connected" indicator (own node only)
+5. Last heard + online/offline dot
+6. Role icon + label
+7. Unmonitored badge / Store & Forward badge
+8. Distance + bearing (remote nodes with position)
+9. Channel number (if > 0)
+10. MQTT indicator
+11. Log availability icons
+12. Hops away
+13. LoRa signal meter (direct-link nodes)
 
 **Android (`NodeItem`)**
 
@@ -91,7 +93,7 @@ Row layout (fields hidden if data absent, top-to-bottom):
 | **Hardware model** | Android shows the hardware model name in the list row footer; iOS does not. |
 | **Node ID** | Android shows the node ID in the list row footer; iOS does not. |
 | **Mute status** | Android shows a mute icon in the row header; iOS uses "Hide alerts" but does not surface the muted state in the list row. |
-| **Status message** | Android shows the node's status message in the list row; iOS does not. |
+| **Status message placement** | Both platforms now show node status inline. iOS places it directly beneath the name (2-line clamp); Android gives it a dedicated second row. |
 | **Signal display** | Both show signal strength, but iOS uses a signal meter bar for direct nodes; Android shows SNR + RSSI text values. |
 
 ---
@@ -230,6 +232,8 @@ Keeping the menu concise (4–6 items) while surfacing the most-used actions:
 
 iOS sort order: not user-configurable (always last-heard descending; favourites pinned first; connected node always at top).
 
+Recent iOS updates: filter selections now persist across launches (Apple PR [#1625](https://github.com/meshtastic/Meshtastic-Apple/pull/1625), merged 2026-06-18), and the Distance filter now falls back to the connected device's position while keeping nodes with no position visible (Apple PR [#1919](https://github.com/meshtastic/Meshtastic-Apple/pull/1919), merged 2026-06-10).
+
 **Android — Sort radio buttons:**
 
 | # | Sort option |
@@ -343,9 +347,10 @@ iOS sort order: not user-configurable (always last-heard descending; favourites 
 | 7 | PAX Counter |
 | 8 | Ringtone |
 | 9 | Serial |
-| 10 | Store & Forward |
-| 11 | TAK Server |
-| 12 | Telemetry |
+| 10 | Status Message *(conditional; firmware ≥ 2.8.0)* |
+| 11 | Store & Forward |
+| 12 | TAK Server |
+| 13 | Telemetry |
 
 ---
 
@@ -423,7 +428,7 @@ iOS sort order: not user-configurable (always last-heard descending; favourites 
 |-------|--------|
 | **Ordering** | iOS sorts alphabetically; Android uses a custom order (MQTT first, then by approximate importance). |
 | **"Ringtone" vs "Audio"** | iOS lists "Ringtone" as a separate module; Android has "Audio" (which includes ringtone config). |
-| **Android-only modules** | Android has: Audio, Remote Hardware, Neighbor Info, Status Message, Traffic Management. |
+| **Android-only modules** | Android has: Audio, Remote Hardware, Neighbor Info, Traffic Management. Apple added Status Message in PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858) (merged 2026-06-13). |
 | **iOS-only module entry** | iOS lists "PAX Counter"; Android uses "Paxcounter" — different capitalisation. |
 | **"Canned Messages" label** | iOS: "Canned Messages" (plural). Android: "Canned Message" (singular). |
 
@@ -492,6 +497,14 @@ iOS sort order: not user-configurable (always last-heard descending; favourites 
 | 14 | TAK *(conditional)* |
 | 15 | Status Message *(conditional)* |
 | 16 | Traffic Management *(conditional)* |
+
+---
+
+## Recent Activity (2026-06-03 → 2026-07-03)
+
+- **Apple — node list filters:** PR [#1625](https://github.com/meshtastic/Meshtastic-Apple/pull/1625) made iOS filter selections persistent, and PR [#1919](https://github.com/meshtastic/Meshtastic-Apple/pull/1919) improved the Distance filter by falling back to the connected device position and keeping no-position nodes visible.
+- **Apple — status message parity:** PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858) added the Status Message module config screen, and PR [#1997](https://github.com/meshtastic/Meshtastic-Apple/pull/1997) surfaced node status on cards and node detail views, closing one of the most visible node-list content gaps.
+- **Apple — help/docs terminology:** PR [#2013](https://github.com/meshtastic/Meshtastic-Apple/pull/2013) aligned the in-app documentation browser title to **Help & Documentation**, matching Android and the Settings row label.
 
 ---
 

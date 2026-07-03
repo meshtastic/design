@@ -2,7 +2,7 @@
 
 **Status:** Reference Document  
 **Scope:** iOS/macOS (Meshtastic-Apple) vs Android (Meshtastic-Android)  
-**Last Updated:** 2026-05-21  
+**Last Updated:** 2026-07-03
 
 > **Purpose:** This document audits all SpecKit feature specifications written to date across the Apple and Android Meshtastic client repositories, surfaces which features are specced on one platform but not the other, and flags opportunities for cross-platform alignment.
 
@@ -12,9 +12,9 @@
 
 | Feature | Android Spec | Android Status | Apple Spec | Apple Status | Notes |
 |---------|-------------|----------------|-----------|--------------|-------|
-| Local Mesh Discovery | [20260507-161658-local-mesh-discovery](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260507-161658-local-mesh-discovery) | 🔴 Branch Complete | [001-local-mesh-discovery](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/001-local-mesh-discovery) | ✅ Implemented | Paired spec — branch `feat/discovery`, 50/51 tasks done; awaiting merge |
+| Local Mesh Discovery | [20260507-161658-local-mesh-discovery](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260507-161658-local-mesh-discovery) | 🔴 Branch Complete | [001-local-mesh-discovery](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/001-local-mesh-discovery) | ✅ Implemented | Paired spec — Android branch `feat/discovery` still has D048 outstanding; Apple `main` received June hardening follow-ups for full LoRa config restore, default-slot scanning, and noise-floor analysis (PRs [#1956](https://github.com/meshtastic/Meshtastic-Apple/pull/1956), [#1957](https://github.com/meshtastic/Meshtastic-Apple/pull/1957), [#1961](https://github.com/meshtastic/Meshtastic-Apple/pull/1961), [#1968](https://github.com/meshtastic/Meshtastic-Apple/pull/1968)) |
 | Node List Layout (Compact / Complete) | [20260507-161758-node-list-layout](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260507-161758-node-list-layout) | 🔴 Branch Complete | [002-node-list-layout](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/002-node-list-layout) | ✅ Implemented | Paired spec — branch `feat/node-list`, 47/47 tasks done; awaiting merge |
-| App Documentation (Web + In-App + AI) | [20260507-161858-app-docs-markdown](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260507-161858-app-docs-markdown) | 🔴 Branch Complete | [003-app-docs-markdown](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/003-app-docs-markdown) | ✅ Implemented | Paired spec — branch `feat/20260507-161858-app-docs-markdown`, 159/159 tasks done; awaiting merge |
+| App Documentation (Web + In-App + AI) | [20260507-161858-app-docs-markdown](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/20260507-161858-app-docs-markdown) | 🔴 Branch Complete | [003-app-docs-markdown](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/003-app-docs-markdown) | ✅ Implemented | Paired spec — Android branch `feat/20260507-161858-app-docs-markdown`, 159/159 tasks done; Apple fixed the docs translation pipeline in PR [#1963](https://github.com/meshtastic/Meshtastic-Apple/pull/1963) and aligned the browser title to **Help & Documentation** in PR [#2013](https://github.com/meshtastic/Meshtastic-Apple/pull/2013); web repo activity was test/tooling-focused rather than new user-facing docs features |
 | TAK v2 Protocol Integration | [005-tak-v2-protocol](https://github.com/meshtastic/Meshtastic-Android/tree/main/specs/005-tak-v2-protocol) | ✅ Implemented | [005-tak-v2-apple](https://github.com/meshtastic/Meshtastic-Apple/pull/1838) | ✅ Implemented | ✅ Now paired: Apple spec added and merged via PR [#1838](https://github.com/meshtastic/Meshtastic-Apple/pull/1838) (2026-05-21). Android: 80/80 tasks merged to `main`. Apple: ships TAK v2 with full spec. |
 | Message Formatting Toolbar | _(not spec'd)_ | — | [004-message-formatting-toolbar](https://github.com/meshtastic/Meshtastic-Apple/tree/main/specs/004-message-formatting-toolbar) | ✅ Implemented | Apple PR [#1771](https://github.com/meshtastic/Meshtastic-Apple/pull/1771) merged 2026-05-12. Android still not spec'd — strong candidate for Android spec. Relates to design [#21](https://github.com/meshtastic/design/issues/21). |
 | Lockdown Mode | [20260513-075218-lockdown-mode](https://github.com/meshtastic/Meshtastic-Android/tree/features/lockdown-v2/specs/20260513-075218-lockdown-mode) | 🔴 Branch Complete | [007-lockdown-mode](https://github.com/meshtastic/Meshtastic-Apple/tree/007-lockdown-mode/specs/007-lockdown-mode) | 🔴 Branch Complete | Paired spec — Android `features/lockdown-v2` (53/53 tasks done); Apple `007-lockdown-mode` (27/28 tasks done); firmware protobuf PR #911 is the shared dependency |
@@ -133,6 +133,16 @@ Protects unattended Meshtastic nodes from unauthorized physical access. When ena
 
 ---
 
+## Recent Client Activity (2026-06-03 → 2026-07-03)
+
+- **Paired but still unspecced:** Android PR [#5976](https://github.com/meshtastic/Meshtastic-Android/pull/5976) and Apple PR [#1993](https://github.com/meshtastic/Meshtastic-Apple/pull/1993) both shipped XEdDSA packet-signing UI for node and messaging surfaces (tracking design [#113](https://github.com/meshtastic/design/issues/113)), but neither repo has a matching SpecKit feature yet.
+- **Status Message parity improved without a spec:** Apple added the Status Message module config screen in PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858) and then shipped list/detail display surfaces plus the correct 2.8.0 gate in PR [#1997](https://github.com/meshtastic/Meshtastic-Apple/pull/1997). Android already had the settings surface, so this is now much closer to cross-platform parity while still remaining unspecced.
+- **Discovery moved forward on both clients:** Apple hardened Local Mesh Discovery in June (PRs [#1956](https://github.com/meshtastic/Meshtastic-Apple/pull/1956), [#1957](https://github.com/meshtastic/Meshtastic-Apple/pull/1957), [#1961](https://github.com/meshtastic/Meshtastic-Apple/pull/1961), [#1968](https://github.com/meshtastic/Meshtastic-Apple/pull/1968)); Android improved disabled-state guidance in PR [#6027](https://github.com/meshtastic/Meshtastic-Android/pull/6027) and added Mesh Beacon invitations as a discovery-adjacent flow in PR [#6043](https://github.com/meshtastic/Meshtastic-Android/pull/6043).
+- **New Android-only spec candidate:** Android PR [#6014](https://github.com/meshtastic/Meshtastic-Android/pull/6014) implemented Waypoint geofences (design [#114](https://github.com/meshtastic/design/issues/114)). Apple and web still have no equivalent implementation or published spec, making this the clearest new cross-platform spec candidate from the last month.
+- **Web repo note:** meshtastic/web had no major new user-facing design features in this period, but PR [#1121](https://github.com/meshtastic/web/pull/1121) added a real-device Playwright messaging suite that exercises browser ↔ mesh text messaging and surfaced SDK/PKI issues relevant to future cross-platform messaging work.
+
+---
+
 ## Recommendations
 
 1. **Open PRs for the three "Branch Complete" paired specs.** Local Mesh Discovery (D048 remaining), Node List Layout (0 remaining), and App Documentation (0 remaining) are all complete on their Android branches. Apple implementations are already in production. These are the highest-priority merges.
@@ -145,5 +155,4 @@ Protects unattended Meshtastic nodes from unauthorized physical access. When ena
 
 5. **Coordinate the translation pipeline across platforms.** The `meshtastic/translations` repo is populated by the Apple pipeline today. Once the Android docs feature merges, Android should adopt the same CDN-first / on-device-fallback strategy so both clients contribute translations that benefit all users.
 
-6. **Track M3 Expressive progress.** The Android branch is 14/58 tasks complete. While platform-specific, the interaction patterns (swipe-to-reveal, spring animations, expressive FABs) represent UX conventions that should inform how equivalent interactions are handled on Apple platforms even if the API layer differs.
-
+6. **Track post-merge M3 Expressive patterns.** The core M3 Expressive adoption already merged on Android via PR [#5479](https://github.com/meshtastic/Meshtastic-Android/pull/5479); June follow-up work such as the Compose M3 map-dialog migration (PR [#5988](https://github.com/meshtastic/Meshtastic-Android/pull/5988)) shows the pattern is still expanding. While platform-specific, these interaction patterns should continue to inform how equivalent Apple interactions are designed.

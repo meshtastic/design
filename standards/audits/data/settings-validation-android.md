@@ -247,7 +247,7 @@ configuration settings screen. Constraints are sourced from two layers:
 
 | Field | Type | Validation | Notes |
 |-------|------|------------|-------|
-| `enabled` | Boolean | Toggle | — |
+| `enabled` | Boolean | Toggle | Disabled when the primary channel is public/default; save also forces `enabled = false` in that case (PR [#5986](https://github.com/meshtastic/Meshtastic-Android/pull/5986), 2026-06-27) |
 | `sender` | Interval | Dropdown: `RANGE_TEST_SENDER` intervals | 0 (disabled) – 1 hour |
 | `save` | Boolean | Toggle | — |
 
