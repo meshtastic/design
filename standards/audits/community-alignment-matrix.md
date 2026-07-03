@@ -1,7 +1,7 @@
 # Community Design Alignment Matrix
 
-**Date:** May 21, 2026
-**Source:** All 40 open issues in [meshtastic/design](https://github.com/meshtastic/design/issues) as of May 21, 2026
+**Date:** July 3, 2026
+**Source:** Base issue census from the 40 open [meshtastic/design](https://github.com/meshtastic/design/issues) issues audited on May 21, 2026, plus Apple/Android/web client activity through July 3, 2026
 **Standards Version:** v1.4 ([meshtastic_design_standards_latest.md](../meshtastic_design_standards_latest.md))
 
 ---
@@ -9,6 +9,8 @@
 ## Executive Summary
 
 This document maps every open issue in the design repository against community opinion and the Meshtastic Design Standards v1.4. For each issue, community positions are aggregated into majority and minority views, cross-referenced against the relevant standard section, and assigned an action recommendation. The goal is to surface what is ready to close, what needs a design spec, and where the community still needs to reach agreement.
+
+> **Update scope:** The issue distribution below remains the May 2026 baseline census. The new material in this refresh is the client-repo activity addendum later in the document.
 
 **Verdict legend used throughout this document:**
 
@@ -127,7 +129,7 @@ Issues where commenters hold meaningfully different positions.
 
 | Issue | Topic | Position A | Position B | Standard | Verdict | Action |
 |-------|-------|-----------|-----------|----------|---------|--------|
-| [#86](https://github.com/meshtastic/design/issues/86) | Adjustable font size in Conversations | Add per-app font size control or pinch-to-zoom (8 commenters) | §5 mandates OS Dynamic Type support, not a redundant in-app control (@garthvh → #21) | §5 Vision-Centric — Dynamic Type up to 200%; 16px default | ⚠️ §5 says *support* Dynamic Type, not add a redundant slider. Note: @d0ugak's contrast bug report (dark text on dark bubbles) is a §2 issue, separate from font size. | Needs Discussion |
+| [#86](https://github.com/meshtastic/design/issues/86) | Adjustable font size in Conversations | Add per-app font size control or pinch-to-zoom (8 commenters) | §5 mandates OS Dynamic Type support, not a redundant in-app control (@garthvh → #21) | §5 Vision-Centric — Dynamic Type up to 200%; 16px default | ⚠️ §5 says *support* Dynamic Type, not add a redundant slider. Note: Android addressed the linked contrast bug in PR [#5985](https://github.com/meshtastic/Meshtastic-Android/pull/5985), but the font-size request itself remains unresolved. | Needs Discussion |
 | [#33](https://github.com/meshtastic/design/issues/33) | Relay node message display | Fix it — improve beyond hop count; add last-seen time check (@NomDeTom) | Remove it entirely — ID guessing is inherently broken and actively misleads users; specific bug with 00-suffix nodes breaks DMs (@1nv, @teran1983, @DirectX, @timurey) | §3 Dynamic Layout — suppress misleading or null data; §6 IA — plain language | "Remove" ✅ directly aligned with §3; "Fix" ⚠️ valid goal but accuracy must be proven before display | Needs Discussion |
 | [#83](https://github.com/meshtastic/design/issues/83) _(tracked by [#100](https://github.com/meshtastic/design/issues/100))_ | "Translate this message" feature | Useful; use offline models (Firefox NMT, ML Kit) to avoid API costs (@GTG3000, @neopiccolorat) | Not a priority; costs, complexity, edge use-case; OS-level translate action is sufficient (@jamesarich) | §3, §4, §6 (via parent #100) | ⚠️ Partially covered — see #100 for alignment standard | Needs Discussion |
 | [#79](https://github.com/meshtastic/design/issues/79) | Signal strength from incoming packets | Add table/chart to Settings → Advanced panel (reporter) | Too technically advanced for the main app; build a separate "Wireshark-type" tool (@DarkRanger935) | §4 Iconography, §5 Vision-Centric | 🔇 Standards silent on whether a feature belongs in the main app vs a separate tool | Needs Discussion |
@@ -136,7 +138,7 @@ Issues where commenters hold meaningfully different positions.
 
 ### Key Takeaways — Active Debates
 
-- **#86:** §5 mandates that apps *support* Dynamic Type (i.e. don't break at 200% system font scale). A per-app font-size control is a separate UX pattern and is not required — nor prohibited — by the standard. Addressing OS Dynamic Type compliance likely resolves the root complaint. The contrast issue from @d0ugak is a §2 bug and should be addressed independently.
+- **#86:** §5 mandates that apps *support* Dynamic Type (i.e. don't break at 200% system font scale). A per-app font-size control is a separate UX pattern and is not required — nor prohibited — by the standard. Android PR [#5985](https://github.com/meshtastic/Meshtastic-Android/pull/5985) resolved the linked contrast bug, but the broader Dynamic Type question still needs a cross-platform design decision.
 - **#33:** The "remove it" position is directly supported by §3 (suppress misleading data). Multiple commenters confirm real-world breakage. If accuracy cannot be guaranteed, §3 supports removal over a broken display.
 - **#79:** Whether this belongs in the main app or a dedicated diagnostics tool is a product scope decision, not a design standards question. Resolve scope first.
 
@@ -196,7 +198,7 @@ Umbrella issues that should remain open until their sub-items complete.
 |-------|-------|----------------|----------|---------|-----------|
 | [#53](https://github.com/meshtastic/design/issues/53) | Sensor Telemetry UI/UX | Sub-issues #54 (AQI) in progress; #51 (particulates) closed | §3, §6 | ✅ | Yes — active work |
 | [#47](https://github.com/meshtastic/design/issues/47) | Configurable node list info | No sub-issues yet; concept aligns with §3 | §1, §3 | ✅ | Yes — needs spec |
-| [#21](https://github.com/meshtastic/design/issues/21) | Cross-platform text messaging features | Active — links to #86 (font size), enhanced markup proposals | §5, §6 | ✅ @garthvh's Dynamic Type position aligned with §5 | Yes — active |
+| [#21](https://github.com/meshtastic/design/issues/21) | Cross-platform text messaging features | Active — links to #86 (font size), enhanced markup proposals; web PR [#1121](https://github.com/meshtastic/web/pull/1121) added real-device messaging E2E coverage | §5, §6 | ✅ @garthvh's Dynamic Type position aligned with §5 | Yes — active |
 | [#20](https://github.com/meshtastic/design/issues/20) | Managed Mode Updates | Directly maps to §3; blocked on firmware | §3 Dynamic Layout | ✅ Directly aligned | Yes — blocked |
 | [#15](https://github.com/meshtastic/design/issues/15) | Signal Meter | Focus on SNR (@garthvh + @ianmcorvidae agree); RSSI not in NodeDB | §4 Iconography | ✅ SNR approach aligned with §4 | Yes — engineering decision pending |
 
@@ -212,6 +214,20 @@ Issues that are implemented, design-resolved, or filed in the wrong repository.
 | [#51](https://github.com/meshtastic/design/issues/51) | Display raw particulate sensor data | Many PM sensors (and CO2, HCHO) now implemented per @oscgonfer | **Closed** |
 | [#37](https://github.com/meshtastic/design/issues/37) | Preserve favorites on NodeDB reset | Implemented cross-platform — Android PR #3633, Apple PR [#1828](https://github.com/meshtastic/Meshtastic-Apple/pull/1828); firmware issue #8226 merged | **Closed** |
 | [#7](https://github.com/meshtastic/design/issues/7) | Hexagon sticker | Branding/assets request, not a client UI design issue | **Redirect** to meshtastic/meshtastic or design team |
+
+---
+
+## Section 8: Recent Client Repo Activity (2026-06-03 → 2026-07-03)
+
+These updates came from the Apple, Android, and web repositories after the original May 2026 issue census and are the main reason this audit was refreshed.
+
+| Area | Repo activity | Design issue linkage | Audit impact |
+|------|---------------|----------------------|--------------|
+| Node list filters & sort | Apple PRs [#1625](https://github.com/meshtastic/Meshtastic-Apple/pull/1625) and [#1919](https://github.com/meshtastic/Meshtastic-Apple/pull/1919) added persistent filters plus a better Distance filter fallback/no-position pass-through | [#85](https://github.com/meshtastic/design/issues/85), [#47](https://github.com/meshtastic/design/issues/47) | Confirms active implementation progress on node-list configurability, but the broader cross-platform sort/filter spec is still needed |
+| Signed-node / signed-message trust UI | Android PRs [#5976](https://github.com/meshtastic/Meshtastic-Android/pull/5976) and [#5985](https://github.com/meshtastic/Meshtastic-Android/pull/5985); Apple PR [#1993](https://github.com/meshtastic/Meshtastic-Apple/pull/1993) | [#113](https://github.com/meshtastic/design/issues/113) | New active design issue with paired client implementations; contrast/accessibility concerns now have a concrete Android resolution to review |
+| Waypoint geofences | Android PR [#6014](https://github.com/meshtastic/Meshtastic-Android/pull/6014) shipped editor, overlays, and alerts | [#114](https://github.com/meshtastic/design/issues/114) | New cross-platform design topic with Android implementation in production and no Apple/web parity yet |
+| Status Message | Apple PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858) added the settings screen; Apple PR [#1997](https://github.com/meshtastic/Meshtastic-Apple/pull/1997) added card/detail display surfaces | [#115](https://github.com/meshtastic/design/issues/115) | Moves Apple much closer to Android parity and gives the design issue a concrete shipping reference implementation |
+| Text messaging validation | Web PR [#1121](https://github.com/meshtastic/web/pull/1121) added a real-device Playwright messaging suite and surfaced SDK `nodeDB` and PKI key-mismatch bugs | [#21](https://github.com/meshtastic/design/issues/21) | No new UX shipped in web, but the test coverage now validates the baseline messaging flow and exposed real blockers for future messaging features |
 
 ---
 
