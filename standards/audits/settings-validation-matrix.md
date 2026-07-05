@@ -3,9 +3,11 @@
 **Status:** Reference Document  
 **Sources:** [settings-validation-android.md](data/settings-validation-android.md) · [settings-validation-apple.md](data/settings-validation-apple.md)  
 **See also:** [deprecated-fields-audit.md](deprecated-fields-audit.md)  
-**Last Updated:** 2026-07-03
+**Last Updated:** 2026-07-04
 
 > **Purpose:** This document cross-references the Android and Apple settings validation references to surface missing screens, missing fields, and constraint mismatches that should be aligned.
+>
+> **Verification (2026-07-04):** Claims re-verified against Apple `main` (2026-07-04) and Android `main` (2026-07-02) source. Corrections this pass: Apple `adc_multiplier_override` is already relaxed to `> 0.0` (PR [#1866](https://github.com/meshtastic/Meshtastic-Apple/pull/1866), resolves #1865); Traffic Management flipped to Apple-only (Android removed its screen); the TAK "enabled toggle" attribution was wrong (neither platform has one); `compass_orientation` enum values and the LoRa `bandwidth` enum name corrected.
 
 ---
 
@@ -39,21 +41,21 @@
 | Range Test | ⚠️ | ✅ | Android PR [#5986](https://github.com/meshtastic/Meshtastic-Android/pull/5986) now blocks Range Test on public/default primary channels; Apple has no equivalent guard yet |
 | RTTTL / Ringtone | ✅ (within Ext. Notification) | ✅ (separate screen) | Byte limit differs by 2 |
 | Ambient Lighting | ✅ | ✅ | ✅ Both platforms aligned: Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477) enforces 0–31 for current and 0–255 for RGB with error indicators |
-| TAK Module | ✅ | ✅ | Apple has `enabled` toggle; Android does not |
+| TAK Module | ✅ | ✅ | Neither platform has an `enabled` toggle (only Team + Role pickers). Android role-gates the whole screen (nav-level, TAK/TAK_TRACKER); Apple always renders it and shows a role warning note. See §3 |
 | Paxcounter | ✅ | ✅ | RSSI threshold fields added to Apple via PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) |
 | Audio | ✅ | ✅ | Apple screen added via PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861) |
 | Remote Hardware | ✅ | ❌ | Android only |
 | Neighbor Info | ✅ | ✅ | Apple screen added via PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860) |
 | Status Message | ✅ | ✅ | Apple screen added in PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858); firmware gate corrected to 2.8.0 in PR [#1997](https://github.com/meshtastic/Meshtastic-Apple/pull/1997) |
-| Traffic Management | ✅ | ❌ | Android only |
+| Traffic Management | ❌ | ✅ | ⚠️ **Now Apple-only (verified 2026-07-04)** — Apple added `TrafficManagementConfig`; Android removed its screen because it did not work as intended (no `ModuleRoute` entry; only a stale detekt-baseline reference remains) |
 
 ---
 
-## 2. Screens Only on Android
+## 2. Platform-Exclusive Screens
 
-These module config screens are present in Android but have no equivalent in the Apple app.
+Module config screens present on only one platform, plus historical entries now on both.
 
-> **Note (July 2026):** Audio (PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861)), Neighbor Info (PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860)), and Status Message (PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858)) have been added to Apple. Remote Hardware and Traffic Management remain Android-only.
+> **Note (updated 2026-07-04):** Audio (PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861)), Neighbor Info (PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860)), and Status Message (PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858)) have been added to Apple. **Remote Hardware** remains the only genuinely Android-only screen. **Traffic Management** has flipped to **Apple-only** — Apple added it; Android removed its screen because it did not work as intended.
 
 ### Audio (`ModuleConfig.AudioConfig`) — ✅ Now on both platforms
 
@@ -92,23 +94,22 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 |-------|--------------------|
 | `node_status` | max 80 bytes; requires `supportsStatusMessage` capability |
 
-### Traffic Management (`ModuleConfig.TrafficManagementConfig`)
+### Traffic Management (`ModuleConfig.TrafficManagementConfig`) — ⚠️ Now Apple-only
 
-| Field | Android Validation |
+**Platform flip (verified 2026-07-04).** Apple added a `TrafficManagementConfig` screen (wired into Settings navigation). Android **removed** its screen because it did not work as intended — `main` no longer has a `ModuleRoute` entry or source file; only a stale `detekt-baseline.xml` reference to the removed `TrafficManagementConfigScreen` composable remains. The fields below are the Apple screen; per-field `exhaust_hop_*` / `router_preserve_hops` / `position_precision_bits` presence on Apple was not individually re-verified.
+
+| Field | Apple Validation |
 |-------|--------------------|
-| `enabled` | Toggle; requires `supportsTrafficManagementConfig` capability |
+| `enabled` | Toggle (master) |
 | `position_dedup_enabled` | Toggle |
-| `position_precision_bits` | Numeric input |
-| `position_min_interval_secs` | Numeric input |
+| `position_min_interval_secs` | Numeric input (shown when `position_dedup_enabled`) |
 | `nodeinfo_direct_response` | Toggle |
-| `nodeinfo_direct_response_max_hops` | Numeric input |
+| `nodeinfo_direct_response_max_hops` | Numeric input (shown when `nodeinfo_direct_response`) |
 | `rate_limit_enabled` | Toggle |
-| `rate_limit_window_secs` | Numeric input |
-| `rate_limit_max_packets` | Numeric input |
+| `rate_limit_window_secs` | Numeric input (shown when `rate_limit_enabled`) |
+| `rate_limit_max_packets` | Numeric input (shown when `rate_limit_enabled`) |
 | `drop_unknown_enabled` | Toggle |
-| `unknown_packet_threshold` | Numeric input |
-| `exhaust_hop_telemetry` / `exhaust_hop_position` | Toggle |
-| `router_preserve_hops` | Toggle |
+| `unknown_packet_threshold` | Numeric input (shown when `drop_unknown_enabled`) |
 
 ---
 
@@ -121,7 +122,7 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 | `tx_power` | Signed integer, no enforced range | `Stepper(in: 0...30)` — 0 labelled "Max Transmit Power" | ✅ **Fixed May 2026.** Apple now allows 0 dBm (firmware default). Both platforms accept 0 as "use max legal continuous power." |
 | `spread_factor` | Numeric input; rejects values outside 7–12 with error indicator | `Picker(ForEach 7..<13)` i.e. 7–12 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 7–12. |
 | `coding_rate` | Numeric input; rejects values outside 5–8 with error indicator | `Picker(ForEach 5..<9)` i.e. 5–8 | ✅ **Fixed in Android PR [#5477](https://github.com/meshtastic/Meshtastic-Android/pull/5477)** (May 2026). Both platforms enforce 5–8. |
-| `bandwidth` | Numeric input | Picker (enum `BandwidthCodes`) | Android allows arbitrary integer; Apple is enum-constrained |
+| `bandwidth` | Numeric input | Picker (enum `Bandwidths`) | Android allows arbitrary integer; Apple is enum-constrained |
 | `pa_fan_disabled` | Shown when `hasPaFan = true` | Not present | Apple issue [#1864](https://github.com/meshtastic/Meshtastic-Apple/issues/1864) |
 
 ### Bluetooth Config
@@ -167,13 +168,13 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `compass_orientation` | Dropdown: `CompassOrientation` enum | Picker (DEGREES / NORTH_UP / HEADING_UP); firmware ≥ 2.3.13 | ✅ **Added to Apple** in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) (May 2026); deprecated `compass_north_top` toggle shown only for firmware < 2.3.13 |
+| `compass_orientation` | Dropdown: `CompassOrientation` enum | Picker over rotation values (`0° / 90° / 180° / 270°` + `… Inverted` variants); firmware ≥ 2.3.13 | ✅ **Added to Apple** in PR [#1847](https://github.com/meshtastic/Meshtastic-Apple/pull/1847) (May 2026); deprecated `compass_north_top` toggle shown only for firmware < 2.3.13 |
 
 ### Power Config
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `adc_multiplier_override` | Must be > 0.0 | `FloatField(isValid: { (2.0...6.0).contains($0) })` — **2.0–6.0** | ⚠️ Android only validates > 0; Apple restricts to 2.0–6.0 |
+| `adc_multiplier_override` | Must be > 0.0 | `FloatField(isValid: { $0 > 0.0 })` — **> 0.0** | ✅ **Aligned (verified 2026-07-04).** Apple already relaxed the validator to `{ $0 > 0.0 }` in PR [#1866](https://github.com/meshtastic/Meshtastic-Apple/pull/1866) (resolves issue [#1865](https://github.com/meshtastic/Meshtastic-Apple/issues/1865)); both platforms now accept `> 0.0`. Apple retains its ADC Override toggle (0 = firmware default). |
 | `is_power_saving` | Toggle | Shown only for ESP32/ESP32S3 or specific roles | Both platform-conditional but different conditions documented |
 
 ### Canned Messages Config
@@ -200,7 +201,8 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 
 | Field | Android | Apple | Discrepancy |
 |-------|---------|-------|-------------|
-| `enabled` | Not present (no enable toggle) | Toggle (entire form shown only for TAK/TAK_TRACKER roles) | Apple has an explicit enable toggle; Android does not |
+| `enabled` | Not present (no enable toggle) | Not present (no enable toggle) | ✅ **Corrected 2026-07-04.** Neither platform exposes an enable toggle — both show only Team + Role pickers. Prior claim that Apple had an `enabled` toggle was wrong. |
+| Role gating | Whole screen gated at nav level to TAK / TAK_TRACKER roles (`isApplicable`) | Screen always rendered; shows an orange warning note ("These settings only apply when the device role is TAK or TAK Tracker") when role differs | Different visibility UX; Android hides, Apple warns |
 
 ### Paxcounter Config
 
@@ -238,7 +240,7 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 | ~~4~~ | ~~MQTT Config~~ | ~~`address`~~ | `max_size:64` → 63 bytes max | ✅ Enforces 63 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 63 bytes | ✅ Resolved |
 | ~~5~~ | ~~Canned Messages~~ | ~~`messages`~~ | `max_size:201` → 200 bytes max | ✅ Enforces 200 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 200 bytes | ✅ Resolved |
 | ~~6~~ | ~~External Notification~~ | ~~`ringtone`~~ | `max_size:231` → 230 bytes max | ✅ Enforces 230 bytes | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — now enforces 230 bytes | ✅ Resolved |
-| 7 | Power Config | `adc_multiplier_override` | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ❌ Validates only `> 0.0`; any positive float accepted; no explicit UI for the `0 = disabled` semantic | ✅ `FloatField` restricted to `(2.0...6.0)`; ADC Override toggle sets field to `0` when off | Android: add range validation `2.0..6.0` and consider a toggle to express `0 = use firmware default`, matching Apple's approach. |
+| ~~7~~ | ~~Power Config~~ | ~~`adc_multiplier_override`~~ | `float` — proto comment: *"Should be set to floating point value between 2 and 6"*; `0` = use firmware default | ✅ Validates `> 0.0`; any positive float accepted | ✅ Apple relaxed `FloatField` to `{ $0 > 0.0 }` in PR [#1866](https://github.com/meshtastic/Meshtastic-Apple/pull/1866); "ADC Override" toggle (0 = firmware default) retained | ✅ **Resolved (verified 2026-07-04).** Canonical is `> 0.0`; both platforms aligned. Apple issue [#1865](https://github.com/meshtastic/Meshtastic-Apple/issues/1865) resolved. (Supersedes the earlier "Android should tighten to 2.0–6.0" direction — Apple relaxed instead.) |
 | ~~8~~ | ~~Security Config~~ | ~~`is_managed`~~ | `repeated bytes admin_key` must be set before managed mode is meaningful | ✅ Toggle is `.enabled = formState.admin_key.isNotEmpty()` | ✅ **Fixed in Apple PR [#1833](https://github.com/meshtastic/Meshtastic-Apple/pull/1833)** — toggle disabled when `adminKey.length == 0`; warning shown | ✅ Resolved |
 | 9 | Range Test Config | `enabled` | Public/default primary channels should not be used for automated range-test traffic | ✅ **Fixed in Android PR [#5986](https://github.com/meshtastic/Meshtastic-Android/pull/5986)** (2026-06-27) — UI disables the toggle and save forces `enabled = false` on public/default channels | ❌ No equivalent guard documented | Apple: add the same public/default-channel safety check before enabling or saving Range Test. |
 
@@ -254,7 +256,7 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 | Canned Messages | `allow_input_source` *(deprecated — should be removed from both)* |
 | ~~Paxcounter~~ | ~~`wifi_threshold`, `ble_threshold`~~ | ✅ Added to Apple in PR [#1846](https://github.com/meshtastic/Meshtastic-Apple/pull/1846) |
 | ~~Module screens~~ | ~~Audio, Neighbor Info~~ | ✅ Added to Apple: Audio PR [#1861](https://github.com/meshtastic/Meshtastic-Apple/pull/1861), Neighbor Info PR [#1860](https://github.com/meshtastic/Meshtastic-Apple/pull/1860) |
-| Module screens | Remote Hardware, Traffic Management | Status Message ✅ added to Apple in PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858) |
+| Module screens | Remote Hardware | Only genuinely Android-only screen. Status Message ✅ added to Apple in PR [#1858](https://github.com/meshtastic/Meshtastic-Apple/pull/1858); Traffic Management is now **Apple-only** (Android removed it — see §2) |
 
 ### Fields Present on Apple but Missing from Android
 
@@ -262,7 +264,8 @@ Apple implementation added in PR [#1858](https://github.com/meshtastic/Meshtasti
 |------|-------|-------|
 | App Settings | Enable Administration | Apple-only toggle |
 | ~~Network Config~~ | ~~`udp_enabled`~~ | ✅ Android PR [#5549](https://github.com/meshtastic/Meshtastic-Android/pull/5549) added/aligned the UDP toggle label |
-| TAK Module | `enabled` | Apple shows an explicit enable toggle |
+| ~~TAK Module~~ | ~~`enabled`~~ | ✅ **Corrected 2026-07-04** — Apple has no TAK enable toggle; neither platform exposes one |
+| Traffic Management | Entire screen | ✅ **Now Apple-only** — Apple added `TrafficManagementConfig`; Android removed its screen (see §2) |
 
 ---
 
