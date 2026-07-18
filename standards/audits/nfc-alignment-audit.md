@@ -18,8 +18,8 @@ Two share URLs exist; both put their payload in the URL **fragment (`#`)**, whic
 
 | Share type | URL | Payload (protobuf) | Source |
 |-----------|-----|--------------------|--------|
-| **Contact** | `https://meshtastic.org/v/#<base64url>` | `SharedContact` | [admin.proto](https://github.com/meshtastic/protobufs/blob/master/meshtastic/admin.proto) |
-| **Channel set** | `https://meshtastic.org/e/#<base64url>` (opt. `?add=true`) | `ChannelSet` | [apponly.proto](https://github.com/meshtastic/protobufs/blob/master/meshtastic/apponly.proto) |
+| **Contact** | `https://meshtastic.org/v/#<base64url>` | `SharedContact` | [admin.proto](https://github.com/meshtastic/protobufs/blob/5ba1936/meshtastic/admin.proto) |
+| **Channel set** | `https://meshtastic.org/e/#<base64url>`, or `https://meshtastic.org/e/?add=true#<base64url>` when adding to existing channels (query **before** the fragment) | `ChannelSet` | [apponly.proto](https://github.com/meshtastic/protobufs/blob/5ba1936/meshtastic/apponly.proto) |
 
 ### Shared protobuf building blocks
 
@@ -82,12 +82,12 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 
 **Key files** (Meshtastic-Apple `main` @ `e531f15`):
 
-- NFC write: [`Meshtastic/Views/Settings/Tools.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Views/Settings/Tools.swift) — `import CoreNFC`; `final class NFCReader: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate`; builds a well-known-type **URI** NDEF record for `"https://meshtastic.org/v/#" + base64url(SharedContact)`, wraps it in `NFCNDEFMessage`, calls `tag.writeNDEF(message)`. Button: `Label("Write Contact to NFC Tag", systemImage: "tag")`.
-- Contact QR: [`Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift) — builds `SharedContact { nodeNum, user, manuallyVerified }`, `urlPrefix = "https://meshtastic.org/v/#"`, QR via `CIFilter.qrCodeGenerator()`, shares via `ShareLink`.
-- Contact import: [`Meshtastic/Helpers/ContactURLHandler.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Helpers/ContactURLHandler.swift) → confirmation alert → `accessoryManager.addContactFromURL(...)`; provisioning in [`AccessoryManager+ToRadio.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Accessory/Accessory%20Manager/AccessoryManager+ToRadio.swift) via `AdminMessage.addContact`.
-- Channel URL: [`Meshtastic/Helpers/MeshtasticChannelURL.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Helpers/MeshtasticChannelURL.swift) (`/e/#` `ChannelSet`); generate [`ShareChannels.swift`], receive [`SaveChannelQRCode.swift`].
-- Routing: [`Meshtastic/MeshtasticApp.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/MeshtasticApp.swift) `onOpenURL`; App Intent entry [`AddContactIntent.swift`].
-- Config: [`Info.plist`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Info.plist) `NFCReaderUsageDescription = "We use NFC tags to share node contacts"`; [`Meshtastic.entitlements`](https://github.com/meshtastic/Meshtastic-Apple/blob/main/Meshtastic/Meshtastic.entitlements) `com.apple.developer.nfc.readersession.formats = TAG`.
+- NFC write: [`Meshtastic/Views/Settings/Tools.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Views/Settings/Tools.swift) — `import CoreNFC`; `final class NFCReader: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate`; builds a well-known-type **URI** NDEF record for `"https://meshtastic.org/v/#" + base64url(SharedContact)`, wraps it in `NFCNDEFMessage`, calls `tag.writeNDEF(message)`. Button: `Label("Write Contact to NFC Tag", systemImage: "tag")`.
+- Contact QR: [`Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift) — builds `SharedContact { nodeNum, user, manuallyVerified }`, `urlPrefix = "https://meshtastic.org/v/#"`, QR via `CIFilter.qrCodeGenerator()`, shares via `ShareLink`.
+- Contact import: [`Meshtastic/Helpers/ContactURLHandler.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Helpers/ContactURLHandler.swift) → confirmation alert → `accessoryManager.addContactFromURL(...)`; provisioning in [`AccessoryManager+ToRadio.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Accessory/Accessory%20Manager/AccessoryManager+ToRadio.swift) via `AdminMessage.addContact`.
+- Channel URL: [`Meshtastic/Helpers/MeshtasticChannelURL.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Helpers/MeshtasticChannelURL.swift) (`/e/#` `ChannelSet`); generate [`ShareChannels.swift`], receive [`SaveChannelQRCode.swift`].
+- Routing: [`Meshtastic/MeshtasticApp.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/MeshtasticApp.swift) `onOpenURL`; App Intent entry [`AddContactIntent.swift`].
+- Config: [`Info.plist`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Info.plist) `NFCReaderUsageDescription = "We use NFC tags to share node contacts"`; [`Meshtastic.entitlements`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Meshtastic.entitlements) `com.apple.developer.nfc.readersession.formats = TAG`.
 
 **Entitlement/code inconsistency to verify:** the shipped entitlement format is `TAG`, but the code uses `NFCNDEFReaderSession`/`writeNDEF` (which is the **NDEF** family). This is the result of PR [#1657 "revert NFC entitlement from NDEF back to TAG"](https://github.com/meshtastic/Meshtastic-Apple/pull/1657). Flagged as an observation, not a confirmed runtime bug.
 
@@ -103,13 +103,13 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 | NFC write — channel (`/e/#`) | ✅ Yes |
 | NFC read (in-app scan session) | ✅ Yes — `enableReaderMode(...)` |
 | OS-driven tag read | ✅ `ACTION_NDEF_DISCOVERED` intent filter for `/e/,/E/,/v/,/V/` (tap-to-import) |
-| Minimum OS | Android 8.0 (**minSdk 26**) — available across all supported devices |
+| Minimum OS | Android 8.0 (**minSdk 26**) on NFC-capable hardware; the manifest declares `uses-feature android.hardware.nfc required="false"`, so the app still runs on devices without an NFC radio (the NFC affordance is hidden there — see §4) |
 | Capability / enable handling | ✅ `LocalNfcScannerSupported` (defaults `false`) + `NfcDisabledDialog` prompts to open NFC settings |
 | Entry point | Shared **`QrDialog`** ("Write to NFC" beside the QR) + a "Share Connected Node" node-list action |
 
 **Key files** (Meshtastic-Android `main` @ `0da4c78`, app version base 2.8.0; refactored into a KMP multi-module project — legacy `app/src/main/...`, `ChannelFragment`, `QrCodeImage` no longer exist):
 
-- NFC module: [`core/nfc/src/androidMain/kotlin/org/meshtastic/core/nfc/NfcScanner.kt`](https://github.com/meshtastic/Meshtastic-Android/blob/main/core/nfc/src/androidMain/kotlin/org/meshtastic/core/nfc/NfcScanner.kt) — `NfcScannerEffect(onResult, onNfcDisabled)` (read via `enableReaderMode`, flags `FLAG_READER_NFC_A|B|F|V|BARCODE`, `Ndef.get(tag)`, `record.toUri()`); `NfcWriterEffect(url, onResult, onNfcDisabled)` (write via `NdefRecord.createUri(url)` → `writeNdefMessage`). Plus [`core/nfc/README.md`].
+- NFC module: [`core/nfc/src/androidMain/kotlin/org/meshtastic/core/nfc/NfcScanner.kt`](https://github.com/meshtastic/Meshtastic-Android/blob/0da4c78/core/nfc/src/androidMain/kotlin/org/meshtastic/core/nfc/NfcScanner.kt) — `NfcScannerEffect(onResult, onNfcDisabled)` (read via `enableReaderMode`, flags `FLAG_READER_NFC_A|B|F|V|BARCODE`, `Ndef.get(tag)`, `record.toUri()`); `NfcWriterEffect(url, onResult, onNfcDisabled)` (write via `NdefRecord.createUri(url)` → `writeNdefMessage`). Plus [`core/nfc/README.md`].
 - Capability contract: [`core/ui/.../util/LocalNfcScannerProvider.kt`] (`LocalNfcScannerProvider`, `LocalNfcScannerSupported`, `LocalNfcWriterProvider`); enable prompt [`core/ui/.../component/NfcDialogs.kt`] (`NfcDisabledDialog`).
 - Share surface: [`core/ui/.../component/QrDialog.kt`] renders the QR **and** a "Write to NFC" button that writes the same channel/contact URL (`write_nfc` / `write_nfc_text` / `write_nfc_success` / `write_nfc_failed` strings).
 - URL model: [`core/model/.../util/MeshtasticUrlConstants.kt`] (`CONTACT_URL_PREFIX = "https://meshtastic.org/v/#"`, `CHANNEL_URL_PREFIX = "https://meshtastic.org/e/"`); [`ChannelSet.kt`] `getChannelUrl()`/`toChannelSet()`; [`SharedContact.kt`] `getSharedContactUrl()`/`toSharedContact()`.
@@ -129,9 +129,9 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 
 | Finding | Detail | Source |
 |---------|--------|--------|
-| **Real NFC chip, undriven** | LilyGO **T-LoRa Pager** wires an **ST25R3916** NFC reader/transceiver (`NFC_INT 5`, `NFC_CS 39`) — but the part name appears in exactly one comment, with no driver and no `lib_deps` entry. Hardware present, firmware support absent. | [`variants/esp32s3/tlora-pager/variant.h`](https://github.com/meshtastic/firmware/blob/master/variants/esp32s3/tlora-pager/variant.h) |
+| **Real NFC chip, undriven** | LilyGO **T-LoRa Pager** wires an **ST25R3916** NFC reader/transceiver (`NFC_INT 5`, `NFC_CS 39`) — but the part name appears in exactly one comment, with no driver and no `lib_deps` entry. Hardware present, firmware support absent. | [`variants/esp32s3/tlora-pager/variant.h`](https://github.com/meshtastic/firmware/blob/62df860/variants/esp32s3/tlora-pager/variant.h) |
 | **nRF "NFC" = GPIO** | nRF52840/nRF54L15 boards define `PIN_NFC1 (9)`/`PIN_NFC2 (10)` and set `-D CONFIG_NFCT_PINS_AS_GPIOS=1` — i.e. the NFC antenna pins are *reclaimed as ordinary GPIO/I2C*, the opposite of an NFC feature. | `variants/nrf52840/*/variant.h` |
-| **Dormant OOB idea** | A comment notes BLE security "can be re-enabled once a display or **NFC OOB path** is available" — an idea, no code. | [`src/platform/nrf54l15/NRF54L15Bluetooth.cpp`](https://github.com/meshtastic/firmware/blob/master/src/platform/nrf54l15/NRF54L15Bluetooth.cpp) |
+| **Dormant OOB idea** | A comment notes BLE security "can be re-enabled once a display or **NFC OOB path** is available" — an idea, no code. | [`src/platform/nrf54l15/NRF54L15Bluetooth.cpp`](https://github.com/meshtastic/firmware/blob/62df860/src/platform/nrf54l15/NRF54L15Bluetooth.cpp) |
 | **Open request** | "NFC tag interface for quick onboarding of stations" — an I2C NFC tag whose content is set from a phone, for in-field config of BLE-less relays (incl. GPS coordinates). | firmware [#7236](https://github.com/meshtastic/firmware/issues/7236) |
 
 ---
@@ -278,11 +278,11 @@ Realize the dormant nRF54L15 idea: use NFC OOB to bootstrap secure BLE pairing �
 |----------|-----|-----------|
 | iOS (Meshtastic-Apple) | `main` @ `e531f15` | `Views/Settings/Tools.swift`, `Views/Nodes/Helpers/ShareContactQRDialog.swift`, `Helpers/ContactURLHandler.swift`, `Helpers/MeshtasticChannelURL.swift`, `Accessory/Accessory Manager/AccessoryManager+ToRadio.swift`, `MeshtasticApp.swift`, `Info.plist`, `Meshtastic.entitlements` |
 | Android (Meshtastic-Android) | `main` @ `0da4c78` (v2.8.0) | `core/nfc/src/androidMain/.../NfcScanner.kt`, `core/ui/.../component/QrDialog.kt`, `core/ui/.../component/NfcDialogs.kt`, `core/ui/.../util/LocalNfcScannerProvider.kt`, `core/model/.../util/MeshtasticUrlConstants.kt`, `core/model/.../util/{ChannelSet,SharedContact}.kt`, `core/service/.../MessagingControllerImpl.kt`, `androidApp/.../MainActivity.kt`, `androidApp/src/main/AndroidManifest.xml` |
-| Firmware (meshtastic/firmware) | `master` | `variants/esp32s3/tlora-pager/variant.h` (ST25R3916), `variants/nrf52840/*/variant.h` (`CONFIG_NFCT_PINS_AS_GPIOS`), `src/platform/nrf54l15/NRF54L15Bluetooth.cpp`; issue [#7236](https://github.com/meshtastic/firmware/issues/7236) |
-| Protobufs (meshtastic/protobufs) | `master` | `admin.proto` (`SharedContact`, `AdminMessage.add_contact` #66, `set_owner` #32), `mesh.proto` (`User`, `public_key`), `apponly.proto` (`ChannelSet`) |
+| Firmware (meshtastic/firmware) | `master` @ `62df860` | `variants/esp32s3/tlora-pager/variant.h` (ST25R3916), `variants/nrf52840/*/variant.h` (`CONFIG_NFCT_PINS_AS_GPIOS`), `src/platform/nrf54l15/NRF54L15Bluetooth.cpp`; issue [#7236](https://github.com/meshtastic/firmware/issues/7236) |
+| Protobufs (meshtastic/protobufs) | `master` @ `5ba1936` | `admin.proto` (`SharedContact`, `AdminMessage.add_contact` #66, `set_owner` #32), `mesh.proto` (`User`, `public_key`), `apponly.proto` (`ChannelSet`) |
 | Standards | v1.4 | [meshtastic_design_standards_latest.md](../meshtastic_design_standards_latest.md) §1–§10 |
 
-> Line numbers in linked source may drift over time; blob links are pinned to the branch/SHA above where possible.
+> All source blob links are pinned to the commit SHAs above (Apple `e531f15`, Android `0da4c78`, firmware `62df860`, protobufs `5ba1936`) so the audit is reproducible; line numbers cited in prose may still differ if you browse a different revision.
 
 ---
 
