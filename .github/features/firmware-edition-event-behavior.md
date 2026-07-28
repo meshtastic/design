@@ -33,16 +33,42 @@ The field is reported by the device in `MyNodeInfo.firmware_edition` and is avai
 
 ## Metadata Source
 
-Display metadata is **data-driven, not hardcoded in clients**. Adding an event is a metadata change, not a client release.
+Display metadata is **data-driven, not hardcoded in clients**. Adding an event is a metadata change, not a client release — subject to the caching rules below.
 
 | | |
 |---|---|
 | Source of truth | `GET https://api.meshtastic.org/resource/eventFirmware` |
 | Backing repo | `meshtastic/api` — `data/eventFirmware.json` |
 | Icons | `meshtastic/api` — `static/eventFirmware/<slug>.png`, served at `resource/eventFirmware/<slug>.png` |
-| Offline fallback | Clients bundle a copy of the manifest, refreshed on release |
+| Offline seed | Clients bundle a copy of the manifest, refreshed at release |
 
 Clients match the enum **name** reported by the device (`DEFCON`) against each entry's `edition` key. An edition with no manifest entry gets no branding and no theme, but still triggers the notification default in Behavior 3.
+
+### Caching and staleness
+
+Recommended shape: a persistent cache **seeded from the bundled snapshot** and refreshed from the endpoint stale-while-revalidate — serve what's cached, refresh behind it, and rate-limit refresh *attempts* so a failing fetch offline doesn't retry on every lookup. Persist rather than hold in memory, so the snapshot survives a process restart.
+
+This bounds what "no client release" actually buys:
+
+| Client state | Sees a newly added event? |
+|---|---|
+| Online, cache refreshed | Yes |
+| Online, first lookup | Yes, once the refresh lands; serves the seed until then |
+| Offline since install | **No** — bundled seed only, until the client next reaches the network |
+| Offline, cached from an earlier fetch | Whatever that fetch contained |
+
+So a client release is still what guarantees an event reaches *every* user. Add events to the manifest early enough that clients have refreshed before the event starts, and treat bundling the icon (see Behavior 1) as the offline path.
+
+### Trust boundary
+
+The manifest is first-party but **remote**, and it drives rendered text, opened links, fetched images, and font selection. Clients must treat it as untrusted input at the point of use:
+
+- **Tolerate schema drift.** Ignore unknown fields and accept missing ones rather than failing the whole payload — one malformed entry must not take down branding for every other edition. Drop entries whose `edition` is absent.
+- **Restrict URLs.** Require `https` for `iconUrl` and every `links[].url`, and reject anything else before fetching or opening it. A link field is a navigation primitive; without a scheme allowlist the manifest can invoke arbitrary handlers on the device.
+- **Treat all text as display-only.** `displayName`, `welcomeMessage`, `tagline`, and `links[].label` render as plain text — never as markup, HTML, or a link target.
+- **Bound images.** Enforce a decoded size limit and accept only expected image types; render the fallback icon on violation.
+- **`fonts` are family-name identifiers, not URLs.** Resolve them only against the platform's own font provider. Never treat the value as a fetchable location.
+- **Colors are `#RRGGBB`.** Parse strictly and drop malformed entries rather than substituting a default that misrepresents the brand.
 
 ### Manifest shape
 
@@ -73,6 +99,8 @@ Clients match the enum **name** reported by the device (`DEFCON`) against each e
 
 Every field except `edition` is optional. Clients must degrade rather than fail: an edition with only an `accentColor` gets a wash and nothing else.
 
+Where a UI element needs a value that is absent, fall back rather than render blank. In particular, **`displayName` falls back to the raw enum name** (`DEFCON`), so a minimal entry — or an edition with no entry at all — still labels the firmware section correctly.
+
 **`welcomeMessage` and `tagline` are deliberately not localized.** Moving them into data traded per-language translation for per-event editability without a client release. Do not route them through the client's translation pipeline; they arrive as authored English.
 
 **`fonts` are family names, not URLs** (`Lato`, not a font file). Resolving them is platform-specific and optional — Android binds them only in the Google flavor, where a downloadable-font provider exists, and falls back to the app typeface elsewhere.
@@ -82,6 +110,8 @@ Every field except `edition` is optional. Clients must degrade rather than fail:
 ### Trigger
 
 The client observes `MyNodeInfo.firmware_edition` **while the device is in a Connected state**. If the edition maps to a manifest entry, branding activates. On disconnect (or reconnection to vanilla firmware), branding deactivates.
+
+Treat the active edition as **derived state, not a latched one-shot**: it should follow the currently connected device's reported value for as long as that connection lasts. A change from one non-vanilla edition to another — reconnecting to a different device, or re-flashing between events — must swap the artwork, name, theme, and sheet contents together. Recomputing from the reported edition gets this for free; caching the first edition seen does not, and leaves stale branding on screen.
 
 ### UI Changes
 
@@ -175,18 +205,30 @@ Two cases the current Android implementation handles differently from an earlier
 
 ## Behavior 4: Post-Event Nudge
 
-Event firmware ships factory-default configuration and is not intended as a daily driver. Once `eventEnd` has passed **in the event's own `timeZone`**, a client connected to that edition should surface a persistent, non-dismissable prompt toward the firmware update flow.
+Event firmware ships factory-default configuration and is not intended as a daily driver. Once the event is over, a client connected to that edition should surface a persistent, non-dismissable prompt toward the firmware update flow.
 
-Drive this from the metadata date, not from a stored "event is over" bit: the prompt then appears whenever an ended-event device connects and disappears on its own once the device is re-flashed. A missing or unparseable `eventEnd` must never be treated as ended.
+### The date boundary
+
+`eventEnd` is date-only, so the rule must be stated exactly. **`eventEnd` is inclusive — the event has ended when the current local date in the event's `timeZone` is strictly later than `eventEnd`.**
+
+```
+ended = today(in: timeZone) > eventEnd
+```
+
+A device is therefore *not* nudged during the final day of the event, and is nudged from local midnight at the start of the following day. Resolve "today" in the event's own zone, not the device's: an attendee who flies home the last night should not be nudged early because their phone moved timezone.
+
+Fall back to the device zone only when `timeZone` is absent or unparseable, and **never treat a missing or unparseable `eventEnd` as ended** — an unknown end date must not nudge users off working firmware.
+
+Drive this from the metadata date, not from a stored "event is over" bit: the prompt then appears whenever an ended-event device connects and disappears on its own once the device is re-flashed.
 
 ## Adding a New Event
 
-For an event whose enum value already exists, no client changes are needed:
+For an event whose enum value already exists, no client code changes are needed:
 
 1. Add an entry to `data/eventFirmware.json` in `meshtastic/api`.
 2. Add `static/eventFirmware/<slug>.png` and point `iconUrl` at it.
 
-Optionally, clients may bundle the icon so it appears offline and before their next manifest refresh.
+Land both **well before the event** so online clients have refreshed their cache by the time attendees arrive. Per the caching table above, users who have been offline since install will not see the event until their client next reaches the network — bundling the icon and shipping the manifest snapshot in a client release is what covers them.
 
 A new enum value requires a proto change coordinated via the `meshtastic/protobufs` repo, and clients must then pick up the new protobufs release.
 
@@ -194,7 +236,7 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 
 | Platform | Branding | Theme | Notifications | Post-event | Notes |
 |---|---|---|---|---|---|
-| Android | ✅ | ✅ | ✅ | ✅ | Fonts are Google-flavor only |
+| Android | ✅ | ✅ | ✅ | ✅ | Fonts are Google-flavor only; does not yet enforce the URL scheme allowlist |
 | Apple | — | — | — | — | Not yet implemented |
 | Web | — | — | — | — | Not yet implemented |
 
@@ -204,3 +246,4 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 - [ ] Create iOS implementation issue.
 - [ ] Create Web implementation issue.
 - [ ] Resolve the two notification divergences above and align all platforms.
+- [ ] Enforce the URL scheme allowlist on link and icon fetches (Android does not today).
