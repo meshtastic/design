@@ -52,12 +52,16 @@ This bounds what "no client release" actually buys:
 
 | Client state | Sees a newly added event? |
 |---|---|
-| Online, cache refreshed | Yes |
-| Online, first lookup | Yes, once the refresh lands; serves the seed until then |
+| Online, cache already refreshed | Yes |
+| Online, first lookup | Only if the refresh completes within the lookup's bounded wait — otherwise not until branding is re-evaluated (see below) |
 | Offline since install | **No** — bundled seed only, until the client next reaches the network |
 | Offline, cached from an earlier fetch | Whatever that fetch contained |
 
 So a client release is still what guarantees an event reaches *every* user. Add events to the manifest early enough that clients have refreshed before the event starts, and treat bundling the icon (see Behavior 1) as the offline path.
+
+**A cache write must re-evaluate the active edition.** Refreshing the manifest is only useful if the currently connected device's branding, theme, and sheet contents are recomputed when new rows land — atomically, so artwork from one edition never pairs with a name from another. Expose the lookup as an **observable** keyed on the edition name rather than a one-shot read: a one-shot resolves once when the connection or edition changes, so a refresh that arrives afterward sits in the cache unseen until the user reconnects.
+
+This is the shape to copy, not the shape that shipped — Android currently resolves the edition with a suspending one-shot inside a `combine` over connection state, so it has exactly the staleness described above. Tracked as a sub-task.
 
 ### Trust boundary
 
@@ -65,6 +69,7 @@ The manifest is first-party but **remote**, and it drives rendered text, opened 
 
 - **Tolerate schema drift.** Ignore unknown fields and accept missing ones rather than failing the whole payload — one malformed entry must not take down branding for every other edition. Drop entries whose `edition` is absent.
 - **Restrict URLs.** Require `https` for `iconUrl` and every `links[].url`, and reject anything else before fetching or opening it. A link field is a navigation primitive; without a scheme allowlist the manifest can invoke arbitrary handlers on the device.
+- **Hold `firmware.zipUrl` to a higher bar than the rest.** It is the only field that feeds an *executable artifact* onto a device, so a scheme check is not sufficient. Before presenting or consuming it: require `https`, validate the host against an **approved-origin allowlist** (the project's own release hosts — not merely "some HTTPS URL"), and verify artifact integrity — a checksum or signature carried out of band, plus the firmware's own image validation — before anything is written to a device. A manifest compromise must not become arbitrary firmware delivery. Clients that only display the event's firmware version, and never fetch it, should say so explicitly rather than leaving the sink implied. Android does not consume this field today.
 - **Treat all text as display-only.** `displayName`, `welcomeMessage`, `tagline`, and `links[].label` render as plain text — never as markup, HTML, or a link target.
 - **Bound images.** Enforce a decoded size limit and accept only expected image types; render the fallback icon on violation.
 - **`fonts` are family-name identifiers, not URLs.** Resolve them only against the platform's own font provider. Never treat the value as a fetchable location.
@@ -211,7 +216,7 @@ Event firmware ships factory-default configuration and is not intended as a dail
 
 `eventEnd` is date-only, so the rule must be stated exactly. **`eventEnd` is inclusive — the event has ended when the current local date in the event's `timeZone` is strictly later than `eventEnd`.**
 
-```
+```text
 ended = today(in: timeZone) > eventEnd
 ```
 
@@ -236,7 +241,7 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 
 | Platform | Branding | Theme | Notifications | Post-event | Notes |
 |---|---|---|---|---|---|
-| Android | ✅ | ✅ | ✅ | ✅ | Fonts are Google-flavor only; does not yet enforce the URL scheme allowlist |
+| Android | ✅ | ✅ | ✅ | ✅ | Fonts Google-flavor only; no URL scheme allowlist; edition lookup is a one-shot, so a cache refresh needs a reconnect |
 | Apple | — | — | — | — | Not yet implemented |
 | Web | — | — | — | — | Not yet implemented |
 
@@ -247,3 +252,4 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 - [ ] Create Web implementation issue.
 - [ ] Resolve the two notification divergences above and align all platforms.
 - [ ] Enforce the URL scheme allowlist on link and icon fetches (Android does not today).
+- [ ] Make the edition lookup observable so a manifest refresh re-evaluates active branding without a reconnect (Android).
