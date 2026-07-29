@@ -104,6 +104,9 @@ Clients ship the trusted public key keyed by `keyId`. A key delivered by this
 endpoint, the display manifest, or an artifact host is not a trust root.
 Unknown keys, malformed base64, invalid signatures, expired contracts, and
 unsupported schema versions make in-app installation unavailable.
+After signature verification, the client requires `payload.edition` to exactly
+match the requested `{EDITION}`. Contract caches are keyed by edition; a valid
+contract for one edition must never satisfy a request for another.
 
 The schema-1 contract is scoped to one event release:
 
@@ -132,7 +135,23 @@ The schema-1 contract is scoped to one event release:
       "minimumBootloaderVersion": null
     }
   ],
-  "standardArtifacts": []
+  "standardArtifacts": [
+    {
+      "pioEnv": "tbeam-s3-core",
+      "hwModel": 12,
+      "architecture": "esp32-s3",
+      "version": "2.7.26.54e0d8d",
+      "format": "bin",
+      "url": "https://raw.githubusercontent.com/meshtastic/meshtastic.github.io/<40-hex-commit>/firmware-2.7.26.54e0d8d/firmware-tbeam-s3-core-2.7.26.54e0d8d.bin",
+      "sha256": "<64 lowercase hex characters>",
+      "byteCount": 2213168,
+      "minimumSourceVersion": "2.7.26",
+      "partitionRole": "app0",
+      "partitionScheme": "8MB",
+      "dfuProtocol": null,
+      "minimumBootloaderVersion": null
+    }
+  ]
 }
 ```
 
@@ -149,13 +168,26 @@ Selection is exact on `pioEnv`, `hwModel`, and `architecture`, with exactly one
 matching artifact. The client also enforces `minimumSourceVersion` and
 architecture-specific compatibility:
 
+Signed versions use `MAJOR.MINOR.PATCH` or
+`MAJOR.MINOR.PATCH.SOURCE`, where the first three components are non-negative
+decimal integers and `SOURCE` contains only ASCII letters, digits, `_`, or `-`.
+A connected device version may additionally begin with `v`. Clients remove
+that prefix, compare the three numeric components lexicographically, and ignore
+the source-reference suffix for minimum-version ordering. Short versions,
+extra suffix components, integer overflow, and every other grammar are
+unsupported and reject the artifact.
+
 - ESP32 artifacts are bare application `.bin` payloads for `app0`, never
   factory, merged, filesystem, or OTA-loader images. Their partition scheme
-  must exactly match the connected target.
+  must exactly match the connected target. `partitionRole` and
+  `partitionScheme` are required and non-null; missing, null, or unknown values
+  reject the artifact before compatibility checks.
 - nRF52 artifacts are target-specific Nordic DFU OTA ZIPs. The contract names
-  the DFU protocol and minimum compatible bootloader. A client that cannot
-  establish the installed bootloader's compatibility must not offer in-app
-  DFU.
+  the DFU protocol and minimum compatible bootloader. `dfuProtocol` and
+  `minimumBootloaderVersion` are required and non-null; missing, null, or
+  unknown values reject the artifact before compatibility checks. A client
+  that cannot establish the installed bootloader's compatibility must not
+  offer in-app DFU.
 - Unsupported architectures and devices without a proven app OTA path use the
   web flasher.
 
@@ -335,7 +367,10 @@ Before installation the client:
 2. Fetches and verifies the edition's signed contract.
 3. Selects one exact target and validates source-version and OTA compatibility.
 4. Downloads with a signed size ceiling and verifies SHA-256.
-5. Hands the local verified file to the platform's existing OTA/DFU flow.
+5. Re-checks that the same device is connected, rebuilds its target identity,
+   and repeats exact-target and compatibility selection. A disconnect or
+   identity change during download aborts the install.
+6. Hands the local verified file to the platform's existing OTA/DFU flow.
 
 If any step is unavailable or fails, the primary action opens
 `https://flasher.meshtastic.org`. After the event, a compatible device running
@@ -351,7 +386,10 @@ For an event whose enum value already exists, no client code changes are needed:
 2. Add `static/eventFirmware/<slug>.png` and point `iconUrl` at it.
 3. To enable in-app OTA, add a reviewed entry to
    `data/eventFirmwareOTA.json` with immutable per-target event and standard
-   artifacts, then configure the API's release signing key.
+   artifacts, then configure the API's release signing key. The signing
+   `keyId` and public key must already be trusted by released clients. If they
+   are not, first ship a client release containing the public key and wait for
+   that release to reach users before publishing or enabling the OTA contract.
 
 Land both **well before the event** so online clients have refreshed their cache by the time attendees arrive. Per the caching table above, users who have been offline since install will not see the event until their client next reaches the network — bundling the icon and shipping the manifest snapshot in a client release is what covers them.
 
