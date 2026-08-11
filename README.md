@@ -86,19 +86,17 @@ The SVG can be imported and converted to an Android vector drawable using Androi
 
 To regenerate the action bar icons use the Image Asset tool to import logo/svg/Mesh_Logo_White.svg. Use 0% padding, HOLO_DARK theme and name the generated asset "app_icon".
 
+## Design Standards
+
+All UI must comply with the [Meshtastic Client Design Standards](https://raw.githubusercontent.com/meshtastic/design/refs/heads/master/standards/meshtastic_design_standards_latest.md). Fetch and review this document before making any UI changes.
+
+This ensures that Copilot will fetch and reference the latest design standards whenever it assists with UI-related code, helping maintain cross-platform consistency for colors, typography, node identity, accessibility, and theming.
+
 ## Using Design Standards with GitHub Copilot
 
 If you are developing a Meshtastic client, you can configure GitHub Copilot to automatically enforce the [Meshtastic Client Design Standards](standards/meshtastic_design_standards_latest.md) when making UI changes.
 
 Add the following section to your repository's `.github/copilot-instructions.md` file (create the file if it doesn't exist):
-
-```markdown
-## Design Standards
-
-All UI must comply with the [Meshtastic Client Design Standards](https://raw.githubusercontent.com/meshtastic/design/refs/heads/master/standards/meshtastic_design_standards_latest.md). Fetch and review this document before making any UI changes.
-```
-
-This ensures that Copilot will fetch and reference the latest design standards whenever it assists with UI-related code, helping maintain cross-platform consistency for colors, typography, node identity, accessibility, and theming.
 
 ## Stats
 
