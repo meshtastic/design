@@ -42,7 +42,7 @@ Protobuf message: `Config.LoRaConfig`
 
 | Field | UI Control | Constraint / Validation |
 |---|---|---|
-| `region` | Picker (enum) | Values from `RegionCode` enum (unset, US, EU_433, EU_868, CN, JP, ANZ, KR, TW, RU, IN, NZ_865, TH, LORA_24, UA_433, UA_868, MY_433, MY_919, SG_923) |
+| `region` | Picker (enum) | Values from `RegionCode` enum (unset, US, EU_433, EU_868, CN, JP, ANZ, KR, TW, RU, IN, NZ_865, TH, LORA_24, UA_433, MY_433, MY_919, SG_923) |
 | `usePreset` | Toggle | Boolean |
 | `modemPreset` | Picker (enum) | Values from `ModemPresets` enum; disabled when `usePreset` is false |
 | `hopLimit` | Picker (`ForEach 0..<8`) | Integer **0–7** inclusive. Proto: *"Maximum number of hops. This can't be greater than 7."* |
