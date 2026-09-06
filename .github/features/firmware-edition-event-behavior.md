@@ -75,6 +75,135 @@ The manifest is first-party but **remote**, and it drives rendered text, opened 
 - **`fonts` are family-name identifiers, not URLs.** Resolve them only against the platform's own font provider. Never treat the value as a fetchable location.
 - **Colors are `#RRGGBB`.** Parse strictly and drop malformed entries rather than substituting a default that misrepresents the brand.
 
+### Executable firmware is authorized separately
+
+The display manifest does not authorize installation. In particular,
+`firmware.zipUrl` is informational and must never be promoted directly into an
+in-app OTA action. A client that offers event firmware OTA fetches a separately
+signed contract for the selected edition:
+
+```text
+GET https://api.meshtastic.org/resource/eventFirmware/{EDITION}/ota
+```
+
+Unknown editions return `404`. If the API signing key is unavailable, the
+endpoint fails closed with `503`; it must not return an unsigned contract.
+
+The response is an Ed25519 envelope. `payload` is the exact UTF-8 JSON bytes,
+base64 encoded, that were signed:
+
+```jsonc
+{
+  "keyId": "event-release-2026",
+  "payload": "<base64 contract JSON>",
+  "signature": "<base64 Ed25519 signature over decoded payload bytes>"
+}
+```
+
+Clients ship the trusted public key keyed by `keyId`. A key delivered by this
+endpoint, the display manifest, or an artifact host is not a trust root.
+Unknown keys, malformed base64, invalid signatures, expired contracts, and
+unsupported schema versions make in-app installation unavailable.
+After signature verification, the client requires `payload.edition` to exactly
+match the requested `{EDITION}`. Contract caches are keyed by edition; a valid
+contract for one edition must never satisfy a request for another.
+
+The schema-1 contract is scoped to one event release:
+
+```jsonc
+{
+  "schemaVersion": 1,
+  "releaseId": "defcon34-2.8.0.b00d76f",
+  "edition": "DEFCON",
+  "version": "2.8.0.b00d76f",
+  "issuedAt": "2026-07-29T00:00:00Z",
+  "expiresAt": "2026-10-01T00:00:00Z",
+  "artifacts": [
+    {
+      "pioEnv": "tbeam-s3-core",
+      "hwModel": 12,
+      "architecture": "esp32-s3",
+      "version": "2.8.0.b00d76f",
+      "format": "bin",
+      "url": "https://raw.githubusercontent.com/meshtastic/meshtastic.github.io/<40-hex-commit>/event/...",
+      "sha256": "<64 lowercase hex characters>",
+      "byteCount": 2383792,
+      "minimumSourceVersion": "2.7.26",
+      "partitionRole": "app0",
+      "partitionScheme": "8MB",
+      "dfuProtocol": null,
+      "minimumBootloaderVersion": null
+    }
+  ],
+  "standardArtifacts": [
+    {
+      "pioEnv": "tbeam-s3-core",
+      "hwModel": 12,
+      "architecture": "esp32-s3",
+      "version": "2.7.26.54e0d8d",
+      "format": "bin",
+      "url": "https://raw.githubusercontent.com/meshtastic/meshtastic.github.io/<40-hex-commit>/firmware-2.7.26.54e0d8d/firmware-tbeam-s3-core-2.7.26.54e0d8d.bin",
+      "sha256": "<64 lowercase hex characters>",
+      "byteCount": 2213168,
+      "minimumSourceVersion": "2.7.26",
+      "partitionRole": "app0",
+      "partitionScheme": "8MB",
+      "dfuProtocol": null,
+      "minimumBootloaderVersion": null
+    }
+  ]
+}
+```
+
+`issuedAt` and `expiresAt` use UTC ISO-8601 timestamps with whole-second
+precision (`yyyy-MM-dd'T'HH:mm:ss'Z'`). `releaseId` and `keyId` are stable,
+bounded identifiers; they are not URLs or user-facing labels.
+
+`artifacts` installs the event edition. `standardArtifacts` provides the
+explicit return path to ordinary Meshtastic firmware. A production contract
+must contain both sets; a client must not infer the return artifact by editing
+an event URL or selecting whatever release happens to be latest.
+
+Selection is exact on `pioEnv`, `hwModel`, and `architecture`, with exactly one
+matching artifact. The client also enforces `minimumSourceVersion` and
+architecture-specific compatibility:
+
+Signed versions use `MAJOR.MINOR.PATCH` or
+`MAJOR.MINOR.PATCH.SOURCE`, where the first three components are non-negative
+decimal integers and `SOURCE` contains only ASCII letters, digits, `_`, or `-`.
+A connected device version may additionally begin with `v`. Clients remove
+that prefix, compare the three numeric components lexicographically, and ignore
+the source-reference suffix for minimum-version ordering. Short versions,
+extra suffix components, integer overflow, and every other grammar are
+unsupported and reject the artifact.
+
+- ESP32 artifacts are bare application `.bin` payloads for `app0`, never
+  factory, merged, filesystem, or OTA-loader images. Their partition scheme
+  must exactly match the connected target. `partitionRole` and
+  `partitionScheme` are required and non-null; missing, null, or unknown values
+  reject the artifact before compatibility checks.
+- nRF52 artifacts are target-specific Nordic DFU OTA ZIPs. The contract names
+  the DFU protocol and minimum compatible bootloader. `dfuProtocol` and
+  `minimumBootloaderVersion` are required and non-null; missing, null, or
+  unknown values reject the artifact before compatibility checks. A client
+  that cannot establish the installed bootloader's compatibility must not
+  offer in-app DFU.
+- Unsupported architectures and devices without a proven app OTA path use the
+  web flasher.
+
+Artifact URLs are HTTPS, use an approved project origin, and identify immutable
+content. For `raw.githubusercontent.com`, the revision path component is a
+40-hex commit SHA. Clients reject redirects, enforce the signed byte count while
+downloading, then verify both byte count and SHA-256 before opening the existing
+OTA/DFU flow. Any failure falls back to the web flasher without writing bytes to
+the device.
+
+Signing keys are release infrastructure. Private keys live only in deployment
+secrets; public keys ship in clients. Rotation adds a new `keyId` and public key
+to clients before the API begins signing with it. Revocation requires removing
+the affected contract and shipping a client update when the trust key itself is
+compromised.
+
 ### Manifest shape
 
 ```jsonc
@@ -226,12 +355,41 @@ Fall back to the device zone only when `timeZone` is absent or unparseable, and 
 
 Drive this from the metadata date, not from a stored "event is over" bit: the prompt then appears whenever an ended-event device connects and disappears on its own once the device is re-flashed.
 
+## Behavior 5: Event Firmware Installation
+
+An event info or firmware-updates screen may offer a convenient install action,
+but only when the signed contract above authorizes one exact artifact for the
+connected device. Display metadata alone never enables the action.
+
+Before installation the client:
+
+1. Confirms the same device is still connected.
+2. Fetches and verifies the edition's signed contract.
+3. Selects one exact target and validates source-version and OTA compatibility.
+4. Downloads with a signed size ceiling and verifies SHA-256.
+5. Re-checks that the same device is connected, rebuilds its target identity,
+   and repeats exact-target and compatibility selection. A disconnect or
+   identity change during download aborts the install.
+6. Hands the local verified file to the platform's existing OTA/DFU flow.
+
+If any step is unavailable or fails, the primary action opens
+`https://flasher.meshtastic.org`. After the event, a compatible device running
+the event edition uses `standardArtifacts` through the same process. Clients
+must label this as a firmware rewrite, keep their existing OTA safety UI, and
+must not imply that background execution can keep a BLE/Wi-Fi transfer alive.
+
 ## Adding a New Event
 
 For an event whose enum value already exists, no client code changes are needed:
 
 1. Add an entry to `data/eventFirmware.json` in `meshtastic/api`.
 2. Add `static/eventFirmware/<slug>.png` and point `iconUrl` at it.
+3. To enable in-app OTA, add a reviewed entry to
+   `data/eventFirmwareOTA.json` with immutable per-target event and standard
+   artifacts, then configure the API's release signing key. The signing
+   `keyId` and public key must already be trusted by released clients. If they
+   are not, first ship a client release containing the public key and wait for
+   that release to reach users before publishing or enabling the OTA contract.
 
 Land both **well before the event** so online clients have refreshed their cache by the time attendees arrive. Per the caching table above, users who have been offline since install will not see the event until their client next reaches the network — bundling the icon and shipping the manifest snapshot in a client release is what covers them.
 
@@ -242,7 +400,7 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 | Platform | Branding | Theme | Notifications | Post-event | Notes |
 |---|---|---|---|---|---|
 | Android | ✅ | ✅ | ✅ | ✅ | Fonts Google-flavor only; no URL scheme allowlist; edition lookup is a one-shot, so a cache refresh needs a reconnect |
-| Apple | — | — | — | — | Not yet implemented |
+| Apple | PR | PR | PR | PR | Signed event OTA contract and installer are in draft; hardware event install remains untested |
 | Web | — | — | — | — | Not yet implemented |
 
 ## Sub-tasks
@@ -253,3 +411,5 @@ A new enum value requires a proto change coordinated via the `meshtastic/protobu
 - [ ] Resolve the two notification divergences above and align all platforms.
 - [ ] Enforce the URL scheme allowlist on link and icon fetches (Android does not today).
 - [ ] Make the edition lookup observable so a manifest refresh re-evaluates active branding without a reconnect (Android).
+- [ ] Provision and document the production event-firmware signing key and rotation process.
+- [ ] Hardware-validate each artifact target before adding it to a signed OTA contract.
