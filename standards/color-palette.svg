@@ -109,13 +109,18 @@
   <!-- ─── Semantic Colors ─── -->
   <text x="60" y="460" font-size="16" font-weight="700" fill="#2C2D3C">Semantic Colors</text>
 
-  <!-- Link -->
-  <rect x="60" y="478" width="160" height="100" rx="8" fill="#9BA8E0"/>
-  <text x="140" y="524" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Link</text>
-  <text x="140" y="544" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">#9BA8E0</text>
+  <!-- Link: split per mode - Blue 600 in light mode, Blue 400 in dark mode -->
+  <rect x="60" y="478" width="80" height="100" rx="8" fill="#5C6BC0"/>
+  <rect x="132" y="478" width="88" height="100" fill="#9BA8E0"/>
+  <rect x="60" y="478" width="160" height="100" rx="8" fill="none" stroke="#B8BAC8" stroke-width="0.5"/>
+  <text x="140" y="514" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Link</text>
+  <text x="100" y="538" font-size="9" fill="rgba(255,255,255,0.9)" text-anchor="middle">light</text>
+  <text x="100" y="552" font-size="10" fill="rgba(255,255,255,0.9)" text-anchor="middle">#5C6BC0</text>
+  <text x="176" y="538" font-size="9" fill="rgba(255,255,255,0.9)" text-anchor="middle">dark</text>
+  <text x="176" y="552" font-size="10" fill="rgba(255,255,255,0.9)" text-anchor="middle">#9BA8E0</text>
 
   <rect x="60" y="586" width="160" height="48" rx="8" fill="#E0E3F8" stroke="#B8BAC8" stroke-width="0.5"/>
-  <text x="140" y="614" font-size="11" font-weight="600" fill="#9BA8E0" text-anchor="middle">Link Light #E0E3F8</text>
+  <text x="140" y="614" font-size="11" font-weight="600" fill="#5C6BC0" text-anchor="middle">Link Tint #E0E3F8</text>
 
   <!-- Info -->
   <rect x="240" y="478" width="160" height="100" rx="8" fill="#5C6BC0"/>
