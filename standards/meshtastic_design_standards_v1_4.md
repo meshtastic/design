@@ -162,7 +162,7 @@ Use these for status indicators, alerts, and feedback.
 |------|-----|-----|-------|
 | Link | `#5C6BC0` light / `#9BA8E0` dark | `92 107 192` / `155 168 224` | Hyperlinks, clickable URLs (Blue 600 light, Blue 400 dark) |
 | Link Light | `#E0E3F8` | `224 227 248` | Link tint background |
-| Info | `#5C6BC0` | `92 107 192` | Informational indicators, links |
+| Info | `#5C6BC0` | `92 107 192` | Informational indicators |
 | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
 | Warning | `#E8A33E` | `232 163 62` | Caution / attention states |
 | Warning Light | `#FFF3E0` | `255 243 224` | Warning tint background |
