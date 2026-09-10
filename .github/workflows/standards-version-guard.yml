@@ -1,0 +1,77 @@
+name: Standards version guard
+
+on:
+  pull_request:
+    paths:
+      - 'standards/**'
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Edits target the current standards version
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'allow-superseded-edit') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reject edits to superseded standards versions
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          LATEST: standards/meshtastic_design_standards_latest.md
+        run: |
+          set -euo pipefail
+
+          # "Current" is whatever the base branch says right now, not whatever
+          # this branch was forked from. A PR that predates a version bump is
+          # exactly the case this guard exists to catch, so it must rebase.
+          mode="$(git ls-tree "$BASE_SHA" -- "$LATEST" | awk '{print $1}')"
+          if [ "$mode" != "120000" ]; then
+            echo "::error::Expected $LATEST to be a symlink on the base branch (found mode '${mode:-missing}')."
+            exit 1
+          fi
+
+          current="$(git show "$BASE_SHA:$LATEST")"
+          echo "Current standards version on base branch: $current"
+
+          merge_base="$(git merge-base "$BASE_SHA" "$HEAD_SHA")"
+
+          failed=0
+          while IFS= read -r f; do
+            [ -n "$f" ] || continue
+            base="$(basename "$f")"
+
+            # Only versioned standards documents are gated.
+            case "$base" in
+              meshtastic_design_standards_v*.md) ;;
+              *) continue ;;
+            esac
+
+            # Editing the version the symlink points at is the whole point.
+            if [ "$base" = "$current" ]; then
+              echo "ok: $f is the current version"
+              continue
+            fi
+
+            # Adding a new version file is how a release lands. Only edits to
+            # version files that already exist on the base branch are rejected.
+            if ! git cat-file -e "$BASE_SHA:$f" 2>/dev/null; then
+              echo "ok: $f is a new version file"
+              continue
+            fi
+
+            echo "::error file=$f::$f is superseded by $current. Apply this change to $current instead, or add the 'allow-superseded-edit' label if the older version genuinely needs the fix."
+            failed=1
+          done < <(git diff --name-only "$merge_base" "$HEAD_SHA" -- 'standards/*.md')
+
+          if [ "$failed" -ne 0 ]; then
+            echo
+            echo "Superseded standards versions are published records. Changes belong in $current."
+            exit 1
+          fi
+
+          echo "All standards edits target the current version."
