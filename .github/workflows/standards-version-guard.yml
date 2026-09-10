@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'standards/**'
+      - '.github/workflows/standards-version-guard.yml'
 
 permissions:
   contents: read
