@@ -4,7 +4,9 @@
 **Scope:** iOS/macOS (Meshtastic-Apple) vs Android (Meshtastic-Android) vs Web (meshtastic/web) vs Firmware (meshtastic/firmware)
 **Areas Covered:** NFC tag read/write, contact & channel sharing, tag-based provisioning, shared data model, hardware support, design-standards conformance
 **Design Standards:** v1.4 ([meshtastic_design_standards_latest.md](../meshtastic_design_standards_latest.md))
-**Last Updated:** 2026-07-18
+**Last Updated:** 2026-09-10
+
+> **Revised 2026-09-10.** The first revision described iOS as write-only, contacts-only and reachable only from a Tools screen. Meshtastic-Apple [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) closed that on 2026-07-24, six days after this document was written, and four of the nine recorded mismatches are gone. The grades in §4 have been re-checked against both codebases rather than carried forward; two moved because the original reading was wrong, not because the code changed, and those are called out in place.
 
 > **Purpose:** NFC tag support shipped on the client apps without a design artifact to keep the platforms aligned. This document records exactly what each platform does with NFC today, identifies the mismatches, grades every NFC surface against the Meshtastic Client Design Standards v1.4, recommends a canonical NFC experience, and explores concrete new features to build — including on firmware. It is the parent reference for a `[ALIGNMENT]` issue (see appendix); no code changes are proposed here.
 
@@ -68,21 +70,25 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 
 ### 2.1 iOS / macOS (Meshtastic-Apple)
 
-**NFC: write-only, contacts-only, iOS 18+, and buried in a Tools screen.**
+**NFC: read and write, contacts and channels, from the share sheets. iOS 18+, no Mac Catalyst.**
+
+PR [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) closed most of what this section previously recorded as missing. What follows is the state after it, plus [#2189](https://github.com/meshtastic/Meshtastic-Apple/pull/2189) and [#2464](https://github.com/meshtastic/Meshtastic-Apple/pull/2464).
 
 | Capability | State |
 |-----------|-------|
-| NFC write — contact (`/v/#`) | ✅ Yes — `NFCNDEFReaderSession` → `tag.writeNDEF(...)` |
-| NFC write — channel (`/e/#`) | ❌ No |
-| NFC read (in-app scan session) | ❌ No — relies on the OS |
-| OS-driven tag read | ⚠️ Indirect — a written tag holds a `meshtastic.org/v/#…` universal link; iOS background NFC + the `applinks:meshtastic.org/v/*` association open the app, which imports via the normal URL path |
-| Minimum OS | iOS **18** (feature gated `@available(iOS 18, *)`) — base deployment target is iOS 16.4/17.5, macOS 14.6, so NFC is unavailable below iOS 18 even where the app runs |
+| NFC write — contact (`/v/#`) | ✅ Yes — `NFCNDEFReaderSession` → `tag.writeNDEF(...)`, from `ShareContactQRDialog` |
+| NFC write — channel (`/e/#`) | ✅ Yes — from `ShareChannels` |
+| NFC read (in-app scan session) | ✅ Yes — `NFCReader.scanToRead`, reachable from Settings → Tools only |
+| OS-driven tag read | ✅ Universal-link dispatch as before, now alongside the in-app reader |
+| Minimum OS | iOS **18** (`@available(iOS 18, *)`) — unchanged |
 | macOS (Catalyst) | ❌ CoreNFC imported under `#if !targetEnvironment(macCatalyst)` — no NFC on the Mac build |
-| Entry point | **Settings → Tools** — not co-located with QR sharing |
+| Entry point | Write is co-located with the QR on both share surfaces. The in-app reader is still Settings → Tools |
 
-**Key files** (Meshtastic-Apple `main` @ `e531f15`):
+**Key files** (Meshtastic-Apple `main` @ `14a47966`):
 
-- NFC write: [`Meshtastic/Views/Settings/Tools.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Views/Settings/Tools.swift) — `import CoreNFC`; `final class NFCReader: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate`; builds a well-known-type **URI** NDEF record for `"https://meshtastic.org/v/#" + base64url(SharedContact)`, wraps it in `NFCNDEFMessage`, calls `tag.writeNDEF(message)`. Button: `Label("Write Contact to NFC Tag", systemImage: "tag")`.
+- NFC read/write: `Meshtastic/Helpers/NFCReader.swift` — `NFCReader` with a `write(payload:)` and a `scanToRead(onURL:)` mode, plus the shared `NFCWriteButton` view (`Label("Write to NFC Tag", systemImage: "tag")`, bordered capsule, large control size) that both share surfaces use.
+- Share surfaces: `Views/Nodes/Helpers/ShareContactQRDialog.swift` and `Views/Settings/ShareChannels.swift` — each renders a `ShareLink` and an `NFCWriteButton` with its own caption. `Views/Settings/Tools.swift` keeps the in-app reader.
+- Import confirm: `Views/Nodes/Helpers/AddContactConfirmationView.swift`.
 - Contact QR: [`Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Views/Nodes/Helpers/ShareContactQRDialog.swift) — builds `SharedContact { nodeNum, user, manuallyVerified }`, `urlPrefix = "https://meshtastic.org/v/#"`, QR via `CIFilter.qrCodeGenerator()`, shares via `ShareLink`.
 - Contact import: [`Meshtastic/Helpers/ContactURLHandler.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Helpers/ContactURLHandler.swift) → confirmation alert → `accessoryManager.addContactFromURL(...)`; provisioning in [`AccessoryManager+ToRadio.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Accessory/Accessory%20Manager/AccessoryManager+ToRadio.swift) via `AdminMessage.addContact`.
 - Channel URL: [`Meshtastic/Helpers/MeshtasticChannelURL.swift`](https://github.com/meshtastic/Meshtastic-Apple/blob/e531f15/Meshtastic/Helpers/MeshtasticChannelURL.swift) (`/e/#` `ChannelSet`); generate [`ShareChannels.swift`], receive [`SaveChannelQRCode.swift`].
@@ -95,7 +101,7 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 
 ### 2.2 Android (Meshtastic-Android)
 
-**NFC: full read + write, contacts and channels, co-located with QR, with an enable-prompt.**
+**NFC: full read + write, contacts and channels, co-located with QR, with an enable-prompt. Tag emulation in review.**
 
 | Capability | State |
 |-----------|-------|
@@ -103,9 +109,11 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 | NFC write — channel (`/e/#`) | ✅ Yes |
 | NFC read (in-app scan session) | ✅ Yes — `enableReaderMode(...)` |
 | OS-driven tag read | ✅ `ACTION_NDEF_DISCOVERED` intent filter for `/e/,/E/,/v/,/V/` (tap-to-import) |
-| Minimum OS | Android 8.0 (**minSdk 26**) on NFC-capable hardware; the manifest declares `uses-feature android.hardware.nfc required="false"`, so the app still runs on devices without an NFC radio (the NFC affordance is hidden there — see §4) |
-| Capability / enable handling | ✅ `LocalNfcScannerSupported` (defaults `false`) + `NfcDisabledDialog` prompts to open NFC settings |
-| Entry point | Shared **`QrDialog`** ("Write to NFC" beside the QR) + a "Share Connected Node" node-list action |
+| Minimum OS | Android 8.0 (**minSdk 26**); the manifest declares `uses-feature android.hardware.nfc required="false"`, so the app runs on devices without an NFC radio |
+| Capability / enable handling | ⚠️ `NfcDisabledDialog` prompts to open NFC settings when NFC is off, but `MainActivity` supplies `LocalNfcScannerSupported provides true` unconditionally rather than checking `FEATURE_NFC`, so the affordance also appears on hardware that has no NFC radio at all |
+| Entry point | Shared **`QrDialog`** (icon button beside the QR) + a "Share Connected Node" node-list action. Reading is on the import FAB on both the contact and channel screens |
+| Tag emulation (phone acts as the tag) | 🚧 [#7124](https://github.com/meshtastic/Meshtastic-Android/pull/7124) — host card emulation serving the same URL as a Type 4 tag while the share dialog is in the foreground. No iOS equivalent is possible |
+| Share to another app (link/QR image) | ❌ None. Copy to clipboard only |
 
 **Key files** (Meshtastic-Android `main` @ `0da4c78`, app version base 2.8.0; refactored into a KMP multi-module project — legacy `app/src/main/...`, `ChannelFragment`, `QrCodeImage` no longer exist):
 
@@ -138,17 +146,21 @@ A scanned/tapped payload is written to the node's NodeDB over the mesh via `Admi
 
 ## 3. Mismatches
 
+Rows 1, 2, 3 and 6 from the 2026-07-18 revision are closed and have been removed. What remains, plus what the closing work exposed:
+
 | # | Area | iOS | Android | Web | Firmware | Priority |
 |---|------|-----|---------|-----|----------|----------|
-| 1 | **Channel write (`/e/#`) to NFC** | ❌ Contacts only | ✅ | ❌ | ❌ | **High** |
-| 2 | **In-app NFC read/scan session** | ❌ OS universal-link only | ✅ `enableReaderMode` | ❌ | ❌ | **High** |
-| 3 | **Entry point** | Settings → Tools (detached from QR) | Shared QR dialog + "Share Connected Node" | n/a | n/a | **High** |
-| 4 | **Minimum OS gate** | iOS 18 only (no Mac Catalyst) | Android 8 (minSdk 26) | n/a | n/a | Medium |
-| 5 | **Enable-NFC / unsupported prompt** | ❌ None | ✅ `NfcDisabledDialog` | n/a | n/a | Medium |
-| 6 | **Import verification semantics** | Honors the encoded `manually_verified` flag | Forces `manually_verified = true` on import | — | — | Medium |
-| 7 | **Reader entitlement vs code** | `TAG` entitlement, NDEF code (see §2.1) | NDEF URL records (consistent) | n/a | n/a | Low |
-| 8 | **Web NFC** | — | — | ❌ None (additive, Chromium-Android only) | — | Low |
-| 9 | **Firmware NFC** | — | — | — | ❌ None (ST25R3916 wired but undriven; request [#7236](https://github.com/meshtastic/firmware/issues/7236)) | Low (Exploratory) |
+| 1 | **Share to another app** | ✅ `ShareLink` on both surfaces, sends the QR image and the URL | ❌ Copy to clipboard only | — | — | **High** |
+| 2 | **In-app reader entry point** | Settings → Tools only | Import FAB on both the contact and channel screens | ❌ | ❌ | Medium |
+| 3 | **Minimum OS gate** | iOS 18 only, no Mac Catalyst | Android 8 (minSdk 26) | n/a | n/a | Medium |
+| 4 | **Affordance hidden without hardware** | Version-gated, no runtime check | ⚠️ `LocalNfcScannerSupported` hardcoded `true` | n/a | n/a | Medium |
+| 5 | **Naming of the channel share surface** | "Generate QR Code" | "Share Channels QR Code" | n/a | n/a | Medium |
+| 6 | **Channel add-vs-replace explained** | ✅ Toggle in the share screen with a consequence line | ⚠️ Segmented buttons on the channel list, no consequence text, away from the share action | — | — | Medium |
+| 7 | **What the surface says it is** | Names the node and explains the QR | ❌ Explains NFC only, never the QR, and does not name what is being shared | — | — | Medium |
+| 8 | **Tag emulation** | ❌ Not possible on iOS | 🚧 [#7124](https://github.com/meshtastic/Meshtastic-Android/pull/7124) | ❌ | ❌ | Low (platform limit) |
+| 9 | **Reader entitlement vs code** | `TAG` entitlement, NDEF code (see §2.1) | NDEF URL records (consistent) | n/a | n/a | Low |
+| 10 | **Web NFC** | — | — | ❌ None (additive, Chromium-Android only) | — | Low |
+| 11 | **Firmware NFC** | — | — | — | ❌ None (ST25R3916 wired but undriven; request [#7236](https://github.com/meshtastic/firmware/issues/7236)) | Low (Exploratory) |
 
 ---
 
@@ -165,13 +177,13 @@ Every NFC surface graded against [meshtastic_design_standards_latest.md](../mesh
 
 | NFC surface | Standard § | iOS | Android | Notes |
 |-------------|-----------|-----|---------|-------|
-| Show NFC affordance only when hardware present/enabled | **§3** Dynamic Layout & Conditional Visibility | ⚠️ | ✅ | Android hides via `LocalNfcScannerSupported` (default `false`) + `NfcDisabledDialog`; iOS only version-gates (iOS 18) with no runtime capability/enable prompt. |
-| Labeled action, not icon-only (+ web tooltip) | **§4** Iconography & Descriptive Text | ✅ | ✅ | iOS `Label("Write Contact to NFC Tag", …)`; Android `write_nfc` text. Web must add hover tooltips if/when it ships NFC. |
-| Plain-language subtext explaining the tap | **§6** Information Architecture | ⚠️ | ⚠️ | Neither clearly explains "hold a phone/tag near the top of your device to add this contact." Both should add subtext per §6. |
-| Native scan sheet, 44×44 targets, Dynamic Type | **§5** Vision-Centric & Native Patterns | ⚠️ | ✅ | iOS has no in-app reader sheet at all; adding one should use the native `NFCNDEFReaderSession` system sheet. |
-| Circular identifier in the import-confirm dialog | **§1** Node Identity (Circle Standard) | ⚠️ | ⚠️ | Contact-confirm should render the incoming node's circular avatar, not a text-only alert. Verify current dialogs; align both. |
+| Show NFC affordance only when hardware present/enabled | **§3** Dynamic Layout & Conditional Visibility | ⚠️ | ❌ | Neither checks the radio. Android's `MainActivity` supplies `LocalNfcScannerSupported provides true` unconditionally, so the affordance shows on a phone with no NFC; iOS only version-gates. Corrected from ✅ on 2026-09-10 — the earlier grade read the CompositionLocal's default rather than what the app provides. |
+| Labeled action, not icon-only (+ web tooltip) | **§4** Iconography & Descriptive Text | ✅ | ⚠️ | iOS uses `Label("Write to NFC Tag", systemImage: "tag")` in a bordered capsule. Android's are `IconButton`s whose text exists only as a content description. §4 does not require a visible label on mobile, but it does require a hover tooltip for icon-only buttons on Desktop and Web, and `QrDialog` ships to the Compose Desktop app with none. The NFC button is hidden there (capability defaults false); Copy is not. |
+| Plain-language subtext explaining the tap | **§6** Information Architecture | ✅ | ⚠️ | iOS carries a per-surface caption naming the thing being shared, and a line explaining the QR. Android has one generic NFC subtext shared by both surfaces and no explanation of the QR itself. |
+| Native scan sheet, 44×44 targets, Dynamic Type | **§5** Vision-Centric & Native Patterns | ✅ | ✅ | iOS now uses the native `NFCNDEFReaderSession` system sheet. |
+| Circular identifier in the import-confirm dialog | **§1** Node Identity (Circle Standard) | ✅ | ✅ | iOS added `AddContactConfirmationView`; Android's `SharedContactDialog` renders a `NodeChip`. Neither *share* dialog identifies the node being shared, which is mismatch 7 rather than a §1 finding. |
 | QR + dialog contrast in light & dark | **§2** Light & Dark Mode | ✅ | ✅ | Keep QR quiet-zone/contrast WCAG-AA in both themes; never a hybrid screen. |
-| Success/failure feedback + tappable links use semantic colors | **§7** Color Palette / Semantic Colors | 🔇 | ⚠️ | Write feedback should use **Success `Green 600 #3FB86D`** (never accent `#67EA94`) and the **Error** scale; links use **Link `Blue 400 #9BA8E0`**. Android has `write_nfc_success`/`write_nfc_failed` strings — verify their color tokens. |
+| Success/failure feedback + tappable links use semantic colors | **§7** Color Palette / Semantic Colors | 🔇 | ✅ | Android's write feedback uses `SemanticColors.Success` and `colorScheme.error`. |
 | Firmware fixed-station GPS provisioning (see §6.B2) | **§10** Units & Measurement | 🔇 | 🔇 | Any coordinates written to a tag are stored/transmitted in canonical units (data-layer note). |
 
 **Applicable v1.4 Agent Implementation Checklist items** (standards doc, "Agent Implementation Checklist (v1.4)") that any NFC work must satisfy:
@@ -203,8 +215,8 @@ A unified target experience, each point tied to the standard it satisfies:
 
 | Platform | To reach canonical |
 |----------|--------------------|
-| iOS | Add channel (`/e/#`) NFC write; add an in-app `NFCNDEFReaderSession` scan action; move NFC into the share sheet + add "Share Connected Node"; add an enable/unsupported prompt; add plain-language subtext + circular-ID confirm; resolve the `TAG`↔NDEF entitlement; re-evaluate the iOS 18 gate. |
-| Android | Already the reference. Verify §7 color tokens on write feedback; add §6 subtext; confirm §1 circular-ID confirm. |
+| iOS | Move the in-app reader out of Settings → Tools onto the share and import surfaces; resolve the `TAG`↔NDEF entitlement; re-evaluate the iOS 18 gate and Catalyst exclusion; rename the channel screen off "Generate QR Code". |
+| Android | Add a share-to-another-app action; gate the affordance on `FEATURE_NFC`; name what is being shared and explain the QR; give channel add-vs-replace a consequence line next to the share action; add desktop tooltips for icon-only buttons; rename "Share Channels QR Code". |
 | Web | Add capability-detected Web NFC read/write (`NDEFReader`) on supported browsers, with graceful fallback to QR/link; tooltips per §4. |
 | Firmware | Out of scope for parity; see §6.B exploration. |
 
@@ -214,15 +226,16 @@ A unified target experience, each point tied to the standard it satisfies:
 
 ### 6.A Client parity (near-term, low-risk)
 
+A1 through A5 shipped in Meshtastic-Apple [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) and are struck from the table below. A6 remains.
+
 | # | Proposal | Where | Standards |
 |---|----------|-------|-----------|
-| A1 | **iOS: write channel sets to NFC** (`/e/#`) | reuse `MeshtasticChannelURL.urlString(...)`, add a writer path alongside `Tools.swift`'s `NFCReader` | — |
-| A2 | **iOS: in-app NFC *read* session** | new `NFCNDEFReaderSession` reader → feed the URL into `ContactURLHandler` / `MeshtasticChannelURL` (the import paths already exist) | §5 |
-| A3 | **iOS: move NFC into the share sheet + "Share Connected Node"** | surface write from `ShareContactQRDialog`/`ShareChannels`, mirroring Android's `QrDialog` | §6 |
-| A4 | **iOS: enable/unsupported prompt** | analogous to Android `NfcDisabledDialog` | §3 |
-| A5 | **iOS: plain-language subtext + circular-ID confirm** | `ContactURLHandler` confirmation UI | §1, §6 |
 | A6 | **iOS: resolve `TAG`↔NDEF entitlement** | `Meshtastic.entitlements` vs `NFCNDEFReaderSession` usage (see §2.1) | — |
 | A7 | **Web: capability-detected Web NFC** | `NDEFReader` read/write behind feature detection; reuse existing `/e/#` `/v/#` URL codecs | §3, §4 |
+| A8 | **Android: share the link and QR to another app** | an `ACTION_SEND` platform util behind the existing `expect`/`actual` in `core/ui`, matching iOS `ShareLink` | §6 |
+| A9 | **Android: gate the affordance on `FEATURE_NFC`** | `MainActivity` currently provides `LocalNfcScannerSupported = true` unconditionally | §3 |
+| A10 | **Both: say what the surface does** | name the node or channel set being shared, explain the QR, and give channel add-vs-replace a consequence line beside the share action | §6 |
+| A11 | **Both: rename the channel share surface** | "Generate QR Code" / "Share Channels QR Code" both predate link and NFC sharing | §6 |
 
 ### 6.B Firmware NFC (new ground)
 
@@ -249,12 +262,12 @@ Realize the dormant nRF54L15 idea: use NFC OOB to bootstrap secure BLE pairing �
 
 | Priority | Item | Platforms | Rough effort | Dependency |
 |----------|------|-----------|--------------|------------|
-| P0 | A1 iOS channel NFC write | iOS | S | none (reuses `/e/#` codec) |
-| P0 | A2 iOS in-app NFC read | iOS | M | none (import paths exist) |
-| P0 | A3 iOS NFC → share sheet + Share Connected Node | iOS | S–M | A1/A2 |
-| P1 | A4/A5 iOS enable prompt, subtext, circular-ID confirm | iOS | S | §1/§3/§6 |
+| P0 | A8 Android share-to-another-app | Android | S–M | none |
+| P1 | A9 Android `FEATURE_NFC` gate | Android | S | none |
+| P1 | A10 say what the surface does | Both | S | none |
+| P1 | A11 rename the channel share surface | Both | S | none |
 | P1 | A6 iOS entitlement `TAG`↔NDEF resolution | iOS | S | verify runtime |
-| P1 | Android §7 color tokens + §6 subtext + §1 confirm | Android | S | none |
+| P2 | iOS in-app reader onto the share/import surfaces | iOS | S | none |
 | P2 | A7 Web NFC (capability-detected) | Web | M | Chromium-Android only |
 | P2 | B1 ST25DV identity tag | Firmware + HW | M | board with ST25DV |
 | P3 | B2 tap-to-provision station (#7236) | Firmware + protobufs | L | new provisioning payload |
@@ -265,8 +278,10 @@ Realize the dormant nRF54L15 idea: use NFC OOB to bootstrap secure BLE pairing �
 
 ## 7. Sub-tasks
 
-- [ ] Create **Android** alignment issue (verify §7 color tokens on write feedback; add §6 subtext; confirm §1 circular-ID import confirm).
-- [ ] Create **iOS** alignment issue (channel NFC write; in-app reader; NFC into share sheet + Share Connected Node; enable prompt; subtext + circular-ID confirm; entitlement resolution; iOS 18 gate review).
+- [x] iOS parity work (channel write, in-app reader, share-sheet placement, confirm view) — shipped in Meshtastic-Apple [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136).
+- [ ] Android: share-to-another-app, `FEATURE_NFC` gate, surface copy, channel consequence line, desktop tooltips.
+- [ ] Both: rename the channel share surface off "QR".
+- [ ] iOS: entitlement resolution, reader entry point, iOS 18 / Catalyst review.
 - [ ] Create **Web** alignment issue (capability-detected Web NFC read/write with graceful fallback).
 - [ ] Create **Firmware** tracking issue (NFC exploration B1–B4; cross-link firmware [#7236](https://github.com/meshtastic/firmware/issues/7236)).
 
@@ -276,13 +291,13 @@ Realize the dormant nRF54L15 idea: use NFC OOB to bootstrap secure BLE pairing �
 
 | Platform | Ref | Key files |
 |----------|-----|-----------|
-| iOS (Meshtastic-Apple) | `main` @ `e531f15` | `Views/Settings/Tools.swift`, `Views/Nodes/Helpers/ShareContactQRDialog.swift`, `Helpers/ContactURLHandler.swift`, `Helpers/MeshtasticChannelURL.swift`, `Accessory/Accessory Manager/AccessoryManager+ToRadio.swift`, `MeshtasticApp.swift`, `Info.plist`, `Meshtastic.entitlements` |
-| Android (Meshtastic-Android) | `main` @ `0da4c78` (v2.8.0) | `core/nfc/src/androidMain/.../NfcScanner.kt`, `core/ui/.../component/QrDialog.kt`, `core/ui/.../component/NfcDialogs.kt`, `core/ui/.../util/LocalNfcScannerProvider.kt`, `core/model/.../util/MeshtasticUrlConstants.kt`, `core/model/.../util/{ChannelSet,SharedContact}.kt`, `core/service/.../MessagingControllerImpl.kt`, `androidApp/.../MainActivity.kt`, `androidApp/src/main/AndroidManifest.xml` |
+| iOS (Meshtastic-Apple) | `main` @ `14a47966` | `Views/Settings/Tools.swift`, `Views/Nodes/Helpers/ShareContactQRDialog.swift`, `Helpers/ContactURLHandler.swift`, `Helpers/MeshtasticChannelURL.swift`, `Accessory/Accessory Manager/AccessoryManager+ToRadio.swift`, `MeshtasticApp.swift`, `Info.plist`, `Meshtastic.entitlements` |
+| Android (Meshtastic-Android) | `main` @ `a0d99298` (v2.8.2) | `core/nfc/src/androidMain/.../NfcScanner.kt`, `core/ui/.../component/QrDialog.kt`, `core/ui/.../component/NfcDialogs.kt`, `core/ui/.../util/LocalNfcScannerProvider.kt`, `core/model/.../util/MeshtasticUrlConstants.kt`, `core/model/.../util/{ChannelSet,SharedContact}.kt`, `core/service/.../MessagingControllerImpl.kt`, `androidApp/.../MainActivity.kt`, `androidApp/src/main/AndroidManifest.xml` |
 | Firmware (meshtastic/firmware) | `master` @ `62df860` | `variants/esp32s3/tlora-pager/variant.h` (ST25R3916), `variants/nrf52840/*/variant.h` (`CONFIG_NFCT_PINS_AS_GPIOS`), `src/platform/nrf54l15/NRF54L15Bluetooth.cpp`; issue [#7236](https://github.com/meshtastic/firmware/issues/7236) |
 | Protobufs (meshtastic/protobufs) | `master` @ `5ba1936` | `admin.proto` (`SharedContact`, `AdminMessage.add_contact` #66, `set_owner` #32), `mesh.proto` (`User`, `public_key`), `apponly.proto` (`ChannelSet`) |
 | Standards | v1.4 | [meshtastic_design_standards_latest.md](../meshtastic_design_standards_latest.md) §1–§10 |
 
-> All source blob links are pinned to the commit SHAs above (Apple `e531f15`, Android `0da4c78`, firmware `62df860`, protobufs `5ba1936`) so the audit is reproducible; line numbers cited in prose may still differ if you browse a different revision.
+> All source blob links are pinned to the commit SHAs above (Apple `14a47966`, Android `a0d99298`, firmware `62df860`, protobufs `5ba1936`) so the audit is reproducible; line numbers cited in prose may still differ if you browse a different revision. Links inside §2 that still carry the older Apple `e531f15` and Android `0da4c78` SHAs point at the revision this document originally described and are left as they are.
 
 ---
 
@@ -297,10 +312,11 @@ Paste into a new [meshtastic/design](https://github.com/meshtastic/design/issues
 
 NFC tag support is live but divergent across clients, and absent on firmware:
 
-- Android: full read + write, contacts and channels, in the shared QR dialog, with an
-  enable-NFC prompt and tap-to-import (v2.8.0, PR #6030).
-- iOS: write-only, contacts-only, iOS 18+ (no Mac Catalyst), buried in Settings → Tools,
-  no in-app reader; entitlement is `TAG` while the code uses NDEF.
+- Android: read + write, contacts and channels, in the shared QR dialog, with an
+  enable-NFC prompt and tap-to-import (v2.8.0, PR #6030). No share-to-another-app.
+- iOS: read + write, contacts and channels, from the share sheets (PR #2136), plus
+  `ShareLink` on both. Reader still lives in Settings → Tools; entitlement is `TAG`
+  while the code uses NDEF; iOS 18+ and no Mac Catalyst.
 - Web: no NFC.
 - Firmware: no NFC — though the T-LoRa Pager already carries an undriven ST25R3916 and
   request #7236 asks for NFC tap-to-provision.
