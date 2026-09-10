@@ -130,9 +130,9 @@ Used for tertiary/info elements and secondary call-to-action. The key color is `
 | Blue 900 | `#002366` | `0 35 102` | onTertiaryContainer dark |
 | Blue 800 | `#1A3F8C` | `26 63 140` | Deep blue |
 | Blue 700 | `#2855A8` | `40 85 168` | **Theme Accent** — tertiary light mode |
-| Blue 600 | `#5C6BC0` | `92 107 192` | Info indicators, links |
+| Blue 600 | `#5C6BC0` | `92 107 192` | Info indicators; **Link color in light mode** |
 | Blue 500 | `#7B8AD0` | `123 138 208` | Medium blue |
-| Blue 400 | `#9BA8E0` | `155 168 224` | **Link color** — hyperlinks, clickable URLs |
+| Blue 400 | `#9BA8E0` | `155 168 224` | **Link color in dark mode** — hyperlinks, clickable URLs |
 | Blue 300 | `#B0BFF0` | `176 191 240` | Dark-mode tertiary |
 | Blue 200 | `#D0D8F5` | `208 216 245` | — |
 | Blue 100 | `#E0E3F8` | `224 227 248` | Link tint background |
@@ -160,9 +160,9 @@ Use these for status indicators, alerts, and feedback.
 
 | Name | Hex | RGB | Usage |
 |------|-----|-----|-------|
-| Link | `#9BA8E0` | `155 168 224` | Hyperlinks, clickable URLs (Blue 400) |
+| Link | `#5C6BC0` light / `#9BA8E0` dark | `92 107 192` / `155 168 224` | Hyperlinks, clickable URLs (Blue 600 light, Blue 400 dark) |
 | Link Light | `#E0E3F8` | `224 227 248` | Link tint background |
-| Info | `#5C6BC0` | `92 107 192` | Informational indicators, links |
+| Info | `#5C6BC0` | `92 107 192` | Informational indicators |
 | Info Light | `#E8EAF6` | `232 234 246` | Info tint background |
 | Warning | `#E8A33E` | `232 163 62` | Caution / attention states |
 | Warning Light | `#FFF3E0` | `255 243 224` | Warning tint background |
@@ -686,7 +686,7 @@ These are the rules a reviewer can check without judgment. The rest of the secti
 - [ ] Is accent green **never used as text** on light backgrounds?
 - [ ] Do all foreground/background pairings meet **WCAG AA 4.5:1** contrast?
 - [ ] Are **semantic colors** (Link, Info, Warning, Error, Success) used consistently and not repurposed?
-- [ ] Is the **Link** color using `Blue 400` (`#9BA8E0`) for hyperlinks and clickable URLs?
+- [ ] Is the **Link** color using `Blue 600` (`#5C6BC0`) in light mode and `Blue 400` (`#9BA8E0`) in dark mode? No single value passes 4.5:1 on both grounds: Blue 400 measures 2.14:1 on Neutral 50, Blue 600 measures 3.52:1 on Neutral 900.
 - [ ] Is **Success** using `Green 600` (`#3FB86D`) — not `Green 500` (`#67EA94`)?
 - [ ] Does the M3 theme use **Section 8** role mappings (or dynamic color on Android 12+)?
 - [ ] Are **Fixed colors** (Section 8.4) used for theme-invariant elements?
