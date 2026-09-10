@@ -1,1 +1,1 @@
-meshtastic_design_standards_v1_4.md
+meshtastic_design_standards_v1_5.md
