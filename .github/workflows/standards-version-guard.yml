@@ -24,6 +24,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           LATEST: standards/meshtastic_design_standards_latest.md
+          INDEX: standards/README.md
           EXEMPT: ${{ contains(github.event.pull_request.labels.*.name, 'allow-superseded-edit') }}
         run: |
           set -euo pipefail
@@ -67,6 +68,29 @@ jobs:
                     echo "ok: $LATEST points at $target"
                   else
                     echo "::error file=$LATEST::$LATEST points at standards/$target, which does not exist."
+                    failed=1
+                  fi
+
+                  # $INDEX is the entry point other repositories link, because
+                  # the symlink itself does not render on the web: GitHub serves
+                  # it as its target's filename. The index names the current
+                  # version instead, so a symlink move that leaves it behind
+                  # publishes a stale pointer that still looks authoritative.
+                  if printf '%s\n' "$changed" | awk -F'\t' -v p="$INDEX" '$2 == p { hit = 1 } END { exit !hit }'; then
+                    marker="$(git show "$HEAD_SHA:$INDEX" 2>/dev/null \
+                      | sed -n 's/.*<!-- current-version:[[:space:]]*\([^[:space:]]*\)[[:space:]]*-->.*/\1/p' \
+                      | head -n 1)"
+                    if [ -z "$marker" ]; then
+                      echo "::error file=$INDEX::$INDEX has no '<!-- current-version: ... -->' marker, so the version it claims cannot be checked."
+                      failed=1
+                    elif [ "$marker" != "$target" ]; then
+                      echo "::error file=$INDEX::$INDEX marks '$marker' as current, but $LATEST points at '$target'. Update the index, including the marker."
+                      failed=1
+                    else
+                      echo "ok: $INDEX marks $target as current"
+                    fi
+                  else
+                    echo "::error file=$INDEX::$LATEST now points at $target, but $INDEX was not updated. It names the current version for every repository that links the standards."
                     failed=1
                   fi
                   ;;
