@@ -65,7 +65,7 @@ Secondary/Background/Accent color:
 
 ### Extended Color Palette
 
-The complete extended palette — including Neutral Scale, Green Scale, Semantic Colors, and Theme Colors — is documented visually in the [Color Palette SVG](standards/color-palette.svg) and defined in the [Meshtastic Client Design Standards](standards/meshtastic_design_standards_latest.md).
+The complete extended palette — including Neutral Scale, Green Scale, Semantic Colors, and Theme Colors — is documented visually in the [Color Palette SVG](standards/color-palette.svg) and defined in the [Meshtastic Client Design Standards](standards/).
 
 > **Accessibility note:** All foreground/background pairings meet WCAG AA contrast (4.5:1 minimum). Never use `#67EA94` for text on light backgrounds — use `Green 600` (`#3FB86D`) or `Green 700` (`#2D8F52`) instead.
 
@@ -88,15 +88,26 @@ To regenerate the action bar icons use the Image Asset tool to import logo/svg/M
 
 ## Design Standards
 
-All UI must comply with the [Meshtastic Client Design Standards](https://raw.githubusercontent.com/meshtastic/design/refs/heads/master/standards/meshtastic_design_standards_latest.md). Fetch and review this document before making any UI changes.
+All UI must comply with the [Meshtastic Client Design Standards](standards/). Review the current version before making any UI changes.
 
-This ensures that Copilot will fetch and reference the latest design standards whenever it assists with UI-related code, helping maintain cross-platform consistency for colors, typography, node identity, accessibility, and theming.
+The [standards directory](https://github.com/meshtastic/design/tree/master/standards) always names the current version, so a link to it never goes stale. Don't link the `meshtastic_design_standards_latest.md` symlink from the web: GitHub serves it as its target's filename rather than as the document.
 
 ## Using Design Standards with GitHub Copilot
 
-If you are developing a Meshtastic client, you can configure GitHub Copilot to automatically enforce the [Meshtastic Client Design Standards](standards/meshtastic_design_standards_latest.md) when making UI changes.
+If you are developing a Meshtastic client, you can configure GitHub Copilot to automatically enforce the [Meshtastic Client Design Standards](standards/) when making UI changes.
 
 Add the following section to your repository's `.github/copilot-instructions.md` file (create the file if it doesn't exist):
+
+```markdown
+## Meshtastic design standards
+
+All UI work in this repository follows the Meshtastic Client Design Standards:
+https://github.com/meshtastic/design/tree/master/standards
+
+That page names the current version and links it. Read the current version
+before changing UI, and apply sections 1 through 10 to client UI and section 11
+to documentation and in-product text.
+```
 
 ## Stats
 

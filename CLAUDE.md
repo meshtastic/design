@@ -32,3 +32,11 @@ Use `## Summary`, `## What changed`, `## Testing`. Say plainly when a section do
 ## Commits
 
 A short subject saying what changed. Don't add `Co-Authored-By: Claude` or "Generated with Claude Code" trailers.
+
+## Cutting a standards version
+
+`standards/README.md` is the entry point every other repository links to, and it names the current version, so it has to change whenever that version does. Follow the steps under "Cutting a version" on that page: add the new version file, repoint the `meshtastic_design_standards_latest.md` symlink, then update the version named at the top of the index and the row in its table.
+
+Do all of it in the commit that adds the version. An index naming a version that is no longer current is worse than no index, because it looks authoritative.
+
+Don't link `meshtastic_design_standards_latest.md` from anywhere on the web. GitHub serves a symlink as its target's filename, so the blob and raw views return the file name rather than the standards. Link `standards/` instead.
