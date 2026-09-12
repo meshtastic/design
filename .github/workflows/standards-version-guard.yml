@@ -1,0 +1,161 @@
+name: Standards version guard
+
+on:
+  # No path filter: a required status check that is filtered out never reports,
+  # which leaves the pull request pending forever. The job is cheap and exits
+  # early when a pull request touches no standards documents.
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Edits target the current standards version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reject edits to superseded standards versions
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          LATEST: standards/meshtastic_design_standards_latest.md
+          INDEX: standards/README.md
+          EXEMPT: ${{ contains(github.event.pull_request.labels.*.name, 'allow-superseded-edit') }}
+        run: |
+          set -euo pipefail
+
+          # "Current" is whatever the base branch says right now, not whatever
+          # this branch was forked from. A PR that predates a version bump is
+          # exactly the case this guard exists to catch, so it must rebase.
+          mode="$(git ls-tree "$BASE_SHA" -- "$LATEST" | awk '{print $1}')"
+          if [ "$mode" != "120000" ]; then
+            echo "::error::Expected $LATEST to be a symlink on the base branch (found mode '${mode:-missing}')."
+            exit 1
+          fi
+
+          current="$(git show "$BASE_SHA:$LATEST")"
+          echo "Current standards version on base branch: $current"
+
+          merge_base="$(git merge-base "$BASE_SHA" "$HEAD_SHA")"
+
+          # --no-renames so a renamed version file shows up as a deletion
+          # rather than as an untouched new path.
+          changed="$(git diff --name-status --no-renames "$merge_base" "$HEAD_SHA" -- 'standards/*.md')"
+
+          failed=0
+          superseded=0
+
+          # Only checked when the pull request actually touches the symlink. A
+          # branch that merely predates a version bump leaves it alone, and the
+          # merge restores it; reading the branch state would flag that as a
+          # break. Repointing the symlink is legitimate, breaking it is not.
+          if printf '%s\n' "$changed" | awk -F'\t' -v p="$LATEST" '$2 == p { hit = 1 } END { exit !hit }'; then
+            head_mode="$(git ls-tree "$HEAD_SHA" -- "$LATEST" | awk '{print $1}')"
+            if [ "$head_mode" != "120000" ]; then
+              echo "::error file=$LATEST::$LATEST must stay a symlink to a versioned standards file (found mode '${head_mode:-missing}')."
+              failed=1
+            else
+              target="$(git show "$HEAD_SHA:$LATEST")"
+              case "$target" in
+                meshtastic_design_standards_v*.md)
+                  if git cat-file -e "$HEAD_SHA:standards/$target" 2>/dev/null \
+                    || git cat-file -e "$BASE_SHA:standards/$target" 2>/dev/null; then
+                    echo "ok: $LATEST points at $target"
+                  else
+                    echo "::error file=$LATEST::$LATEST points at standards/$target, which does not exist."
+                    failed=1
+                  fi
+
+                  # $INDEX is the entry point other repositories link, because
+                  # the symlink itself does not render on the web: GitHub serves
+                  # it as its target's filename. The index names the current
+                  # version instead, so a symlink move that leaves it behind
+                  # publishes a stale pointer that still looks authoritative.
+                  if printf '%s\n' "$changed" | awk -F'\t' -v p="$INDEX" '$2 == p { hit = 1 } END { exit !hit }'; then
+                    marker="$(git show "$HEAD_SHA:$INDEX" 2>/dev/null \
+                      | sed -n 's/.*<!-- current-version:[[:space:]]*\([^[:space:]]*\)[[:space:]]*-->.*/\1/p' \
+                      | head -n 1)"
+                    if [ -z "$marker" ]; then
+                      echo "::error file=$INDEX::$INDEX has no '<!-- current-version: ... -->' marker, so the version it claims cannot be checked."
+                      failed=1
+                    elif [ "$marker" != "$target" ]; then
+                      echo "::error file=$INDEX::$INDEX marks '$marker' as current, but $LATEST points at '$target'. Update the index, including the marker."
+                      failed=1
+                    else
+                      echo "ok: $INDEX marks $target as current"
+                    fi
+                  else
+                    echo "::error file=$INDEX::$LATEST now points at $target, but $INDEX was not updated. It names the current version for every repository that links the standards."
+                    failed=1
+                  fi
+                  ;;
+                *)
+                  echo "::error file=$LATEST::$LATEST must point at a versioned standards file, not '$target'."
+                  failed=1
+                  ;;
+              esac
+            fi
+          fi
+
+          while IFS="$(printf '\t')" read -r status f; do
+            [ -n "${f:-}" ] || continue
+            base="$(basename "$f")"
+
+            # Only versioned standards documents are gated.
+            case "$base" in
+              meshtastic_design_standards_v*.md) ;;
+              *) continue ;;
+            esac
+
+            # Adding a new version file is how a release lands. Only files that
+            # already exist on the base branch are gated.
+            if ! git cat-file -e "$BASE_SHA:$f" 2>/dev/null; then
+              echo "ok: $f is a new version file"
+              continue
+            fi
+
+            # Versioned files are frozen snapshots. Losing the one the base
+            # branch calls current is never correct, label or no label.
+            if [ "$status" = "D" ]; then
+              if [ "$base" = "$current" ]; then
+                echo "::error file=$f::$f is the current standards version and must not be removed or renamed."
+                failed=1
+              elif [ "$EXEMPT" = "true" ]; then
+                echo "ok: $f removed under the 'allow-superseded-edit' label"
+              else
+                echo "::error file=$f::$f is a published snapshot and must not be removed or renamed. Add the 'allow-superseded-edit' label if it genuinely has to go."
+                failed=1
+              fi
+              continue
+            fi
+
+            # Editing the version the symlink points at is the whole point.
+            if [ "$base" = "$current" ]; then
+              echo "ok: $f is the current version"
+              continue
+            fi
+
+            if [ "$EXEMPT" = "true" ]; then
+              echo "ok: $f edited under the 'allow-superseded-edit' label"
+              continue
+            fi
+
+            echo "::error file=$f::$f is superseded by $current. Apply this change to $current instead, or add the 'allow-superseded-edit' label if the older version genuinely needs the fix."
+            failed=1
+            superseded=1
+          done <<< "$changed"
+
+          if [ "$failed" -ne 0 ]; then
+            if [ "$superseded" -ne 0 ]; then
+              echo
+              echo "Superseded standards versions are published records. Changes belong in $current."
+            fi
+            exit 1
+          fi
+
+          echo "All standards edits target the current version."
