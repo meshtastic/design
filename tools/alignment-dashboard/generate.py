@@ -214,7 +214,11 @@ def cell_state(cell, rows):
     if any(r["notFiled"] for r in rows) and not trackers:
         return "not_filed", False
     if not trackers and not impls:
-        return ("shipped", True) if all_checked else ("not_filed", False)
+        # A ticked row citing nothing is a claim, not a result. It gets its own
+        # state so it never lands in the shipped count: counting it there would
+        # flatter whichever platform is loosest about linking its work, which
+        # is the opposite of what this page is for.
+        return ("claimed", True) if all_checked else ("not_filed", False)
     if trackers and all(t["state"] == "not_planned" for t in trackers):
         return "not_planned", False
     if trackers and all(t["state"] == "completed" for t in trackers):

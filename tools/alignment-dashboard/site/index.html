@@ -97,6 +97,7 @@ input[type=search]{flex:1 1 260px;min-width:0}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .g{font-size:15px;line-height:1;width:1.1em;text-align:center;display:inline-block}
 .g.shipped{color:var(--ship-glyph)} .g.in_progress{color:var(--prog)}
+.g.claimed{color:var(--ink-2)}
 .g.blocked{color:var(--warn-ink)} .g.not_planned,.g.unknown{color:var(--ink-3)}
 .g.filed_not_started{color:var(--ink-2)}
 
@@ -123,6 +124,7 @@ th.rowhead{text-align:left;padding:0;font-weight:400;vertical-align:middle}
 .bar{display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--line-soft);margin-top:7px;max-width:290px}
 .bar i{display:block;height:100%}
 .bar i.shipped{background:var(--ship-glyph)}
+.bar i.claimed{background:repeating-linear-gradient(90deg,var(--ink-3) 0 3px,transparent 3px 6px)}
 .bar i.in_progress{background:var(--prog)}
 .bar i.filed_not_started{background:var(--ink-3)}
 .bar i.blocked{background:var(--warn-line)}
@@ -134,6 +136,8 @@ td.c{text-align:center;padding:5px 4px;vertical-align:middle}
 .cell .n{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.15;letter-spacing:-.01em}
 .cell.shipped{background:var(--ship-fill);border-color:var(--ship-line)}
 .cell.shipped .n{color:var(--ship)}
+.cell.claimed{background:transparent;border:1px dashed var(--line)}
+.cell.claimed .n{color:var(--ink-2);font-style:italic}
 .cell.in_progress{background:var(--prog-fill);border-color:var(--prog-line)}
 .cell.in_progress .n{color:var(--prog)}
 .cell.blocked{background:var(--warn-fill);border-color:var(--warn-line)}
@@ -255,11 +259,15 @@ footer p{margin:0 0 7px;max-width:70ch}
 <script>
 let DATA;
 let COLS = [], PL = {};
-const GLYPH={shipped:'✓',in_progress:'◐',filed_not_started:'○',
+const GLYPH={shipped:'✓',claimed:'✓',in_progress:'◐',filed_not_started:'○',
   not_filed:'',not_planned:'⊘',blocked:'▲',unknown:'?'};
-const WORD={shipped:'Shipped',in_progress:'In progress',filed_not_started:'Filed, not started',
-  not_filed:'No issue filed',not_planned:'Not planned',blocked:'Blocked',unknown:'Unresolved'};
-const ORDER=['blocked','in_progress','filed_not_started','shipped','not_planned','unknown'];
+const WORD={shipped:'Shipped',claimed:'Claimed, nothing linked',in_progress:'In progress',
+  filed_not_started:'Filed, not started',not_filed:'No issue filed',not_planned:'Not planned',
+  blocked:'Blocked',unknown:'Unresolved'};
+const ORDER=['blocked','in_progress','filed_not_started','claimed','shipped','not_planned','unknown'];
+// Cells are narrow, so they carry a short form; the legend spells it out.
+const SHORT={claimed:'Claimed',not_planned:'Not planned',unknown:'Unresolved',
+  filed_not_started:'Filed',in_progress:'In progress',shipped:'Shipped'};
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const short=r=>r.replace('meshtastic/','');
 const DAY=864e5;
@@ -315,7 +323,7 @@ function cellBtn(t,pid){
     return `<td class="c"><button class="cell empty not_filed" data-t="${t.id}" data-p="${pid}" aria-label="${esc(lbl)}">${flag}<span class="vh">${esc(lbl)}</span></button></td>`;
   return `<td class="c"><button class="cell ${c.state}" data-t="${t.id}" data-p="${pid}" aria-label="${esc(lbl)}">${flag}
     <span class="g ${c.state}" aria-hidden="true">${GLYPH[c.state]}</span>
-    <span class="n">${num||WORD[c.state]}</span>
+    <span class="n">${num||SHORT[c.state]||WORD[c.state]}</span>
     ${extra>0?`<span class="plus">+${extra}</span>`:''}</button></td>`;
 }
 function titleCell(t){
@@ -392,7 +400,7 @@ function render(){
         return `<button class="cchip" data-t="${t.id}" data-p="${p}">
           <span class="g ${c.state}" aria-hidden="true">${GLYPH[c.state]||'·'}</span>
           <span class="pl">${esc(PL[p])}</span>
-          <span class="mono" style="font-size:13px;color:var(--ink-3)">${tr?'#'+tr.ref.split('#')[1]:WORD[c.state]}</span>
+          <span class="mono" style="font-size:13px;color:var(--ink-3)">${tr?'#'+tr.ref.split('#')[1]:(SHORT[c.state]||WORD[c.state])}</span>
         </button>`}).join('')}</div>`:''}
       ${none.length?`<p class="nofiled">No issue filed for ${esc(none.join(', '))}.</p>`:''}
       ${open?panel(t):''}</div>`;
@@ -475,7 +483,7 @@ function buildControls(){
 document.getElementById('plat').innerHTML='<option value="">All platforms</option>'+
   COLS.map(p=>`<option value="${p}">${esc(PL[p])} not shipped</option>`).join('');
 document.getElementById('legend').innerHTML=
-  ['shipped','in_progress','filed_not_started','blocked','not_planned'].map(s=>
+  ['shipped','claimed','in_progress','filed_not_started','blocked','not_planned'].map(s=>
    `<span><span class="g ${s}" aria-hidden="true">${GLYPH[s]}</span>${WORD[s]}</span>`).join('')+
   `<span><span class="flag" style="position:static;display:inline-block"></span>Needs review</span>`+
   `<span>Blank means no issue is filed.</span>`;

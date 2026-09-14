@@ -22,10 +22,13 @@ on:
 permissions:
   contents: read
 
-# One build at a time. A queued run would only rebuild the same data.
+# Editing several issues in a row fires several runs, and every run rebuilds
+# the same data from scratch, so superseding one in flight loses nothing and
+# gets the final state published sooner. The deploy job opts out of this below:
+# a Pages deployment that is already running should be left to finish.
 concurrency:
   group: alignment-dashboard
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -138,6 +141,11 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    # Its own group, so a superseding build cancels the build but never a
+    # deployment that is already publishing.
+    concurrency:
+      group: alignment-dashboard-deploy
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

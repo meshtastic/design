@@ -25,17 +25,12 @@ What has to be true for this to be considered done.
 
 ## Platform Tracking
 
-One row per platform. Keep this heading exactly as it is: the alignment
-dashboard reads it, and a different spelling means the topic shows as
-untracked.
+Keep this heading exactly as it is. The alignment dashboard reads it, and a different spelling means the topic shows as untracked.
 
-Cite the platform issue on every row, and link it as a sub-issue as well. A
-ticked row with nothing linked cannot be verified by anyone, including the
-dashboard. Where a platform is out of scope, say so on the row rather than
-deleting it.
+Cite the platform issue on every row, and link it as a sub-issue as well. A ticked row with nothing linked reads as a claim rather than a result, and the dashboard reports it that way. Where a platform is out of scope, say so on its row instead of deleting the row.
 
-- [ ] Android,
-- [ ] Apple,
-- [ ] Web,
-- [ ] Firmware,
-- [ ] Device UI,
+- [ ] Android:
+- [ ] Apple:
+- [ ] Web:
+- [ ] Firmware:
+- [ ] Device UI:
