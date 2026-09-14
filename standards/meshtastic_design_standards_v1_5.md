@@ -403,7 +403,9 @@ Some units are internationally standardized and must be displayed as-is regardle
 
 Documentation is part of the product. A setting that isn't documented, or that is explained in language the reader can't parse, fails the same goal as a button with no label. This section covers the documentation site, the written material in this repository, and the text inside the clients.
 
-This is what new and edited writing follows. Mechanics that belong to the site's build tooling rather than to the content, such as front matter keys and component import paths, are out of scope here.
+This is what new and edited writing follows. Mechanics owned by the site's build tooling are out of scope, such as front matter keys and component import paths.
+
+The section holds itself to its own rules, with one exception. Ruling a word out means naming it, so currently, simply, please, and e.g. appear here as examples rather than as usage.
 
 ### 11.1 Where client documentation lives
 
@@ -414,9 +416,9 @@ Android and Apple app documentation, and the screenshots it references, is writt
 | `docs/software/android/`, `static/img/android/docs/` | [meshtastic/Meshtastic-Android](https://github.com/meshtastic/Meshtastic-Android) |
 | `docs/software/apple/`, `static/img/apple/` | [meshtastic/Meshtastic-Apple](https://github.com/meshtastic/Meshtastic-Apple) |
 
-Open pull requests against the client repository, not the documentation repository. Editing these paths in the docs repo is reverted by the next sync, and a CI guard fails pull requests that touch them. The guard covers renames and deletions as well as edits, because moving a generated file out of a synced path just leaves the next sync to recreate the original beside it.
+Open pull requests against the client repository, not the documentation repository. Editing these paths in the docs repo is reverted by the next sync, and a CI guard fails pull requests that touch them. The guard covers renames and deletions as well as edits. Moving a generated file out of a synced path leaves the next sync to recreate the original.
 
-The sync runs weekly and takes each client's latest release rather than its default branch, so a merged client change reaches the site once it ships in a release. The maintainer override label exists for reverts and for sync-script changes that have to land with their output, not for patching generated documentation by hand.
+The sync runs weekly and takes each client's latest release rather than its default branch. A merged client change reaches the site once it ships in a release. The maintainer override label exists for reverts and for sync-script changes that have to land with their output, not for patching generated documentation by hand.
 
 When generated client documentation is wrong, fix it in the client repository. A correction applied downstream is discarded within the week.
 
@@ -426,27 +428,49 @@ Some client repositories keep their own documentation style guide covering the s
 
 Write for a reader who is competent but new to this topic. Readers range from someone who bought a preassembled node to a developer reading protobuf definitions.
 
-Address the reader as you. Their node, their settings and their region are theirs, so write "your node" and "your region" rather than working around the pronoun.
+Address the reader as you. Their node, their settings, and their region are theirs, so write "your node" and "your region" rather than working around the pronoun.
 
-Don't open a section or a paragraph with "You". Lead with the subject, which is the system, the value or the action, and let the pronoun arrive where it belongs. "The app displays distances in the units your device is set to use" carries the same information as "You see distances in your device's units" and reads as documentation rather than as instruction.
+Don't open a section or a paragraph with "You". Lead with the subject, which is the system, the value, or the action, and let the pronoun arrive where it belongs. Compare "The app displays distances in the units your device is set to use" with "You see distances in your device's units". Both carry the same information, but the first reads as documentation and the second as instruction.
 
 Use the imperative for the step itself: "Flash the firmware", "Select **Save**". A step needs no pronoun, though a condition attached to one still takes it: "If your region has a duty-cycle limit, select a lower preset".
 
 Describe what the software does in the third person, with the node, client, or firmware as the subject. "The node repeats the message", not "your node repeats your messages". What the firmware does is not the reader's doing, and reference material explains it regardless of who is reading.
 
-Don't use "the user" to mean the reader. Many readers are operators configuring nodes for other people, so "the user must set the region" leaves them unsure who is meant, and it pushes sentences into the passive.
+Don't use "the user" to mean the reader. Many readers are operators configuring nodes for other people. "The user must set the region" leaves them unsure who is meant, and it pushes the sentence into the passive.
 
-Active voice, present tense, one idea per sentence. Refer to the project as Meshtastic, not "we". Keep the register plain: no marketing language and no exclamation points.
+Active voice, one idea per sentence. Refer to the project as Meshtastic, not "we". Keep the register plain: no marketing language and no exclamation points.
 
-Drop simply, just, easy, obviously, and of course wherever they characterize how hard the reader's task is. Telling a stuck reader that a step is easy only tells them they are the problem. The same words are ordinary filler elsewhere, as in "the beacon simply goes out on the primary channel", which describes behavior rather than the reader; delete them for tightness, but they aren't the defect this rule is about.
+Contractions are house voice. Write you'll, doesn't, and it's; the full forms read stiff and put distance between the page and the reader. Warnings are the exception: there, write do not and cannot. A negative contraction is the easiest thing on a page to skim past. Misreading one costs a wiped configuration, or a node that has to be recovered over serial.
+
+Write in the timeless present. The node sends a position, not will send: the page describes how the system behaves, and that stays true whenever it is read. Keep will for something genuinely later than the sentence, such as a file that is removed on the next sync.
+
+Don't date the page from inside it. Currently, now, at this time, soon, new, and as of this writing describe the moment of writing rather than the system. The page outlives that moment. A sentence carrying one of them is wrong within a release or two and nothing flags it. Where a fact really is bounded by a version, name the version, as covered in 11.14.
+
+Don't describe a feature that hasn't shipped. A page announcing work in progress generates support questions about behavior no one can reproduce.
+
+Drop simply, just, easy, easily, quickly, obviously, and of course wherever they characterize how hard or how fast the reader's task is. Telling a stuck reader that a step is easy only tells them they are the problem. The same words are ordinary filler elsewhere, as in "the beacon simply goes out on the primary channel". That sentence describes behavior rather than the reader. Delete the word for tightness, but it isn't the defect this rule is about.
+
+Leave out please. A procedure asks for a step because the task requires it, and the politeness reads as an apology for the instruction. Leave out scare quotes, which ask the reader to infer a meaning the sentence declines to state. Where a term is wrong or approximate, use the right one.
+
+Jokes and pop-culture references date faster than the rest of the page. They are also the first thing to fail for a reader who learned English somewhere else.
 
 Don't give hardware or software intent. A node doesn't want, try, or think.
 
+Voice stays the same across the site; tone answers the reader's situation. A feature overview and a troubleshooting page are recognizably the same writer. Someone on the troubleshooting page has already lost an hour, so that page carries the calmest, most concrete writing on the site. Clear beats entertaining everywhere.
+
 ### 11.3 Plain language
 
-Jargon is necessary here, but introduce it rather than assume it. Define a technical term the first time it appears on a page, link to its reference page, or both. Expand acronyms on first use per page, as in pre-shared key (PSK); pages are entered from search results, so first use is per page and not per site.
+Jargon is necessary here, but introduce it rather than assume it. Define a technical term the first time it appears on a page, link to its reference page, or both. Expand acronyms on first use per page, as in pre-shared key (PSK). Readers arrive from search results, so first use is per page and not per site.
 
 Explain the consequence and not only the definition. Someone configuring hop limit needs to know what changes if they get it wrong.
+
+Requirement words carry exact weight, because readers act on the difference between them. Must is an obligation and must not a prohibition. Should is a recommendation that leaves a real alternative, can states a capability, and may states permission. Don't use shall, which is ambiguous outside legal drafting and translates badly. Don't soften an obligation to should because the sentence sounds gentler, and don't harden a recommendation to must because it sounds firmer.
+
+Write for example and such as rather than e.g., and that is rather than i.e. The two abbreviations are routinely swapped for each other, and they read poorly aloud. A reader translating the page has to recognize them first. Inside a table cell or parentheses, where space is tight, e.g. is acceptable.
+
+Keep wording literal and inclusive: use allowlist and blocklist for the mechanism rather than the older color-coded pair. Use singular they for a reader or an operator whose gender isn't known, which is also the shortest way to write the sentence. Don't borrow a disability as a figure of speech, so final check rather than sanity check. Don't reach for violent metaphor either: the client stops responding, it doesn't hang or die. Literal wording reads as neutral description to every reader and survives translation, which figurative language does not.
+
+Use the serial comma in a list of three or more, as in Android, Apple, and Web. Without it the last two items can read as a pair rather than as separate entries.
 
 Use the same glosses in the documentation and in the matching in-app subtext, so both teach the concept in the same words.
 
@@ -482,7 +506,11 @@ Inconsistent terminology is the most common source of cross-platform confusion. 
 | Wireless pairing to a client | Bluetooth; `BLE` is fine in developer docs | BT |
 | Version identifiers | firmware version and app version, kept distinct | version, release |
 
-Use the on-screen label exactly as it appears when documenting a control, in the same capitalization: "Select **Save**". If a label is wrong or unclear, fix the UI rather than paraphrasing it in the docs. Use one name per concept per page; repetition is correct in technical writing. Protobuf fields keep their schema form, so write `hop_limit` for the field and Hop Limit for the control, and don't silently convert between them. Leave mesh, node, and channel lowercase in prose. The compounds app documentation and app version are established names and stay as they are; the rule against app covers naming the client itself.
+Use the on-screen label exactly as it appears when documenting a control, in the same capitalization: "Select **Save**". If a label is wrong or unclear, fix the UI rather than paraphrasing it in the docs. Use one name per concept per page; repetition is correct in technical writing.
+
+Protobuf fields keep their schema form, so write `hop_limit` for the field and Hop Limit for the control, and don't silently convert between them. Leave mesh, node, and channel lowercase in prose. The compounds app documentation and app version are established names and stay as they are; the rule against app covers naming the client itself.
+
+Spell words the American way: color, behavior, gray, meter, organize, honors. Meshtastic's source English is American. A corpus carrying both forms splits search results for a reader who types the other one. It also produces two translation memory entries in Crowdin for a single word. This governs prose; quoted UI labels, code, and a vendor's own product name keep whatever spelling they already have.
 
 Product and technology names take their official casing, because mixed casing across pages makes search and translation unreliable.
 
@@ -501,7 +529,7 @@ Product and technology names take their official casing, because mixed casing ac
 
 Wi-Fi takes the dash, matching the Wi-Fi Alliance and the Android client's word list.
 
-Apply casing to prose only. URLs, file paths, code identifiers, protobuf field names, enum values, and configuration keys are literal strings and stay as they are, as do a vendor's own product names even where they disagree with the table.
+Apply casing to prose only. URLs, file paths, code identifiers, protobuf field names, enum values, and configuration keys are literal strings and stay as they are. So do a vendor's own product names, even where they disagree with the table.
 
 ### 11.5 Page structure
 
@@ -511,11 +539,15 @@ State the purpose in the first sentence after the title, without preamble and wi
 
 One H1 per page, from the title or front matter. Don't skip heading levels, since level conveys structure to screen readers and to the table of contents. Use sentence case. Keep headings descriptive and unique within a page, and avoid "Notes" and "Miscellaneous".
 
-Keep paragraphs to three or four sentences and break longer explanations into lists or tables. Prefer a table wherever content has a repeating shape, such as settings, values, platform differences, or unit mappings. Close with next steps where a task continues elsewhere.
+Keep sentences to roughly 25 words and one idea, and paragraphs to about five sentences and one topic; break anything longer into lists or tables. A one-sentence paragraph is fine where the point stands alone. Front-load: the rule comes before its exceptions, and the main point before the qualification. A reader who stops halfway should still have the part that matters.
+
+Prefer a table wherever content has a repeating shape, such as settings, values, platform differences, or unit mappings. Close with next steps where a task continues elsewhere.
 
 Give each fact one home and link to it. Content repeated across pages drifts.
 
-Settings and configuration pages follow a consistent shape: an overview of what the group controls, an alphabetized table of settings with acceptable values and defaults, a short description of each setting, then details and examples where they're needed. A settings page documents settings; where hardware or prior setup is required, state the requirement and link to it rather than explaining it inline.
+Don't point at other parts of a page with above and below. A screen reader linearizes the page, a phone reflows it, and a search result can drop a reader into the middle. Neither word reliably describes where anything sits. Write earlier or the following, name the section, or link to it. The literal sense is unaffected: a signal below the noise floor is still below the noise floor.
+
+Settings and configuration pages follow a consistent shape. Open with what the group controls, then an alphabetized table of settings with acceptable values and defaults. A short description of each setting follows, then details and examples where they're needed. A settings page documents settings; where hardware or prior setup is required, state the requirement and link to it rather than explaining it inline.
 
 ### 11.6 Instructions
 
@@ -523,7 +555,7 @@ Number sequential steps and keep unordered lists for options that have no order.
 
 State the location before the action, as in "In **Settings > Radio Configuration**, select **Region**". A reader who can't find the control can't perform the step. Say where the procedure starts rather than assuming a screen.
 
-State the expected result for any step whose outcome isn't immediately visible, such as a reboot or a reconnect, and say roughly how long it takes. End a procedure by saying how to confirm it worked, naming the indicator to look for. Where a step commonly fails, give the likely cause and the recovery.
+State the expected result for any step whose outcome isn't immediately visible, such as a reboot or a reconnect. Say roughly how long it takes. End a procedure by saying how to confirm it worked, naming the indicator to look for. Where a step commonly fails, give the likely cause and the recovery.
 
 Flag anything that erases configuration, regenerates keys, or breaks existing pairings in the step before it happens, not after.
 
@@ -531,9 +563,9 @@ Flag anything that erases configuration, regenerates keys, or breaks existing pa
 
 Documentation is where cross-platform inconsistency becomes visible, and it shouldn't paper over it.
 
-Cover every supported client for a feature, or say which clients support it. Silent omission reads as undocumented and generates duplicate issues. Name gaps plainly: "Not currently available on the Web client" is actionable, a missing tab isn't.
+Cover every supported client for a feature, or say which clients support it. Silent omission reads as undocumented and generates duplicate issues. Name gaps plainly: "Not available on the Web client" is actionable, a missing tab isn't.
 
-Use platform tabs for per-client instructions and keep the platform order the same on every page, listing the CLI first where it exists since it's the most stable reference. Give every tab a heading one level below the section that contains it, so tabs inside an H2 take H3 headings. Jumping to H4 skips a level and breaks the outline, which happens easily because tab blocks get copied between pages, and tab content with no heading isn't navigable by screen reader at all.
+Use platform tabs for per-client instructions, and keep the platform order the same on every page. List the CLI first where it exists, since it's the most stable reference. Give every tab a heading one level deeper than the section that contains it, so tabs inside an H2 take H3 headings. Jumping to H4 skips a level and breaks the outline, and tab blocks copied between pages are where that happens. Tab content with no heading isn't navigable by screen reader at all.
 
 Keep tabs in sync when a procedure changes. A stale tab is worse than a missing one because it looks authoritative.
 
@@ -555,31 +587,33 @@ Screenshots go stale, can't be translated, can't be searched, and can't be read 
 
 Put anything a reader might copy, search, or hear into text or a table. Setting names, values, and command syntax never live only inside an image.
 
-Provide both light and dark variants of UI screenshots and show the one matching the reader's theme; a light-only screenshot on a dark page breaks the mode consistency rule in section 2. Capture default themes and default configuration unless the screenshot exists to show a specific setting. Redact node names, real coordinates, map positions, keys, phone numbers, email addresses, and other people's nodes before publishing. Crop to the relevant region, and capture at native resolution or 2x rather than upscaling.
+Provide both light and dark variants of UI screenshots, and show the one matching the reader's theme. A light-only screenshot on a dark page breaks the mode consistency rule in section 2. Capture default themes and default configuration unless the screenshot exists to show a specific setting. Redact node names, real coordinates, map positions, keys, phone numbers, email addresses, and other people's nodes before publishing. Crop to the relevant region, and capture at native resolution or 2x rather than upscaling.
 
 Use webp for screenshots and photos, which cuts page weight for readers on metered or slow connections, and keep SVG for diagrams and logos. Social preview images are PNG at 1200 x 630, since webp is unreliable for social cards. Give video embeds `preload="metadata"` or `preload="none"` so a page doesn't spend the reader's bandwidth before they press play. Store images in the site's shared image directory rather than beside the page, so they can be reused and audited.
 
 Every image needs alt text, as covered in 11.10.
 
-Diagrams use the palette in section 7 and stay legible in both light and dark mode, so don't rely on a light page background for contrast. Prefer Mermaid or SVG over raster: they stay sharp, diff cleanly in review, and their text stays selectable and translatable. Pair color with a label, shape, or pattern rather than carrying meaning by color alone.
+Diagrams use the palette in section 7 and stay legible in both light and dark mode. Don't rely on a light page background for contrast. Prefer Mermaid or SVG over raster: they stay sharp, diff cleanly in review, and their text stays selectable and translatable. Pair color with a label, shape, or pattern rather than carrying meaning by color alone.
 
 ### 11.10 Accessibility
 
 The accessibility requirements in sections 2, 4, and 5 apply to written content as directly as they apply to UI.
 
-Every image needs alt text describing what the image conveys, not the fact that it's an image; leave out "image of" and "screenshot of". Empty alt text is for genuinely decorative images, and it has to be written out explicitly, because `![](/img/example.webp)` with no alt attribute is unlabeled rather than intentionally silent. Correct copied headings and tab labels instead of pasting them, since duplicated platform headings are a recurring source of wrong labels and mismatched tab values.
+Every image needs alt text describing what the image conveys, not the fact that it's an image; leave out "image of" and "screenshot of". Empty alt text is for genuinely decorative images, and it has to be written out explicitly. `![](/img/example.webp)` with no alt attribute is unlabeled rather than intentionally silent. Correct copied headings and tab labels instead of pasting them, since duplicated platform headings are a recurring source of wrong labels and mismatched tab values.
 
 Link text describes its destination. Avoid "click here", "here", "this link", and "read more"; a bare URL is fine only when the URL itself is the information. Don't place two links with similar text next to each other, because they're indistinguishable in a screen reader's link list.
 
-Tables need a real header row and no merged cells, and aren't for visual layout. Pair color-coded status with text, as the icon and text rule in section 4 requires. Name a control rather than describing it by position or appearance. Keep heading order intact so assistive technology can build an accurate outline. Caption video and audio and summarize any instruction they give. Keep structure simple: deeply nested lists and multi-paragraph table cells are hard to navigate without sight.
+Tables need a real header row and no merged cells, and aren't for visual layout. Pair color-coded status with text, as the icon and text rule in section 4 requires. Name a control rather than describing it by position or appearance.
+
+Keep heading order intact so assistive technology can build an accurate outline. Caption video and audio and summarize any instruction they give. Keep structure simple: deeply nested lists and multi-paragraph table cells are hard to navigate without sight.
 
 ### 11.11 Admonitions
 
 Admonitions are the most overused feature in documentation, and overuse cancels them out. A page carrying five callouts effectively carries none, because readers learn within seconds to scan past the styling. Their value comes from being rare.
 
-Default to none. Write the information as body text, and promote it only where a reader skimming the page would suffer a real consequence from missing it: lost configuration, an unrecoverable device, hours spent on a wrong assumption, or a breach of local radio regulations. Useful to know is not a consequence.
+Default to none. Write the information as body text. Promote it only where a reader skimming the page would suffer a real consequence from missing it. A real consequence is lost configuration, an unrecoverable device, hours spent on a wrong assumption, or a breach of local radio regulations. Useful to know is not a consequence.
 
-At most one admonition per H2 section. On a short page that means zero or one in total, and a long reference page should rarely pass three or four, never two in the same section. A page that seems to need more is misorganized, or its callouts are decorative; both are fixed by rewriting the content rather than by adding another box.
+At most one admonition per H2 section. On a short page that means zero or one in total. A long reference page should rarely pass three or four, and never two in the same section. A page that seems to need more is misorganized, or its callouts are decorative. Both are fixed by rewriting the content rather than by adding another box.
 
 | Type | Semantic color (7.7) | For |
 |------|---------------------|-----|
@@ -591,9 +625,9 @@ At most one admonition per H2 section. On a short page that means zero or one in
 
 Two types turn up that aren't in this table. Docusaurus treats `caution` as a deprecated alias rendering as a warning, and `important` as an undocumented legacy alias rendering as info. The framework already fixes the mapping, so write `warning` and `info` directly. Change them as pages are touched; the copies frozen in `versioned_docs/` stay as they are, because a frozen snapshot is never edited.
 
-These rules cover pages authored here. The synced client documentation in 11.1 is written for two renderers at once, so its source cannot use `:::` at all and carries a blockquote form instead. The client repository's own guide governs that form, and whether it reaches the site as a callout depends on that repository's sync conversion.
+These rules cover pages authored here. The synced client documentation in 11.1 is written for two renderers at once. Its source cannot use `:::` at all, and carries a blockquote form instead. The client repository's own guide governs that form, and whether it reaches the site as a callout depends on that repository's sync conversion.
 
-Don't stack or nest them; consecutive callouts read as a wall of boxes and get skipped together, so merge them or move the detail into body text. Required actions belong in the numbered procedure, never only inside a callout.
+Don't stack or nest them. Consecutive callouts read as a wall of boxes and get skipped together, so merge them or move the detail into body text. Required actions belong in the numbered procedure, never only inside a callout.
 
 Don't open a page or a section with an admonition to emphasize prose. If something matters enough to lead with, it's the topic, and it belongs in the opening sentence where it will be read.
 
@@ -607,9 +641,11 @@ Bold is for UI labels and genuine emphasis, not whole sentences and not as a sub
 
 Documentation follows the unit rules in section 10 rather than contradicting them.
 
-State the canonical unit when describing a device value or protobuf field, since values arrive in metric SI units and reference material has to say what the device actually sends. In user-facing prose give metric first with the imperial equivalent in parentheses, as in about 2 km (1.2 mi), and don't imply a client displays a fixed unit; display units follow the reader's OS locale. Leave hPa, degrees, microroentgens per hour, and percentages unconverted.
+State the canonical unit when describing a device value or protobuf field. Values arrive in metric SI units, and reference material has to say what the device sends. In user-facing prose give metric first with the imperial equivalent in parentheses, as in about 2 km (1.2 mi). Don't imply a client displays a fixed unit, since display units follow the reader's OS locale. Leave hPa, degrees, microroentgens per hour, and percentages unconverted.
 
-Use ISO 8601 for absolute dates, so 2026-03-14 rather than 03/14/26. State the time zone, or use UTC, for log excerpts and timestamp examples. Don't hardcode a locale's number formatting in examples, and note that separators are locale-dependent where it could confuse.
+Spell the month in prose: March 14, 2026, and not 03/14/26. The all-numeric forms swap day and month between American and European readers, and a date is worth more characters than the ambiguity costs. Keep ISO 8601 where the string is data rather than prose. That covers log excerpts, timestamp examples, file names, and the date stamps on specs and audits in this repository. State the time zone, or use UTC, wherever a timestamp appears.
+
+Spell out zero through nine in prose and use numerals from 10 up. Numerals override that rule for any measurement or value carrying a unit, as in 3 dB and 915 MHz. They also override it for a value the reader types or selects, and for anything taking a percent sign. Identifiers keep their numerals too, such as a section number, a heading level, or a firmware version. Don't hardcode a locale's number formatting in examples, and note that separators are locale-dependent where it could confuse.
 
 Range depends on terrain, antenna, and preset, so state the conditions with any distance figure or leave the figure out.
 
@@ -617,19 +653,19 @@ Range depends on terrain, antenna, and preset, so state the conditions with any 
 
 Documentation is translated through Crowdin, and client strings are localized separately. Source English has to be written so it can be translated without guesswork.
 
-Keep sentences short and simple; long sentences with nested clauses compound translation errors. Avoid idiom, slang, humor, and cultural reference, since out of the box and your mileage may vary don't survive translation, and describe mechanisms rather than reaching for metaphor.
+Keep sentences short and simple; long sentences with nested clauses compound translation errors. Avoid idiom, slang, humor, and cultural reference: out of the box and your mileage may vary don't survive translation. Describe the mechanism rather than reaching for metaphor.
 
 Don't assemble sentences from fragments in UI strings, because a runtime concatenation can't be reordered for another language's grammar; use complete strings with named placeholders. Keep translatable text out of images, which aren't translated. Code, CLI commands, protobuf field names, enum values, and log output aren't translated either, so mark them with code formatting to make that clear.
 
 Avoid directional wording that breaks in right-to-left layouts. Don't reuse one string in two grammatical contexts, since a word that works as both noun and verb in English usually needs two translations. Allow for expansion: translated strings often run 30 to 40 percent longer than English, and layouts have to take that without clipping.
 
-Keep markdown structure plain. Inline HTML or JSX inside translated prose is a known build breaker, because translation round-trips corrupt tags, putting spaces inside closing tags, duplicating opening tags, and unbalancing containers until the page fails to build.
+Keep markdown structure plain. Inline HTML or JSX inside translated prose is a known build breaker. Translation round-trips corrupt tags: spaces appear inside closing tags, opening tags duplicate, and containers unbalance until the page fails to build.
 
 ### 11.14 Accuracy and versioning
 
 Wrong documentation does more damage than missing documentation, because readers act on it.
 
-The documentation is versioned. The current set describes the release in development and each older line keeps a frozen snapshot, so the version selector already tells a reader which release a page belongs to. Let it do that work.
+The documentation is versioned. The current set describes the release in development, and each older line keeps a frozen snapshot. The version selector already tells a reader which release a page belongs to. Let it do that work.
 
 A feature added in 2.8 appears in the 2.8 set and is absent from 2.7. That is the whole story, and "new in 2.8" on every such page says nothing while the entire set is new. The same holds for a setting that was removed, a default that changed, and a field that was renamed: each snapshot describes its own release.
 
@@ -644,7 +680,7 @@ Write these in the sentence that needs them, not as a banner at the head of the 
 
 Deprecation is the other version fact a snapshot cannot carry, because a removal that has not happened yet appears nowhere. Where a setting is on its way out, say so on the page that still documents it and name the replacement. Record the release that removes it once that release is known. Readers on an older line keep their own snapshot, so a removal does not strand them.
 
-Update the documentation in the same change as the behavior. A UI or firmware change that alters documented behavior isn't finished until the docs match, and screenshots and step sequences need re-checking whenever the relevant UI moves, since steps drift before prose does.
+Update the documentation in the same change as the behavior. A UI or firmware change that alters documented behavior isn't finished until the docs match. Re-check screenshots and step sequences whenever the relevant UI moves, since steps drift before prose does.
 
 Don't document internal or undocumented behavior as a stable contract unless it's intentionally supported. Date-stamp specs and audits in this repository and name the standards version they were graded against. Fix broken links when you find them; a dead link in a procedure stops the reader.
 
@@ -652,7 +688,7 @@ Don't document internal or undocumented behavior as a stable contract unless it'
 
 In-product text follows the same rules as documentation and extends the plain language requirement in section 6.
 
-Labels name the concept rather than the field, so Hop Limit and never `hop_limit` or a raw enum value. Subtext is one plain sentence saying what the setting does and what changes if it's altered, matching the wording the documentation uses for the same concept.
+Labels name the concept rather than the field, so Hop Limit and never `hop_limit` or a raw enum value. Subtext is one plain sentence saying what the setting does and what changes if it's altered. Match the wording the documentation uses for the same concept.
 
 Button labels are verbs that match the outcome: Save, Send, Pair, Remove. Don't use OK for a destructive or consequential action.
 
@@ -660,7 +696,7 @@ Error messages say three things: what happened, why, and what to do next. "Could
 
 Empty states explain the state and offer an action, as in "No nodes yet. Nodes appear here as they're heard on the mesh", rather than an empty screen or a dash. Destructive confirmations name the object and the consequence: "Remove Cabin Repeater? Message history with this node will be deleted", not "Are you sure?".
 
-Don't leave a dead end. Every error, empty, and blocked state either offers a next action or explains what the user is waiting for. Keep strings translatable, as covered in 11.13.
+Don't leave a dead end. Every error, empty, and blocked state either offers a next action or says what it is waiting for. Keep strings translatable, as covered in 11.13.
 
 ### 11.16 Quick checks
 
@@ -672,6 +708,10 @@ These are the rules a reviewer can check without judgment. The rest of the secti
 - [ ] On-screen labels are quoted exactly as they appear, in bold.
 - [ ] Headings are sentence case, with one H1 and no skipped levels.
 - [ ] Product and technology names use their official casing.
+- [ ] Prose uses American spelling.
+- [ ] Running prose spells out for example and that is, rather than e.g. and i.e.
+- [ ] No currently, now, soon, or new dating the page from inside it.
+- [ ] Dates in prose spell the month.
 
 ---
 ### Agent Implementation Checklist (v1.5)
