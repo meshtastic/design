@@ -6,7 +6,7 @@
 **Design Standards:** v1.5 ([meshtastic_design_standards_v1_5.md](../meshtastic_design_standards_v1_5.md))
 **Last Updated:** 2026-09-14
 
-Revised September 14, 2026. The first revision described iOS as write-only, contacts-only, and reachable only from a Tools screen. Meshtastic-Apple [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) closed that on July 24, 2026, six days after this document was written, and four of the nine recorded mismatches are gone. The grades in §4 have been re-checked against both codebases rather than carried forward; two moved because the original reading was wrong, not because the code changed, and those are called out in place.
+Revised September 14, 2026. The first revision described iOS as write-only, contacts-only, and reachable only from a Tools screen. Meshtastic-Apple [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) closed that on July 24, 2026, six days after this document was written, and three of the nine recorded mismatches are gone. The grades in §4 have been re-checked against both codebases rather than carried forward; two moved because the original reading was wrong, not because the code changed, and those are called out in place.
 
 NFC tag support shipped on the client apps without a design artifact to keep the platforms aligned. This document records what each platform does with NFC, identifies the mismatches, grades every NFC surface against the Meshtastic Client Design Standards v1.5, recommends a canonical NFC experience, and explores concrete new features to build — including on firmware. It is the parent reference for a `[ALIGNMENT]` issue (see appendix); no code changes are proposed here.
 
@@ -146,7 +146,7 @@ PR [#2136](https://github.com/meshtastic/Meshtastic-Apple/pull/2136) closed most
 
 ## 3. Mismatches
 
-Rows 1, 2, 3, and 6 from the July 18, 2026 revision are closed and have been removed. What remains, plus what the closing work exposed:
+Rows 1, 2, and 3 from the July 18, 2026 revision are closed and have been removed. What remains, plus what the closing work exposed:
 
 | # | Area | iOS | Android | Web | Firmware | Priority |
 |---|------|-----|---------|-----|----------|----------|
@@ -157,10 +157,11 @@ Rows 1, 2, 3, and 6 from the July 18, 2026 revision are closed and have been rem
 | 5 | **Naming of the channel share surface** | "Generate QR Code" | "Share Channels QR Code" | n/a | n/a | Medium |
 | 6 | **Channel add-vs-replace explained** | ✅ Toggle in the share screen with a consequence line | ⚠️ Segmented buttons on the channel list, no consequence text, away from the share action | — | — | Medium |
 | 7 | **What the surface says it is** | Names the node and explains the QR | ❌ Explains NFC only, never the QR, and does not name what is being shared | — | — | Medium |
-| 8 | **Tag emulation** | ❌ Not possible on iOS | 🚧 [#7124](https://github.com/meshtastic/Meshtastic-Android/pull/7124) | ❌ | ❌ | Low (platform limit) |
-| 9 | **Reader entitlement vs code** | `TAG` entitlement, NDEF code (see §2.1) | NDEF URL records (consistent) | n/a | n/a | Low |
-| 10 | **Web NFC** | — | — | ❌ None (additive, Chromium-Android only) | — | Low |
-| 11 | **Firmware NFC** | — | — | — | ❌ None (ST25R3916 wired but undriven; request [#7236](https://github.com/meshtastic/firmware/issues/7236)) | Low (Exploratory) |
+| 8 | **Import verification semantics** | Honors the encoded `manually_verified` flag | Forces `manually_verified = true` on import | — | — | Medium |
+| 9 | **Tag emulation** | ❌ Not possible on iOS | 🚧 [#7124](https://github.com/meshtastic/Meshtastic-Android/pull/7124) | ❌ | ❌ | Low (platform limit) |
+| 10 | **Reader entitlement vs code** | `TAG` entitlement, NDEF code (see §2.1) | NDEF URL records (consistent) | n/a | n/a | Low |
+| 11 | **Web NFC** | — | — | ❌ None (additive, Chromium-Android only) | — | Low |
+| 12 | **Firmware NFC** | — | — | — | ❌ None (ST25R3916 wired but undriven; request [#7236](https://github.com/meshtastic/firmware/issues/7236)) | Low (Exploratory) |
 
 ---
 
@@ -202,7 +203,7 @@ Every NFC surface graded against [meshtastic_design_standards_v1_5.md](../meshta
 
 A unified target experience, each point tied to the standard it satisfies:
 
-1. **NFC lives beside QR.** Every client surfaces "Write to NFC" from the *same* share sheet as the QR code, for **both** contacts and channels — one share chokepoint, not a separate Tools screen (**§6** IA). Android already does this; iOS and Web should follow.
+1. **NFC lives beside QR.** Every client surfaces "Write to NFC" from the *same* share sheet as the QR code, for **both** contacts and channels — one share chokepoint, not a separate Tools screen (**§6** IA). Android and iOS already do this; Web should follow.
 2. **Symmetric read + write.** In addition to OS tap-to-open, each client offers a deterministic in-app **"Scan NFC tag"** action using the native reader sheet (**§5**).
 3. **Capability-aware.** The NFC affordance appears only when the device has NFC, with an "enable NFC / not supported" prompt when it's off or absent (**§3**).
 4. **Explained in plain language.** A short subtext tells the user what a tap does (**§4/§6**).
@@ -254,7 +255,7 @@ The Pager already has the reader chip wired ([§2.4](#24-firmware-meshtasticfirm
 Realize the dormant nRF54L15 idea: use NFC OOB to bootstrap secure BLE pairing — tap phone to node to pair without a PIN or display. Depends on the nRF BLE stack and an NFC-capable pin/chip; naturally complements B1/B3.
 
 **Cross-cutting design notes (decide once, apply everywhere):**
-- **Verification semantics.** Should a physical tap imply `manually_verified = true`? Android forces it on import; iOS honors the encoded flag (Mismatch #6). Physical proximity is a reasonable trust signal, but pick one rule across clients *and* any firmware ingestion.
+- **Verification semantics.** Should a physical tap imply `manually_verified = true`? Android forces it on import; iOS honors the encoded flag (mismatch 8). Physical proximity is a reasonable trust signal, but pick one rule across clients *and* any firmware ingestion.
 - **Public-key privacy.** `SharedContact` carries `User.public_key`; a static readable tag (B1) publishes it. Make identity-tag exposure explicit and opt-in.
 - **NDEF URL record vs MIME record.** URL records depend on associated-domain/App-Links resolution to open the app; a raw-protobuf **MIME-type** NDEF record would enable fully **offline** import without a URL round-trip. Keep the URL record as the interoperable baseline and treat a MIME record as an additive, cross-platform decision.
 
