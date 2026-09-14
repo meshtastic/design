@@ -358,7 +358,10 @@ function rel(d){
 }
 
 /* ---------- render ---------- */
-const tracked=t=>COLS.some(p=>t.cells[p]);
+// Any tracked platform counts, including ones with no column of their own.
+// Keying this on COLS would file a docs-only or protobufs-only topic under
+// "Nothing tracked yet", which is the opposite of what it says.
+const tracked=t=>Object.keys(t.cells).length>0;
 function render(){
   const all=DATA.topics.filter(pass);
   const untracked=all.filter(t=>!tracked(t));

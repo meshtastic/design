@@ -87,6 +87,22 @@ class TestPlatformAttribution(unittest.TestCase):
             self.assertIsNone(row["platform"])
 
 
+    def test_alias_containing_commas_is_not_split(self):
+        """'Apple (iOS, iPadOS, macOS)' must not become 'Apple (iOS'."""
+        rows, _ = parse_issue(1, '## Platform Tracking'+chr(10)+chr(10)+
+                                 '- [x] Apple (iOS, iPadOS, macOS), Meshtastic-Apple#1996'+chr(10),
+                              CFG)
+        self.assertEqual(rows[0]['platform'], 'apple')
+        self.assertIsNone(rows[0]['aspect'])
+
+    def test_aspect_survives_the_alias_match(self):
+        rows, _ = parse_issue(1, '## Platform Tracking'+chr(10)+chr(10)+
+                                 '- [x] Android display, Meshtastic-Android#5987'+chr(10),
+                              CFG)
+        self.assertEqual(rows[0]['platform'], 'android')
+        self.assertEqual(rows[0]['aspect'], 'display')
+
+
 class TestReferences(unittest.TestCase):
     def test_bare_number_inherits_repo_from_the_row(self):
         """In #115, `#4163` follows Meshtastic-Android#5987 and means Android."""

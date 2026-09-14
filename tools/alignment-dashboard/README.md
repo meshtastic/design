@@ -28,9 +28,11 @@ The generator uses `GITHUB_TOKEN` if it is set and falls back to `gh auth
 token`, so it runs the same way locally as it does in Actions. A full refresh
 is two or three GraphQL requests, around 35 points of the 5000 per hour budget.
 
-`refs-cache.json` maps a reference to whether it is an issue or a pull request.
-That never changes for a given number, so the cache is permanently valid and
-steady-state runs only look up references they have not seen.
+`refs-cache.json` holds the last known state of every reference. It is a
+fallback, not a shortcut: every reference is looked up on every build, because
+an issue's state is the thing this dashboard reports and it changes. The cache
+is only consulted when a lookup returns nothing, so one deleted or briefly
+unreachable reference does not blank a cell.
 
 ## Files
 

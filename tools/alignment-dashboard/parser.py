@@ -103,6 +103,26 @@ def extract_refs(text, shorthand):
     return refs
 
 
+def leading_alias(text, cfg):
+    """The longest configured alias the row starts with, or None.
+
+    Checked before the separator split so an alias that contains a comma, such
+    as "Apple (iOS, iPadOS, macOS)", is not cut in half and turned into a label
+    of "Apple (iOS" carrying a junk aspect.
+    """
+    low = re.sub(r"\*\*", "", text).strip().lower()
+    best = None
+    for alias in cfg["aliases"]:
+        if not low.startswith(alias):
+            continue
+        tail = low[len(alias):]
+        if tail and (tail[0].isalnum() or tail[0] == "-"):
+            continue
+        if best is None or len(alias) > len(best):
+            best = alias
+    return best
+
+
 def normalize_platform(label, cfg):
     """Map a free-text row label to a platform id, plus any trailing aspect."""
     key = re.sub(r"\*\*", "", label or "").strip().lower()
@@ -196,6 +216,16 @@ def parse_issue(number, body, cfg):
             platform, aspect, how = None, None, None
             if context_platform:
                 platform, how = context_platform, "context"
+
+            alias = leading_alias(content, cfg)
+            if platform is None and alias:
+                platform, how = cfg["aliases"][alias], "label"
+                stripped = re.sub(r"\*\*", "", content).strip()
+                tail = SEPARATOR.split(stripped[len(alias):], maxsplit=1)[0].strip()
+                if tail and len(tail) <= 40 and not re.search(r"#\d|https?://", tail):
+                    aspect = tail
+                label = stripped[:len(alias)]
+
             if platform is None and label:
                 bare = re.sub(r"\[|\]\([^)]*\)", "", label).strip()
                 if len(bare) <= 44 and not re.search(r"#\d|https?://", label):

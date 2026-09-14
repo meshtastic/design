@@ -17,11 +17,10 @@ on:
       - "tools/alignment-dashboard/**"
       - ".github/workflows/alignment-dashboard.yml"
 
+# Least privilege by default. The build job reads, and only the steps that
+# publish are granted more, in the job that needs it.
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-  issues: read
+  contents: read
 
 # One build at a time. A queued run would only rebuild the same data.
 concurrency:
@@ -31,10 +30,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: read
     outputs:
       publish: ${{ steps.gate.outputs.publish }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Restore the previous data and reference cache
         run: |
@@ -119,9 +123,9 @@ jobs:
           git commit -q -m "Alignment dashboard data $(date -u +%Y-%m-%dT%H:%MZ)"
           git push -q "$url" dashboard-data
 
-      - uses: actions/configure-pages@v5
-        if: steps.gate.outputs.publish == 'true'
-
+      # No configure-pages step: the page references data.json relatively and
+      # needs no base URL, so its only effect would be to want pages: write in
+      # a job that otherwise does not.
       - uses: actions/upload-pages-artifact@v3
         if: steps.gate.outputs.publish == 'true'
         with:
@@ -131,6 +135,9 @@ jobs:
     needs: build
     if: needs.build.outputs.publish == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

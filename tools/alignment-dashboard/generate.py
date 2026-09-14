@@ -101,11 +101,17 @@ def fetch_issues(tok):
 
 
 def resolve_refs(keys, tok, cache):
-    """Batch aliased issueOrPullRequest lookups, grouped by repo."""
-    by_repo = {}
+    """Batch aliased issueOrPullRequest lookups, grouped by repo.
+
+    Every reference is looked up on every build. The cache is a fallback for
+    lookups that fail, never a way to skip one: an issue's state is the whole
+    point of this dashboard and it changes, so reusing a cached state would
+    freeze every cell at whatever it happened to be the first time it was seen.
+    Resolving all of them costs about one point per forty references.
+    """
+    fresh, by_repo = {}, {}
     for repo, number in keys:
-        if f"{repo}#{number}" not in cache:
-            by_repo.setdefault(repo, []).append(number)
+        by_repo.setdefault(repo, []).append(number)
 
     for repo, numbers in by_repo.items():
         owner, name = repo.split("/", 1)
@@ -124,7 +130,14 @@ def resolve_refs(keys, tok, cache):
             canonical = repo_data.get("nameWithOwner", repo)
             for i, number in enumerate(chunk):
                 node = repo_data.get(f"a{i}")
-                cache[f"{repo}#{number}"] = normalize_ref(node, canonical, repo)
+                fresh[f"{repo}#{number}"] = normalize_ref(node, canonical, repo)
+
+    # A lookup that returned nothing keeps whatever the last good run knew, so
+    # one deleted or briefly unreachable reference does not blank a cell.
+    for key, value in fresh.items():
+        if value.get("type") is None and cache.get(key, {}).get("type"):
+            continue
+        cache[key] = value
     return cache
 
 
@@ -153,6 +166,17 @@ def strip_prefixes(title):
     import re
     stripped = re.sub(r"^(\s*\[[^\]]+\]\s*)+:?\s*", "", title).strip()
     return stripped or title
+
+
+def iter_descendants(node, seen=None):
+    """Every sub-issue below this node, at any depth, each yielded once."""
+    seen = seen if seen is not None else set()
+    for child in (node.get("subIssues") or {}).get("nodes", []):
+        if child["id"] in seen:
+            continue
+        seen.add(child["id"])
+        yield child
+        yield from iter_descendants(child, seen)
 
 
 def walk_sub_issues(node, seen, path, findings, topic_number):
@@ -203,6 +227,11 @@ def cell_state(cell, rows):
         active = [i for i in impls if i["state"] in ("open", "merged")]
         assigned = any(t.get("assigned") for t in trackers)
         return ("in_progress" if (active or assigned) else "filed_not_started"), False
+    # An open pull request and no tracker issue is still work under way. Without
+    # this the row falls through to unknown, which reads as a parser failure
+    # rather than as the plain fact that somebody is working on it.
+    if any(i["state"] == "open" for i in impls):
+        return "in_progress", False
     return "unknown", False
 
 
@@ -406,7 +435,10 @@ def main():
         for row in rows:
             for ref in row["refs"]:
                 wanted.add((ref["repo"], ref["number"]))
-        for child in (issue.get("subIssues") or {}).get("nodes", []):
+        # The whole tree, not just direct children: build() merges descendants
+        # upward, and a grandchild whose state was never looked up renders as
+        # unknown rather than as whatever it actually is.
+        for child in iter_descendants(issue):
             wanted.add((child["repository"]["nameWithOwner"], child["number"]))
 
     cache = {}
