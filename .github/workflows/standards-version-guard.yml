@@ -77,11 +77,17 @@ jobs:
                   # version instead, so a symlink move that leaves it behind
                   # publishes a stale pointer that still looks authoritative.
                   if printf '%s\n' "$changed" | awk -F'\t' -v p="$INDEX" '$2 == p { hit = 1 } END { exit !hit }'; then
+                    # `|| true` because an assignment from a failing command
+                    # substitution exits under `set -e`. A pull request that
+                    # deletes the index while moving the symlink would abort the
+                    # script here and fail with a bare exit, giving no
+                    # annotation saying why. Empty is a real answer, handled
+                    # immediately below.
                     marker="$(git show "$HEAD_SHA:$INDEX" 2>/dev/null \
                       | sed -n 's/.*<!-- current-version:[[:space:]]*\([^[:space:]]*\)[[:space:]]*-->.*/\1/p' \
-                      | head -n 1)"
+                      | head -n 1 || true)"
                     if [ -z "$marker" ]; then
-                      echo "::error file=$INDEX::$INDEX has no '<!-- current-version: ... -->' marker, so the version it claims cannot be checked."
+                      echo "::error file=$INDEX::$INDEX is missing, or carries no '<!-- current-version: ... -->' marker, so the version it claims cannot be checked."
                       failed=1
                     elif [ "$marker" != "$target" ]; then
                       echo "::error file=$INDEX::$INDEX marks '$marker' as current, but $LATEST points at '$target'. Update the index, including the marker."
