@@ -98,6 +98,7 @@ input[type=search]{flex:1 1 260px;min-width:0}
 .g{font-size:15px;line-height:1;width:1.1em;text-align:center;display:inline-block}
 .g.shipped{color:var(--ship-glyph)} .g.in_progress{color:var(--prog)}
 .g.claimed{color:var(--ink-2)}
+.g.not_applicable{color:var(--ink-3)}
 .g.blocked{color:var(--warn-ink)} .g.not_planned,.g.unknown{color:var(--ink-3)}
 .g.filed_not_started{color:var(--ink-2)}
 
@@ -129,6 +130,7 @@ th.rowhead{text-align:left;padding:0;font-weight:400;vertical-align:middle}
 .bar i.filed_not_started{background:var(--ink-3)}
 .bar i.blocked{background:var(--warn-line)}
 .bar i.not_planned{background:var(--line)}
+.bar i.not_applicable{background:var(--line)}
 td.c{text-align:center;padding:5px 4px;vertical-align:middle}
 .cell{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
   gap:1px;min-width:74px;min-height:44px;padding:5px 7px;border-radius:8px;border:1px solid transparent}
@@ -260,13 +262,13 @@ footer p{margin:0 0 7px;max-width:70ch}
 let DATA;
 let COLS = [], PL = {};
 const GLYPH={shipped:'✓',claimed:'✓',in_progress:'◐',filed_not_started:'○',
-  not_filed:'',not_planned:'⊘',blocked:'▲',unknown:'?'};
+  not_filed:'',not_planned:'⊘',not_applicable:'—',blocked:'▲',unknown:'?'};
 const WORD={shipped:'Shipped',claimed:'Claimed, nothing linked',in_progress:'In progress',
   filed_not_started:'Filed, not started',not_filed:'No issue filed',not_planned:'Not planned',
-  blocked:'Blocked',unknown:'Unresolved'};
-const ORDER=['blocked','in_progress','filed_not_started','claimed','shipped','not_planned','unknown'];
+  not_applicable:'Out of scope',blocked:'Blocked',unknown:'Unresolved'};
+const ORDER=['blocked','in_progress','filed_not_started','claimed','shipped','not_planned','not_applicable','unknown'];
 // Cells are narrow, so they carry a short form; the legend spells it out.
-const SHORT={claimed:'Claimed',not_planned:'Not planned',unknown:'Unresolved',
+const SHORT={claimed:'Claimed',not_planned:'Not planned',not_applicable:'Out of scope',unknown:'Unresolved',
   filed_not_started:'Filed',in_progress:'In progress',shipped:'Shipped'};
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const short=r=>r.replace('meshtastic/','');
@@ -378,7 +380,10 @@ function render(){
   const rows=sorted(rest.filter(t=>t.percent<100));
 
   document.getElementById('head').innerHTML='<th scope="col">Topic</th>'+COLS.map(p=>{
-    const n=all.filter(t=>t.cells[p]).length;
+    // The denominator is work this platform actually owes, so a declined
+    // issue or an out-of-scope row does not count against it.
+    const OWED=c=>c&&c.state!=='not_planned'&&c.state!=='not_applicable';
+    const n=all.filter(t=>OWED(t.cells[p])).length;
     const s=all.filter(t=>t.cells[p]?.state==='shipped').length;
     return `<th scope="col">${esc(PL[p]||p)}<span class="cnt">${s}/${n}</span></th>`;
   }).join('');
@@ -483,7 +488,7 @@ function buildControls(){
 document.getElementById('plat').innerHTML='<option value="">All platforms</option>'+
   COLS.map(p=>`<option value="${p}">${esc(PL[p])} not shipped</option>`).join('');
 document.getElementById('legend').innerHTML=
-  ['shipped','claimed','in_progress','filed_not_started','blocked','not_planned'].map(s=>
+  ['shipped','claimed','in_progress','filed_not_started','blocked','not_planned','not_applicable'].map(s=>
    `<span><span class="g ${s}" aria-hidden="true">${GLYPH[s]}</span>${WORD[s]}</span>`).join('')+
   `<span><span class="flag" style="position:static;display:inline-block"></span>Needs review</span>`+
   `<span>Blank means no issue is filed.</span>`;

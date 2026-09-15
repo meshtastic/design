@@ -170,6 +170,24 @@ class TestProvenance(unittest.TestCase):
         self.assertIsNone(rows[0]["platform"])
         self.assertTrue(rows[0]["blocked"])
 
+    def test_out_of_scope_rows_are_detected(self):
+        """design#157: firmware has nothing to do, so the row is a decision."""
+        rows, _ = parse_issue(157, "## Platform Tracking\n\n"
+                                   "- [ ] Firmware: out of scope, the defect is "
+                                   "in how clients store a conversation\n", CFG)
+        self.assertEqual(rows[0]["platform"], "firmware")
+        self.assertTrue(rows[0]["outOfScope"])
+        self.assertFalse(rows[0]["notFiled"])
+
+    def test_not_yet_filed_is_not_out_of_scope(self):
+        """"Not filed" means the work is owed; the two must not be confused."""
+        rows, _ = parse_issue(157, "## Platform Tracking\n\n"
+                                   "- [ ] Web: not yet filed, pending confirmation\n",
+                              CFG)
+        self.assertTrue(rows[0]["notFiled"])
+        self.assertFalse(rows[0]["outOfScope"])
+
+
     def test_not_filed_phrases_are_detected(self):
         rows, _ = parse_issue(1, "## Platform Tracking\n\n"
                                  "- [ ] Web, no tracker opened\n", CFG)

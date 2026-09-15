@@ -211,6 +211,11 @@ def cell_state(cell, rows):
     impls = [e for e in cell["evidence"] if e["role"] == "implementation"]
     all_checked = bool(rows) and all(r["checked"] for r in rows)
 
+    # Checked before not_filed: a row saying this platform is out of scope is a
+    # decision, not an absence, and counting it as outstanding work would mark a
+    # platform down for something nobody ever expected it to do.
+    if any(r["outOfScope"] for r in rows) and not trackers:
+        return "not_applicable", False
     if any(r["notFiled"] for r in rows) and not trackers:
         return "not_filed", False
     if not trackers and not impls:
@@ -371,7 +376,10 @@ def build(issues, cfg, refs):
         counts = {}
         for cell in cells.values():
             counts[cell["state"]] = counts.get(cell["state"], 0) + 1
-        denominator = sum(v for k, v in counts.items() if k != "not_planned")
+        # Neither a declined issue nor an out-of-scope platform is work
+        # outstanding, so neither belongs in the denominator.
+        denominator = sum(v for k, v in counts.items()
+                          if k not in ("not_planned", "not_applicable"))
         percent = round(100 * counts.get("shipped", 0) / denominator) if denominator else 0
 
         topics.append({

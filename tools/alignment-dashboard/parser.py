@@ -29,6 +29,12 @@ NOT_FILED = re.compile(
     r"not (yet )?filed|no tracker opened|not started|neither started|no tracker", re.I
 )
 BLOCKED = re.compile(r"blocked (on|by)\b", re.I)
+# A platform that owes nothing is not a platform that is behind. The
+# template tells authors to say so on the row rather than delete the row,
+# so the row has to be readable as a decision instead of as a gap.
+OUT_OF_SCOPE = re.compile(
+    r"out of scope|not applicable|does not apply|doesn't apply|"
+    r"nothing (for \w+ )?to do|no work (is )?needed", re.I)
 SHIPPED_IN = re.compile(r"shipped in|merged in|landed in", re.I)
 
 # Reference forms, most specific first. A /blob/ URL is a code permalink whose
@@ -267,6 +273,7 @@ def parse_issue(number, body, cfg):
                 "refs": refs,
                 "notFiled": bool(NOT_FILED.search(content)),
                 "blocked": bool(BLOCKED.search(content)),
+                "outOfScope": bool(OUT_OF_SCOPE.search(content)),
                 "shippedIn": bool(SHIPPED_IN.search(content)),
                 "heading": title,
                 "line": line_of(offset),
