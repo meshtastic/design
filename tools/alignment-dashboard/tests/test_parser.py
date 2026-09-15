@@ -12,6 +12,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from generate import cell_state
 from parser import (count_checkbox_rows, extract_refs, load_config,
                     normalize_platform, parse_issue)
 
@@ -192,6 +193,37 @@ class TestProvenance(unittest.TestCase):
         rows, _ = parse_issue(1, "## Platform Tracking\n\n"
                                  "- [ ] Web, no tracker opened\n", CFG)
         self.assertTrue(rows[0]["notFiled"])
+
+
+class TestCellState(unittest.TestCase):
+    """A cell can hold more than one row for the same platform."""
+
+    @staticmethod
+    def row(checked=False, oos=False, notfiled=False, blocked=False):
+        return {"checked": checked, "outOfScope": oos, "notFiled": notfiled,
+                "blocked": blocked, "text": ""}
+
+    def test_every_row_out_of_scope_makes_the_cell_out_of_scope(self):
+        state, _ = cell_state({"evidence": []}, [self.row(oos=True)])
+        self.assertEqual(state, "not_applicable")
+
+    def test_one_out_of_scope_row_does_not_excuse_the_platform(self):
+        """The applicable row still owes work, so the cell is not excused."""
+        state, _ = cell_state({"evidence": []},
+                              [self.row(oos=True), self.row()])
+        self.assertEqual(state, "not_filed")
+
+    def test_out_of_scope_row_does_not_make_the_rest_look_claimed(self):
+        """An unticked out-of-scope row must not drag all_checked down."""
+        state, unverified = cell_state({"evidence": []},
+                                       [self.row(oos=True), self.row(checked=True)])
+        self.assertEqual(state, "claimed")
+        self.assertTrue(unverified)
+
+    def test_out_of_scope_row_does_not_import_its_not_filed_phrasing(self):
+        state, _ = cell_state({"evidence": []},
+                              [self.row(oos=True, notfiled=True), self.row(checked=True)])
+        self.assertEqual(state, "claimed")
 
 
 if __name__ == "__main__":

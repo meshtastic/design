@@ -209,13 +209,19 @@ def cell_state(cell, rows):
     hand-maintained and drifts; the disagreement is recorded, not resolved."""
     trackers = [e for e in cell["evidence"] if e["role"] == "tracker"]
     impls = [e for e in cell["evidence"] if e["role"] == "implementation"]
-    all_checked = bool(rows) and all(r["checked"] for r in rows)
 
-    # Checked before not_filed: a row saying this platform is out of scope is a
-    # decision, not an absence, and counting it as outstanding work would mark a
-    # platform down for something nobody ever expected it to do.
-    if any(r["outOfScope"] for r in rows) and not trackers:
+    # An out-of-scope row settles one piece of work, not the whole platform. A
+    # topic can carry two rows for the same platform, so judge the cell on the
+    # rows that still owe something and only call it out of scope when none do.
+    # Reading "any" here would drop a platform's real work out of the
+    # denominator and show it as owing nothing, which is the worst way for this
+    # page to be wrong.
+    scoped = [r for r in rows if not r["outOfScope"]]
+    if rows and not scoped and not trackers:
         return "not_applicable", False
+
+    rows = scoped
+    all_checked = bool(rows) and all(r["checked"] for r in rows)
     if any(r["notFiled"] for r in rows) and not trackers:
         return "not_filed", False
     if not trackers and not impls:
