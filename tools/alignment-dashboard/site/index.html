@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alignment Coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Meshtastic design standards v1.5 section 7 palette.
+   Two deviations, both measured: Green 600 #3FB86D is 2.35:1 on Neutral 50 and
+   Green 700 #2D8F52 is 3.77:1, so shipped TEXT uses Green 800 and Green 700 is
+   glyph-only. Blue 600 #5C6BC0 is 4.16:1 on a Neutral 100 card, so links use
+   Blue 700. Both clear 4.5:1 in each theme. */
+:root{
+  --ground:#F5F6FA; --surface:#ECEDF3; --raised:#FFFFFF;
+  --line:#D5D6E0; --line-soft:#E4E5EE;
+  --ink:#2C2D3C; --ink-2:#555668; --ink-3:#6E7082;
+  --ship:#005C2E; --ship-glyph:#2D8F52; --ship-fill:#E5FCEE; --ship-line:#B5F5CE;
+  --prog:#2855A8; --prog-fill:#E0E3F8; --prog-line:#D0D8F5;
+  --warn-fill:#FFF3E0; --warn-line:#F2D6A8; --warn-ink:#2C2D3C;
+  --alert:#BA1A1A; --alert-fill:#FFE9E7; --alert-line:#FFCFC9;
+  --link:#2855A8;
+  --chip:#FFFFFF; --chip-on:#2C2D3C; --chip-on-ink:#F5F6FA;
+  --shadow:0 1px 2px rgba(26,27,38,.06),0 1px 1px rgba(26,27,38,.04);
+}
+:root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+  --ground:#1A1B26; --surface:#242533; --raised:#2C2D3C;
+  --line:#3D3E50; --line-soft:#303245;
+  --ink:#ECEDF3; --ink-2:#9496A6; --ink-3:#797B8C;
+  --ship:#67EA94; --ship-glyph:#67EA94; --ship-fill:#00301A; --ship-line:#005C2E;
+  --prog:#9BA8E0; --prog-fill:#1A2242; --prog-line:#2855A8;
+  --warn-fill:#3A2A12; --warn-line:#6B4E1E; --warn-ink:#E8A33E;
+  --alert:#FFB4AB; --alert-fill:#3A1512; --alert-line:#690005;
+  --link:#9BA8E0;
+  --chip:#2C2D3C; --chip-on:#ECEDF3; --chip-on-ink:#1A1B26;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --ground:#1A1B26; --surface:#242533; --raised:#2C2D3C;
+  --line:#3D3E50; --line-soft:#303245;
+  --ink:#ECEDF3; --ink-2:#9496A6; --ink-3:#797B8C;
+  --ship:#67EA94; --ship-glyph:#67EA94; --ship-fill:#00301A; --ship-line:#005C2E;
+  --prog:#9BA8E0; --prog-fill:#1A2242; --prog-line:#2855A8;
+  --warn-fill:#3A2A12; --warn-line:#6B4E1E; --warn-ink:#E8A33E;
+  --alert:#FFB4AB; --alert-fill:#3A1512; --alert-line:#690005;
+  --link:#9BA8E0;
+  --chip:#2C2D3C; --chip-on:#ECEDF3; --chip-on-ink:#1A1B26;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:16px/1.5 Barlow,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+a{color:var(--link)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:3px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* ---- header ---- */
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;
+  padding-bottom:18px;border-bottom:1px solid var(--line)}
+h1{font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:600;font-size:34px;letter-spacing:.01em;
+  margin:0;line-height:1.05;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--ink-2);font-size:16px;max-width:62ch}
+.meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ship-glyph);display:inline-block}
+.themebtn{border:1px solid var(--line);background:var(--chip);border-radius:8px;
+  padding:9px 12px;font-size:14px;min-height:44px;display:inline-flex;align-items:center;gap:7px}
+
+/* ---- attention chips ---- */
+.attn{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:8px 15px;
+  border:1px solid var(--line);border-radius:999px;background:var(--chip);box-shadow:var(--shadow)}
+.chip .k{font-size:15px;font-weight:500}
+.chip .v{font-size:17px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+.chip.alert .v{color:var(--alert)} .chip.alert[aria-pressed="true"] .v{color:inherit}
+.chip.warn  .v{color:var(--warn-ink)} .chip.warn[aria-pressed="true"] .v{color:inherit}
+
+/* ---- controls ---- */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+input[type=search],select{font:inherit;min-height:44px;padding:9px 13px;border:1px solid var(--line);
+  border-radius:9px;background:var(--raised);color:var(--ink)}
+input[type=search]{flex:1 1 260px;min-width:0}
+.result{margin:12px 0 0;color:var(--ink-2);font-size:15px}
+.reset{min-height:44px;padding:9px 14px;border:1px solid var(--line);border-radius:9px;background:var(--chip);font-size:15px}
+
+/* ---- legend ---- */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0 10px;padding:11px 14px;
+  background:var(--surface);border:1px solid var(--line-soft);border-radius:10px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.g{font-size:15px;line-height:1;width:1.1em;text-align:center;display:inline-block}
+.g.shipped{color:var(--ship-glyph)} .g.in_progress{color:var(--prog)}
+.g.claimed{color:var(--ink-2)}
+.g.not_applicable{color:var(--ink-3)}
+.g.blocked{color:var(--warn-ink)} .g.not_planned,.g.unknown{color:var(--ink-3)}
+.g.filed_not_started{color:var(--ink-2)}
+
+/* ---- matrix ---- */
+.tablewrap{margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--raised);
+  overflow:hidden;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse}
+caption{text-align:left;padding:13px 16px;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line-soft)}
+thead th{position:sticky;top:0;z-index:2;background:var(--surface);font-family:"Barlow Condensed",Barlow,sans-serif;
+  font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);
+  padding:10px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+thead th:first-child{text-align:left;padding-left:16px;min-width:300px}
+thead th .cnt{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:400;
+  text-transform:none;letter-spacing:0;color:var(--ink-3);margin-top:1px}
+tbody tr{border-top:1px solid var(--line-soft)}
+tbody tr.open-row{background:var(--surface)}
+th.rowhead{text-align:left;padding:0;font-weight:400;vertical-align:middle}
+.titlebtn{display:block;width:100%;text-align:left;padding:11px 12px 11px 16px;min-height:44px}
+.titlebtn:hover .t{text-decoration:underline}
+.tline{display:flex;align-items:baseline;gap:9px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink-3);flex:none}
+.t{font-size:16px;font-weight:500;color:var(--ink)}
+.closedtag{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink-3)}
+.bar{display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--line-soft);margin-top:7px;max-width:290px}
+.bar i{display:block;height:100%}
+.bar i.shipped{background:var(--ship-glyph)}
+.bar i.claimed{background:repeating-linear-gradient(90deg,var(--ink-3) 0 3px,transparent 3px 6px)}
+.bar i.in_progress{background:var(--prog)}
+.bar i.filed_not_started{background:var(--ink-3)}
+.bar i.blocked{background:var(--warn-line)}
+.bar i.not_planned{background:var(--line)}
+.bar i.not_applicable{background:var(--line)}
+td.c{text-align:center;padding:5px 4px;vertical-align:middle}
+.cell{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;min-width:74px;min-height:44px;padding:5px 7px;border-radius:8px;border:1px solid transparent}
+.cell:hover{border-color:var(--line)}
+.cell .n{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.15;letter-spacing:-.01em}
+.cell.shipped{background:var(--ship-fill);border-color:var(--ship-line)}
+.cell.shipped .n{color:var(--ship)}
+.cell.claimed{background:transparent;border:1px dashed var(--line)}
+.cell.claimed .n{color:var(--ink-2);font-style:italic}
+.cell.in_progress{background:var(--prog-fill);border-color:var(--prog-line)}
+.cell.in_progress .n{color:var(--prog)}
+.cell.blocked{background:var(--warn-fill);border-color:var(--warn-line)}
+.cell.blocked .n{color:var(--warn-ink)}
+.cell.filed_not_started .n{color:var(--ink-2)}
+.cell.not_planned .n,.cell.unknown .n{color:var(--ink-3)}
+.cell.empty{min-width:74px}
+.cell.empty::after{content:"";width:9px;height:1px;background:var(--line-soft);display:block}
+.cell.not_filed::after{background:var(--line)}
+.flag{position:absolute;top:2px;right:3px;width:8px;height:8px;border-radius:50%;
+  border:2px solid var(--alert);background:var(--ground)}
+.plus{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3)}
+
+/* ---- detail ---- */
+td.detail{padding:0;background:var(--surface);border-top:1px solid var(--line)}
+.panel{padding:18px 16px 20px}
+.panel h3{margin:0 0 4px;font-size:19px;font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:600}
+.panel .plink{font-size:15px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:12px;margin-top:15px}
+.pcard{background:var(--raised);border:1px solid var(--line-soft);border-radius:10px;padding:12px 13px}
+.pcard.review{border-color:var(--alert-line)}
+.pcard h4{margin:0 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;
+  font-family:"Barlow Condensed",Barlow,sans-serif;color:var(--ink-2);display:flex;align-items:center;gap:7px}
+.state{font-size:14px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.ev{display:flex;gap:8px;align-items:baseline;font-size:14px;padding:3px 0;border-top:1px solid var(--line-soft)}
+.ev:first-of-type{border-top:0}
+.ev .role{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);flex:none;width:52px}
+.ev .st{font-size:11px;color:var(--ink-3);flex:none}
+.note{font-size:14px;color:var(--ink-2);margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft)}
+.warnline{margin-top:8px;font-size:14px;color:var(--alert);display:flex;gap:7px;align-items:flex-start}
+.other{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.other h4{margin:0 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;
+  font-family:"Barlow Condensed",Barlow,sans-serif;color:var(--ink-2)}
+.other ul{margin:0;padding-left:20px} .other li{font-size:15px;color:var(--ink-2);margin:3px 0}
+
+/* ---- cards (mobile) ---- */
+.cards{display:none;flex-direction:column;gap:10px;margin-top:10px}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--raised);box-shadow:var(--shadow)}
+.card>.titlebtn{padding:13px 14px}
+.cchips{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 14px 13px}
+.cchip{display:flex;align-items:center;gap:7px;min-height:44px;padding:7px 10px;border-radius:9px;
+  border:1px solid var(--line-soft);background:var(--surface);font-size:15px}
+.cchip .pl{font-weight:500;flex:1}
+.nofiled{padding:0 14px 13px;font-size:14px;color:var(--ink-2)}
+.card .panel{border-top:1px solid var(--line);background:var(--surface);border-radius:0 0 11px 11px}
+
+.section-h{display:flex;align-items:baseline;gap:10px;margin:30px 0 4px}
+.section-h h2{font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:600;font-size:22px;margin:0}
+.section-h .c{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink-3)}
+.toggle{border:1px solid var(--line);border-radius:8px;padding:8px 13px;min-height:44px;background:var(--chip);font-size:15px}
+.empty-state{padding:34px 18px;text-align:center;color:var(--ink-2)}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-2);font-size:15px}
+footer p{margin:0 0 7px;max-width:70ch}
+.stale{margin-top:16px;padding:13px 15px;border-radius:10px;background:var(--warn-fill);
+  border:1px solid var(--warn-line);color:var(--warn-ink);font-size:15px}
+
+@media (max-width:860px){
+  .tablewrap{display:none} .cards{display:flex}
+  h1{font-size:28px} .wrap{padding-block:22px 48px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .panel{animation:fade .16s ease-out}
+  @keyframes fade{from{opacity:.4}to{opacity:1}}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Cross-platform alignment coverage</h1>
+      <p class="sub">Every alignment topic in <a href="https://github.com/meshtastic/design/issues">meshtastic/design</a>, and where each client stands on it. Built from native sub-issues and the tracking lists in the issue bodies.</p>
+    </div>
+    <div class="meta">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="gen">—</span>
+      <button class="themebtn" id="theme" aria-label="Color theme">Theme: Auto</button>
+    </div>
+  </header>
+
+  <div class="attn" id="attn"></div>
+
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search topics, or type an issue number" aria-label="Search topics">
+    <select id="plat" aria-label="Filter by platform"></select>
+    <select id="sort" aria-label="Sort topics">
+      <option value="least">Least complete first</option>
+      <option value="most">Most complete first</option>
+      <option value="recent">Recently updated</option>
+      <option value="number">Issue number</option>
+    </select>
+    <button class="reset" id="closedtog" aria-pressed="false">Show resolved</button>
+    <button class="reset" id="reset" hidden>Clear filters</button>
+  </div>
+  <p class="result" id="result"></p>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="tablewrap">
+    <table>
+      <caption id="cap"></caption>
+      <thead><tr id="head"></tr></thead>
+      <tbody id="body"></tbody>
+    </table>
+  </div>
+  <div class="cards" id="cards"></div>
+
+  <div id="donewrap"></div>
+
+  <div class="stale" id="stale" hidden></div>
+
+  <footer>
+    <p>A cell is wrong? Edit the <strong>Platform Tracking</strong> list in the topic issue, or link the platform issue as a sub-issue. This page rebuilds every six hours and on every issue edit.</p>
+    <p id="prov"></p>
+  </footer>
+</div>
+
+<script>
+let DATA;
+let COLS = [], PL = {};
+const GLYPH={shipped:'✓',claimed:'✓',in_progress:'◐',filed_not_started:'○',
+  not_filed:'',not_planned:'⊘',not_applicable:'—',blocked:'▲',unknown:'?'};
+const WORD={shipped:'Shipped',claimed:'Claimed, nothing linked',in_progress:'In progress',
+  filed_not_started:'Filed, not started',not_filed:'No issue filed',not_planned:'Not planned',
+  not_applicable:'Out of scope',blocked:'Blocked',unknown:'Unresolved'};
+const ORDER=['blocked','in_progress','filed_not_started','claimed','shipped','not_planned','not_applicable','unknown'];
+// Cells are narrow, so they carry a short form; the legend spells it out.
+const SHORT={claimed:'Claimed',not_planned:'Not planned',not_applicable:'Out of scope',unknown:'Unresolved',
+  filed_not_started:'Filed',in_progress:'In progress',shipped:'Shipped'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const short=r=>r.replace('meshtastic/','');
+const DAY=864e5;
+const reviewCount=t=>Object.values(t.cells).reduce((n,c)=>n+(c.disagreements?.length?1:0),0);
+const isStale=t=>t.state==='OPEN'&&(Date.now()-new Date(t.updatedAt))/DAY>30;
+const isUntracked=t=>Object.keys(t.cells).length===0;
+const isBlocked=t=>Object.values(t.cells).some(c=>c.state==='blocked')||t.blockedBy.length>0;
+
+let F={chip:null,q:'',plat:'',sort:'least',open:null,showDone:false,showClosed:false};
+
+/* ---------- filtering ---------- */
+function pass(t){
+  if(!F.showClosed&&t.state==='CLOSED')return false;
+  if(F.chip==='review'&&!reviewCount(t))return false;
+  if(F.chip==='blocked'&&!isBlocked(t))return false;
+  if(F.chip==='untracked'&&!isUntracked(t))return false;
+  if(F.chip==='stale'&&!isStale(t))return false;
+  if(F.plat){const c=t.cells[F.plat]; if(!c||c.state==='shipped')return false;}
+  if(F.q){
+    const q=F.q.toLowerCase().replace('#','');
+    if(!(String(t.id)===q||t.title.toLowerCase().includes(q)||t.titleRaw.toLowerCase().includes(q)))return false;
+  }
+  return true;
+}
+function sorted(list){
+  const s=F.sort;
+  return [...list].sort((a,b)=>
+     s==='most'?b.percent-a.percent||a.id-b.id
+    :s==='recent'?new Date(b.updatedAt)-new Date(a.updatedAt)
+    :s==='number'?b.id-a.id
+    :a.percent-b.percent||Object.keys(b.cells).length-Object.keys(a.cells).length);
+}
+
+/* ---------- pieces ---------- */
+function bar(t){
+  const cs=Object.values(t.cells); if(!cs.length)return '';
+  const n=cs.length;
+  const seg=ORDER.filter(s=>s!=='unknown').map(s=>{
+    const k=cs.filter(c=>c.state===s).length;
+    return k?`<i class="${s}" style="width:${100*k/n}%"></i>`:'';
+  }).join('');
+  return `<div class="bar" aria-hidden="true">${seg}</div>`;
+}
+function cellBtn(t,pid){
+  const c=t.cells[pid];
+  if(!c)return `<td class="c"><span class="cell empty"><span class="vh">${esc(PL[pid])}: not tracked</span></span></td>`;
+  const tr=c.evidence.find(e=>e.role==='tracker')||c.evidence[0];
+  const extra=c.evidence.filter(e=>e.role==='tracker').length-1;
+  const num=tr?`#${tr.ref.split('#')[1]}`:'';
+  const flag=c.disagreements?.length?`<span class="flag" title="Needs review"></span>`:'';
+  const lbl=`${PL[pid]}: ${WORD[c.state]}${num?', issue '+num.slice(1):''}${c.disagreements?.length?', needs review':''}`;
+  if(c.state==='not_filed')
+    return `<td class="c"><button class="cell empty not_filed" data-t="${t.id}" data-p="${pid}" aria-label="${esc(lbl)}">${flag}<span class="vh">${esc(lbl)}</span></button></td>`;
+  return `<td class="c"><button class="cell ${c.state}" data-t="${t.id}" data-p="${pid}" aria-label="${esc(lbl)}">${flag}
+    <span class="g ${c.state}" aria-hidden="true">${GLYPH[c.state]}</span>
+    <span class="n">${num||SHORT[c.state]||WORD[c.state]}</span>
+    ${extra>0?`<span class="plus">+${extra}</span>`:''}</button></td>`;
+}
+function titleCell(t){
+  return `<button class="titlebtn" data-t="${t.id}" aria-expanded="${F.open===t.id}">
+    <span class="tline"><span class="num">#${t.id}</span><span class="t">${esc(t.title)}</span>
+    ${t.state==='CLOSED'?'<span class="closedtag">closed</span>':''}</span>${bar(t)}</button>`;
+}
+function panel(t){
+  const cells=Object.entries(t.cells).sort((a,b)=>ORDER.indexOf(a[1].state)-ORDER.indexOf(b[1].state));
+  const cards=cells.map(([pid,c])=>{
+    const ev=c.evidence.map(e=>`<div class="ev"><span class="role">${e.role==='implementation'?'PR':e.role}</span>
+      <a href="${esc(e.url||'#')}">${esc(short(e.ref))}</a><span class="st">${esc(e.state)}</span></div>`).join('');
+    const link=(c.linkage||[]).map(d=>
+      `<p class="note" style="color:var(--ink-3)">${esc(d.message)} (${esc(short(d.ref||''))})</p>`).join('');
+    const dis=(c.disagreements||[]).map(d=>{
+      const m={checked_but_open:'Marked done, but the linked issue is still open.',
+        checked_but_not_planned:'Marked done, but the linked issue was closed as not planned.',
+        unchecked_but_completed:'Marked open, but the linked issue is closed as completed.',
+        claimed_no_evidence:'Marked done with no issue or PR linked, so this cannot be verified.'}[d.type]||d.type;
+      return `<p class="warnline"><span aria-hidden="true">●</span><span>${esc(m)}</span></p>`;
+    }).join('');
+    const note=c.notes?.[0]?`<p class="note">${esc(c.notes[0].text)}</p>`:'';
+    return `<div class="pcard${c.disagreements?.length?' review':''}">
+      <h4>${esc(PL[pid]||pid)}</h4>
+      <p class="state"><span class="g ${c.state}" aria-hidden="true">${GLYPH[c.state]||'·'}</span>${WORD[c.state]}</p>
+      ${ev}${note}${dis}${link}</div>`;
+  }).join('');
+  const other=t.other.length?`<div class="other"><h4>Other tracked work</h4><ul>${
+    t.other.map(o=>`<li>${o.checked?'✓ ':''}${esc(o.text)}</li>`).join('')}</ul></div>`:'';
+  return `<div class="panel"><h3>${esc(t.title)}</h3>
+    <p class="plink"><a href="${esc(t.url)}">meshtastic/design#${t.id}</a> · tracked via ${esc(t.sources.join(' and '))} · updated ${rel(t.updatedAt)}</p>
+    <div class="pgrid">${cards||'<p class="note">No platform work is linked from this topic yet.</p>'}</div>${other}</div>`;
+}
+function rel(d){
+  const s=(Date.now()-new Date(d))/1000, f=new Intl.RelativeTimeFormat(undefined,{numeric:'auto'});
+  if(s<3600)return f.format(-Math.round(s/60),'minute');
+  if(s<DAY/1000)return f.format(-Math.round(s/3600),'hour');
+  if(s<30*DAY/1000)return f.format(-Math.round(s/86400),'day');
+  return f.format(-Math.round(s/2592000),'month');
+}
+
+/* ---------- render ---------- */
+// Any tracked platform counts, including ones with no column of their own.
+// Keying this on COLS would file a docs-only or protobufs-only topic under
+// "Nothing tracked yet", which is the opposite of what it says.
+const tracked=t=>Object.keys(t.cells).length>0;
+function render(){
+  const all=DATA.topics.filter(pass);
+  const untracked=all.filter(t=>!tracked(t));
+  const rest=all.filter(tracked);
+  const done=rest.filter(t=>t.percent===100);
+  const rows=sorted(rest.filter(t=>t.percent<100));
+
+  document.getElementById('head').innerHTML='<th scope="col">Topic</th>'+COLS.map(p=>{
+    // The denominator is work this platform actually owes, so a declined
+    // issue or an out-of-scope row does not count against it.
+    const OWED=c=>c&&c.state!=='not_planned'&&c.state!=='not_applicable';
+    const n=all.filter(t=>OWED(t.cells[p])).length;
+    const s=all.filter(t=>t.cells[p]?.state==='shipped').length;
+    return `<th scope="col">${esc(PL[p]||p)}<span class="cnt">${s}/${n}</span></th>`;
+  }).join('');
+
+  document.getElementById('body').innerHTML=rows.map(t=>{
+    const open=F.open===t.id;
+    return `<tr class="${open?'open-row':''}"><th class="rowhead" scope="row">${titleCell(t)}</th>${
+      COLS.map(p=>cellBtn(t,p)).join('')}</tr>`+
+      (open?`<tr><td class="detail" colspan="${COLS.length+1}">${panel(t)}</td></tr>`:'');
+  }).join('')||`<tr><td class="empty-state" colspan="${COLS.length+1}">No topics match. <button class="reset" onclick="clearAll()">Clear filters</button></td></tr>`;
+
+  document.getElementById('cards').innerHTML=rows.map(t=>{
+    const open=F.open===t.id;
+    const shown=COLS.filter(p=>t.cells[p]&&t.cells[p].state!=='not_filed');
+    const none=COLS.filter(p=>t.cells[p]&&t.cells[p].state==='not_filed').map(p=>PL[p]);
+    return `<div class="card">${titleCell(t)}
+      ${shown.length?`<div class="cchips">${shown.map(p=>{const c=t.cells[p];
+        const tr=c.evidence.find(e=>e.role==='tracker')||c.evidence[0];
+        return `<button class="cchip" data-t="${t.id}" data-p="${p}">
+          <span class="g ${c.state}" aria-hidden="true">${GLYPH[c.state]||'·'}</span>
+          <span class="pl">${esc(PL[p])}</span>
+          <span class="mono" style="font-size:13px;color:var(--ink-3)">${tr?'#'+tr.ref.split('#')[1]:(SHORT[c.state]||WORD[c.state])}</span>
+        </button>`}).join('')}</div>`:''}
+      ${none.length?`<p class="nofiled">No issue filed for ${esc(none.join(', '))}.</p>`:''}
+      ${open?panel(t):''}</div>`;
+  }).join('')||`<div class="empty-state">No topics match.</div>`;
+
+  document.getElementById('cap').textContent=
+    `${rows.length} topic${rows.length===1?'':'s'}, ${COLS.length} client platforms. Select a topic to see the issues and pull requests behind it.`;
+  document.getElementById('result').textContent=describe(rows.length,done.length);
+  document.getElementById('reset').hidden=!(F.chip||F.q||F.plat);
+
+  let extra='';
+  if(done.length) extra+=
+    `<div class="section-h"><h2>Complete everywhere</h2><span class="c">${done.length}</span>
+     <button class="toggle" id="dtog" aria-expanded="${F.showDone}">${F.showDone?'Hide':'Show'}</button></div>`+
+    (F.showDone?`<div class="cards" style="display:flex">${sorted(done).map(t=>
+      `<div class="card">${titleCell(t)}${F.open===t.id?panel(t):''}</div>`).join('')}</div>`:'');
+  if(untracked.length) extra+=
+    `<div class="section-h"><h2>Nothing tracked yet</h2><span class="c">${untracked.length}</span></div>
+     <p class="result">A spec exists, but no platform issue is linked and the body has no tracking list.</p>
+     <div class="cards" style="display:flex">${sorted(untracked).map(t=>
+      `<div class="card">${titleCell(t)}${F.open===t.id?panel(t):''}</div>`).join('')}</div>`;
+  document.getElementById('donewrap').innerHTML=extra;
+
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(F.chip===c.dataset.k)));
+}
+function describe(n,d){
+  const bits=[];
+  if(F.chip)bits.push({review:'that need review',blocked:'that are blocked',
+    untracked:'with nothing tracked yet',stale:'not touched in 30 days'}[F.chip]);
+  if(F.plat)bits.push(`where ${PL[F.plat]} has not shipped`);
+  if(F.q)bits.push(`matching “${F.q}”`);
+  const scope=F.showClosed?'open and resolved':'open';
+  return `Showing ${n} ${scope} topic${n===1?'':'s'} ${bits.join(', ')||'with work outstanding'}${d?`, plus ${d} complete everywhere`:''}.`;
+}
+function clearAll(){F.chip=null;F.q='';F.plat='';document.getElementById('q').value='';
+  document.getElementById('plat').value='';writeHash();render();}
+
+/* ---------- chips ---------- */
+function chips(){
+  const T=DATA.topics.filter(t=>t.state==='OPEN');
+  const defs=[
+    {k:'review',label:'Needs review',cls:'alert',n:T.filter(t=>reviewCount(t)).length},
+    {k:'blocked',label:'Blocked',cls:'warn',n:T.filter(isBlocked).length},
+    {k:'untracked',label:'Nothing tracked',cls:'',n:T.filter(isUntracked).length},
+    {k:'stale',label:'Stale 30d+',cls:'',n:T.filter(isStale).length},
+  ].filter(d=>d.n>0);
+  document.getElementById('attn').innerHTML=
+    `<span class="chip" style="cursor:default"><span class="k">Open topics</span><span class="v mono">${T.length}</span></span>`+
+    defs.map(d=>`<button class="chip ${d.cls}" data-k="${d.k}" aria-pressed="false">
+      <span class="k">${d.label}</span><span class="v mono">${d.n}</span></button>`).join('');
+}
+
+/* ---------- hash ---------- */
+function writeHash(){
+  const p=new URLSearchParams();
+  if(F.open)p.set('t',F.open); if(F.chip)p.set('f',F.chip);
+  if(F.plat)p.set('p',F.plat); if(F.q)p.set('q',F.q);
+  history.replaceState(null,'',p.toString()?'#'+p:location.pathname);
+}
+function readHash(){
+  const p=new URLSearchParams(location.hash.slice(1));
+  F.open=p.get('t')?+p.get('t'):null; F.chip=p.get('f'); F.plat=p.get('p')||'';
+  F.q=p.get('q')||'';
+  document.getElementById('q').value=F.q; document.getElementById('plat').value=F.plat;
+}
+
+/* ---------- init ---------- */
+window.clearAll=clearAll;
+async function boot(){
+  try{
+    const r=await fetch('data.json',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    DATA=await r.json();
+  }catch(err){
+    document.getElementById('result').textContent=
+      'Could not load the dashboard data. The updater may not have run yet.';
+    return;
+  }
+function buildControls(){
+document.getElementById('plat').innerHTML='<option value="">All platforms</option>'+
+  COLS.map(p=>`<option value="${p}">${esc(PL[p])} not shipped</option>`).join('');
+document.getElementById('legend').innerHTML=
+  ['shipped','claimed','in_progress','filed_not_started','blocked','not_planned','not_applicable'].map(s=>
+   `<span><span class="g ${s}" aria-hidden="true">${GLYPH[s]}</span>${WORD[s]}</span>`).join('')+
+  `<span><span class="flag" style="position:static;display:inline-block"></span>Needs review</span>`+
+  `<span>Blank means no issue is filed.</span>`;
+}
+  COLS = DATA.platforms.filter(p=>p.column).map(p=>p.id);
+  PL = Object.fromEntries(DATA.platforms.map(p=>[p.id,p.label]));
+  buildControls();
+  chips();
+  readHash();
+  render();
+  stamp();
+}
+
+function stamp(){
+const gen=new Date(DATA.generatedAt);
+document.getElementById('gen').textContent='Updated '+rel(DATA.generatedAt);
+document.getElementById('gen').title=gen.toISOString();
+document.getElementById('prov').innerHTML=
+  `Generated from ${DATA.stats.issuesScanned} issues in ${esc(DATA.repo)} — ${DATA.stats.topics} alignment topics, `+
+  `${DATA.stats.rows} tracking rows, ${DATA.stats.refsResolved} of ${DATA.stats.refsNeeded} references resolved.`;
+if((Date.now()-gen)/DAY>0.5){
+  const s=document.getElementById('stale'); s.hidden=false;
+  s.textContent=`This data is ${rel(DATA.generatedAt).replace('ago','old')}. The updater may not have run. Check the workflow run in the design repository.`;
+}
+}
+boot();
+
+document.addEventListener('click',e=>{
+  const chip=e.target.closest('.chip[data-k]');
+  if(chip){F.chip=F.chip===chip.dataset.k?null:chip.dataset.k;writeHash();render();return;}
+  const tb=e.target.closest('.titlebtn');
+  if(tb){const id=+tb.dataset.t;F.open=F.open===id?null:id;writeHash();render();return;}
+  const cell=e.target.closest('.cell,.cchip');
+  if(cell&&cell.dataset.t){F.open=+cell.dataset.t;writeHash();render();
+    const el=document.querySelector('.pcard');el&&el.scrollIntoView({block:'nearest'});return;}
+  if(e.target.id==='dtog'){F.showDone=!F.showDone;render();return;}
+  if(e.target.id==='closedtog'){F.showClosed=!F.showClosed;
+    e.target.setAttribute('aria-pressed',String(F.showClosed));
+    e.target.textContent=F.showClosed?'Hide resolved':'Show resolved';render();return;}
+  if(e.target.id==='reset'){clearAll();return;}
+});
+let qt;document.getElementById('q').addEventListener('input',e=>{
+  clearTimeout(qt);qt=setTimeout(()=>{F.q=e.target.value.trim();writeHash();render();},140);});
+document.getElementById('plat').addEventListener('change',e=>{F.plat=e.target.value;writeHash();render();});
+document.getElementById('sort').addEventListener('change',e=>{F.sort=e.target.value;render();});
+
+const tb=document.getElementById('theme');
+const modes=['Auto','Light','Dark'];let mi=0;
+tb.addEventListener('click',()=>{mi=(mi+1)%3;const m=modes[mi];
+  if(m==='Auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',m.toLowerCase());
+  tb.textContent='Theme: '+m;});
+</script>
+</body>
+</html>
