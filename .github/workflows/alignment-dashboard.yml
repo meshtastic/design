@@ -22,17 +22,16 @@ on:
 permissions:
   contents: read
 
-# Editing several issues in a row fires several runs, and every run rebuilds
-# the same data from scratch, so superseding one in flight loses nothing and
-# gets the final state published sooner. The deploy job opts out of this below:
-# a Pages deployment that is already running should be left to finish.
-concurrency:
-  group: alignment-dashboard
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Editing several issues fires several runs, and each rebuilds the same
+    # data from scratch, so superseding one in flight loses nothing. This has
+    # to sit on the job: at workflow scope it would cancel the whole run,
+    # deploy included, and a job-level group cannot exempt a job from that.
+    concurrency:
+      group: alignment-dashboard-build
+      cancel-in-progress: true
     permissions:
       contents: write
       issues: read
@@ -141,8 +140,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    # Its own group, so a superseding build cancels the build but never a
-    # deployment that is already publishing.
+    # A publishing deployment is left to finish.
     concurrency:
       group: alignment-dashboard-deploy
       cancel-in-progress: false
