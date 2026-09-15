@@ -48,7 +48,7 @@ query($owner:String!, $name:String!, $cursor:String) {
           nodes {
             %(fields)s
             subIssuesSummary { total completed }
-            subIssues(first:10) { totalCount nodes { %(fields)s } }
+            subIssues(first:10) { totalCount nodes { %(fields)s subIssuesSummary { total } } }
           }
         }
       }
@@ -193,8 +193,14 @@ def walk_sub_issues(node, seen, path, findings, topic_number):
             continue
         out.append(child)
         out.extend(walk_sub_issues(child, seen, path | {key}, findings, topic_number))
-    total = (node.get("subIssues") or {}).get("totalCount", 0)
-    got = len((node.get("subIssues") or {}).get("nodes", []))
+    # Two ways to come up short: a connection capped by its page size, and a
+    # node at the deepest level fetched, whose children were never requested.
+    # subIssuesSummary catches the second, so a deeper nest is reported rather
+    # than disappearing without a trace.
+    connection = node.get("subIssues") or {}
+    total = max(connection.get("totalCount", 0),
+                (node.get("subIssuesSummary") or {}).get("total", 0))
+    got = len(connection.get("nodes", []))
     if total > got:
         findings.append({
             "topic": topic_number, "type": "truncated", "severity": "warning",
