@@ -1,3 +1,8 @@
+---
+name: update-design-audits
+description: Use when asked to update or refresh the cross-platform design audit files in standards/audits/ with recent Meshtastic-Apple and Meshtastic-Android PR activity, especially anything tagged [ALIGNMENT].
+---
+
 # Skill: Update Design Audit Files
 
 ## When to use this skill
