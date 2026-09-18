@@ -1,0 +1,1173 @@
+{
+ "meshtastic/Meshtastic-Android#3508": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[Feature Request]: add favorite bool to nodedb reset",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/3508"
+ },
+ "meshtastic/Meshtastic-Android#3610": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[Feature Request]: Add request telemetry feature to android app",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/3610"
+ },
+ "meshtastic/Meshtastic-Android#3622": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[Bug]: CLIENT_BASE DMs should not auto-favorite",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/3622"
+ },
+ "meshtastic/Meshtastic-Android#3656": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[Feature Request]: Implement Relay Node visibility for incoming messages",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/3656"
+ },
+ "meshtastic/Meshtastic-Android#3768": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "not_planned",
+  "title": "[Feature Request]: Client notification messages for different public key and failed PKI decryption",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/3768"
+ },
+ "meshtastic/Meshtastic-Android#4163": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat: Add Status Message module support",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/4163"
+ },
+ "meshtastic/Meshtastic-Android#4577": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(settings): Allow clearing the node status message",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/4577"
+ },
+ "meshtastic/Meshtastic-Android#4597": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "not_planned",
+  "title": "[Feature Request]: Remove number of sats",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/4597"
+ },
+ "meshtastic/Meshtastic-Android#5070": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(settings): hide Status Message config until firmware v2.8.0",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/5070"
+ },
+ "meshtastic/Meshtastic-Android#5966": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[2.8.0] - XEdDSA Public Key Signing",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/5966"
+ },
+ "meshtastic/Meshtastic-Android#5968": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[2.8.0] - Waypoint Geofences",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/5968"
+ },
+ "meshtastic/Meshtastic-Android#5976": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(security): surface XEdDSA packet signing in node & messaging UI",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/5976"
+ },
+ "meshtastic/Meshtastic-Android#5980": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(security): make XEdDSA signing shield green & prominent",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/5980"
+ },
+ "meshtastic/Meshtastic-Android#5985": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(ui): StatusSurface AA legibility + node-details signing/transport polish",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/5985"
+ },
+ "meshtastic/Meshtastic-Android#5987": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/5987"
+ },
+ "meshtastic/Meshtastic-Android#6014": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat: Waypoint geofences (editor, map overlays, alert engine) ",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6014"
+ },
+ "meshtastic/Meshtastic-Android#6117": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(geofence): restrict crossing alerts to creator, add per-geofence opt-in",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6117"
+ },
+ "meshtastic/Meshtastic-Android#6136": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(map): Site Planner coverage integration \u2014 import + estimate",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6136"
+ },
+ "meshtastic/Meshtastic-Android#6138": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "Map-layer parity for F-Droid (OSMdroid): share layer UI + logic in common source",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6138"
+ },
+ "meshtastic/Meshtastic-Android#6148": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(map): F-Droid map-layer parity \u2014 share layer UI + logic in common source (#6138)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6148"
+ },
+ "meshtastic/Meshtastic-Android#6162": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat: wire up event-firmware metadata API (offline-first) + post-event firmware reminder",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6162"
+ },
+ "meshtastic/Meshtastic-Android#6163": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat: event-theme fonts \u2014 capture + apply app-wide (Google flavor) with sheet opt-out",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6163"
+ },
+ "meshtastic/Meshtastic-Android#6176": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[2.8.0] Configure packet authenticity policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6176"
+ },
+ "meshtastic/Meshtastic-Android#6183": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "[2.8.0] Select signed plaintext transport for licensed remote Admin",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6183"
+ },
+ "meshtastic/Meshtastic-Android#6304": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "refactor(map): migrate custom overlays to the maps-utils 5.0 data layer",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6304"
+ },
+ "meshtastic/Meshtastic-Android#6324": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Align channel QR share/import contract with design #128",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6324"
+ },
+ "meshtastic/Meshtastic-Android#6331": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[ALIGNMENT]: NFC tag feature-set \u2014 Design Standards v1.4 conformance polish",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6331"
+ },
+ "meshtastic/Meshtastic-Android#6332": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "Align NFC contact import and share dialogs with Design Standards v1.4",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6332"
+ },
+ "meshtastic/Meshtastic-Android#6676": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(ui): move event firmware branding off the app bar",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6676"
+ },
+ "meshtastic/Meshtastic-Android#6931": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Mesh Beacon config editor (design#140)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6931"
+ },
+ "meshtastic/Meshtastic-Android#6932": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "[ALIGNMENT]: Status Message editing (design#115)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/6932"
+ },
+ "meshtastic/Meshtastic-Android#6951": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "refactor(settings): edit the status message on the user screen",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6951"
+ },
+ "meshtastic/Meshtastic-Android#6958": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(map): give every map layer its own opacity slider",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6958"
+ },
+ "meshtastic/Meshtastic-Android#7047": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(node): add an update-status shortcut to the local node menu",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7047"
+ },
+ "meshtastic/Meshtastic-Android#7053": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "Mark nodes not heard since the LoRa config changed",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7053"
+ },
+ "meshtastic/Meshtastic-Android#7117": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(node): signed and verified indicators in place of the PKI lock",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7117"
+ },
+ "meshtastic/Meshtastic-Android#7118": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(node): keep a contact's public key when a different one arrives",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7118"
+ },
+ "meshtastic/Meshtastic-Android#7162": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(messaging): key conversations to channel identity, not slot index",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7162"
+ },
+ "meshtastic/Meshtastic-Android#7163": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "Messages from a replaced channel appear under the new channel",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7163"
+ },
+ "meshtastic/Meshtastic-Apple#1498": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "\ud83d\udc1e [Bug]: CLIENT_BASE DMs should not auto-favorite",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/1498"
+ },
+ "meshtastic/Meshtastic-Apple#1601": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[Feature Request]: Remove number of sats",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/1601"
+ },
+ "meshtastic/Meshtastic-Apple#1983": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Harden channel QR import and sharing",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1983"
+ },
+ "meshtastic/Meshtastic-Apple#1993": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(security): surface XEdDSA packet signing in node & messaging UI",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1993"
+ },
+ "meshtastic/Meshtastic-Apple#1996": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/1996"
+ },
+ "meshtastic/Meshtastic-Apple#2001": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat: geofence support on waypoints (circle + bounding box)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2001"
+ },
+ "meshtastic/Meshtastic-Apple#2005": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[2.8.0] - Waypoint Geofences",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2005"
+ },
+ "meshtastic/Meshtastic-Apple#2033": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Add firmware update notifications",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2033"
+ },
+ "meshtastic/Meshtastic-Apple#2037": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Render GeoJSON overlays that style with color/rgb()",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2037"
+ },
+ "meshtastic/Meshtastic-Apple#2056": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "fix(map): import GeoJSON handed to the app via Open In / Share Sheet",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2056"
+ },
+ "meshtastic/Meshtastic-Apple#2058": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "Site Planner coverage estimate (outbound) \u2014 headless WKWebView bridge round-trip",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2058"
+ },
+ "meshtastic/Meshtastic-Apple#2060": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[ALIGNMENT] Event firmware metadata (design#120)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2060"
+ },
+ "meshtastic/Meshtastic-Apple#2065": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[2.8.0] Configure packet authenticity policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2065"
+ },
+ "meshtastic/Meshtastic-Apple#2068": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Support signed remote Admin in licensed mode",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2068"
+ },
+ "meshtastic/Meshtastic-Apple#2081": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(map): in-app Site Planner coverage estimate round-trip (#2058)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2081"
+ },
+ "meshtastic/Meshtastic-Apple#2082": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(event-firmware): off-device event-firmware metadata pipeline (#2060)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2082"
+ },
+ "meshtastic/Meshtastic-Apple#2126": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "Align channel QR Add semantics and import lifecycle with design #128",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2126"
+ },
+ "meshtastic/Meshtastic-Apple#2135": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[ALIGNMENT]: NFC tag feature-set \u2014 reach cross-platform parity with Android",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2135"
+ },
+ "meshtastic/Meshtastic-Apple#2136": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Align NFC tag support with Android and Design Standards v1.4",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2136"
+ },
+ "meshtastic/Meshtastic-Apple#2211": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(waypoints): local-only waypoints + delete waypoints you can't edit",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2211"
+ },
+ "meshtastic/Meshtastic-Apple#2222": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(events): add native firmware edition branding",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2222"
+ },
+ "meshtastic/Meshtastic-Apple#2248": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "Geofences: local notify opt-in for received waypoints (design#114 notification-scope model)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2248"
+ },
+ "meshtastic/Meshtastic-Apple#2249": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat(waypoints): local notify opt-in for received geofences (design#114)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2249"
+ },
+ "meshtastic/Meshtastic-Apple#2283": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Event mode: bigger connect logo, contrast-safe header, markdown release notes",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2283"
+ },
+ "meshtastic/Meshtastic-Apple#2285": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "About page: rotating hardware carousel with the meshtastic.org featured devices",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2285"
+ },
+ "meshtastic/Meshtastic-Apple#2323": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Hold the event sheet until onboarding finishes",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2323"
+ },
+ "meshtastic/Meshtastic-Apple#2361": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Mesh Beacon config editor (design#140)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2361"
+ },
+ "meshtastic/Meshtastic-Apple#2362": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Status Message editing (design#115)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2362"
+ },
+ "meshtastic/Meshtastic-Apple#2417": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Don't offer direct messages to nodes we have no public key for",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2417"
+ },
+ "meshtastic/Meshtastic-Apple#2427": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Mark nodes not heard since the LoRa config changed",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2427"
+ },
+ "meshtastic/Meshtastic-Apple#2449": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show signing state instead of the PKI locks for 2.8 nodes",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2449"
+ },
+ "meshtastic/Meshtastic-Apple#2452": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show signing once, in the icon beside the name",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2452"
+ },
+ "meshtastic/Meshtastic-Apple#2466": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Draw the signed-node badge on the Meshtastic radio",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2466"
+ },
+ "meshtastic/Meshtastic-Apple#2495": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Key conversations to channel identity, not slot index",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2495"
+ },
+ "meshtastic/design#133": {
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "docs(events): define signed event firmware OTA contract",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/design/pull/133"
+ },
+ "meshtastic/design#27": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[ALIGNMENT]: Cross platform private/pub key pair backup and restoration flow",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/27"
+ },
+ "meshtastic/design#30": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[Feature Request]: Assign battery chemistry to INA sensor to track alternate battery types",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/30"
+ },
+ "meshtastic/design#35": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[ALIGNMENT]: Tapback/Reaction Notifications and behavior",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/35"
+ },
+ "meshtastic/design#37": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[FEAT]: Preserve Favorite nodes when NodeDb is reset",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/37"
+ },
+ "meshtastic/design#39": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[ALIGNMENT]: Clients should auto-favorite nodes on direct message except for CLIENT_BASE",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/39"
+ },
+ "meshtastic/design#40": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[FEAT]: Hide settings when node `is_managed`",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/40"
+ },
+ "meshtastic/design#45": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "not_planned",
+  "title": "[Feature Request]: Allow message editing",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/45"
+ },
+ "meshtastic/design#51": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[Feature Request]: Display raw particulate sensor data",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/51"
+ },
+ "meshtastic/design#54": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[ALIGNMENT]: AQI Display and Calculation standards for improved air quality telemetry project",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/54"
+ },
+ "meshtastic/design#70": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "not_planned",
+  "title": "[Feature Request]: add nodes to ignore/favorite list remotely",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/70"
+ },
+ "meshtastic/design#71": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "not_planned",
+  "title": "[Feature Request]: Hide settings when node is_managed",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/71"
+ },
+ "meshtastic/design#75": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Allow full-text search in messages",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/75"
+ },
+ "meshtastic/design#79": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[Feature Request]: Displaying signal strength based on incoming packets.",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/79"
+ },
+ "meshtastic/design#83": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[Feature Request]: \"Translate this message\" for selected message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/83"
+ },
+ "meshtastic/design#84": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[Feature Request]: intelligent prefixes for large values in Environment Metrics",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/84"
+ },
+ "meshtastic/design#85": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[Feature Request]: make node list sort filter clearer, more comprehensive",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/85"
+ },
+ "meshtastic/design#86": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[Feature Request]: Adjustable font size on Conversations view",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/86"
+ },
+ "meshtastic/design#87": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[Feature Request]: Configurable wind speed units",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/87"
+ },
+ "meshtastic/device-ui#266": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "Show actual message status",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/266"
+ },
+ "meshtastic/device-ui#331": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[2.8.0] XEdDSA packet signing UI",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/331"
+ },
+ "meshtastic/device-ui#332": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/332"
+ },
+ "meshtastic/device-ui#333": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "not_planned",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/333"
+ },
+ "meshtastic/device-ui#334": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[Alignment]: Standardize MUI/T-Deck message status wording and presentation",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/334"
+ },
+ "meshtastic/device-ui#336": {
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "feat: align MUI message status wording",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/device-ui/pull/336"
+ },
+ "meshtastic/device-ui#340": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[2.8.0] Configure packet authenticity policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/340"
+ },
+ "meshtastic/device-ui#350": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "Make TFT channel QR sharing interoperable with design #128",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/350"
+ },
+ "meshtastic/device-ui#351": {
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "feat: share channels with interoperable QR URLs",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/device-ui/pull/351"
+ },
+ "meshtastic/device-ui#387": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "Grey nodes not heard on the current LoRa config",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/387"
+ },
+ "meshtastic/device-ui#402": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[2.8.0] - Node security indicators (signed and verified)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/402"
+ },
+ "meshtastic/device-ui#403": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "[2.8.0] - Waypoint geofence map overlay",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/403"
+ },
+ "meshtastic/firmware#10800": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "completed",
+  "title": "[2.8.0] XEdDSA packet signing UI (BaseUI)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/10800"
+ },
+ "meshtastic/firmware#10806": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "completed",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/10806"
+ },
+ "meshtastic/firmware#10811": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "open",
+  "title": "[2.8.0] - Waypoint Geofences",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/10811"
+ },
+ "meshtastic/firmware#10841": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "XEdDSA packet signing UI (BaseUI)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/10841"
+ },
+ "meshtastic/firmware#10920": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "Add waypoint & geofence support with notifications for BaseUI and InkHUD",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/10920"
+ },
+ "meshtastic/firmware#10963": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "completed",
+  "title": "[2.8.0] Enforce configurable packet authenticity policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/10963"
+ },
+ "meshtastic/firmware#10969": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "Sign plaintext packets in licensed mode",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/10969"
+ },
+ "meshtastic/firmware#10972": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "open",
+  "title": "Authorize signed plaintext remote admin in licensed mode",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/10972"
+ },
+ "meshtastic/firmware#11745": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "completed",
+  "title": "Track whether each node has been heard on the current LoRa config",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/11745"
+ },
+ "meshtastic/firmware#11811": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "fix(nodedb): track whether each node was heard on the current LoRa config",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/11811"
+ },
+ "meshtastic/firmware#7236": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "open",
+  "title": "[Feature Request]: NFC tag interface for quick onboarding of stations",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/7236"
+ },
+ "meshtastic/firmware#8556": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "completed",
+  "title": "[Bug]: CLIENT_BASE DMs should not auto-favorite",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/8556"
+ },
+ "meshtastic/firmware#9700": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "not_planned",
+  "title": "[Feature Request]: Remove number of sats from position",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/firmware/issues/9700"
+ },
+ "meshtastic/meshtastic#2649": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/meshtastic",
+  "state": "open",
+  "title": "Document presets, and why the node list can show unreachable nodes",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/meshtastic/issues/2649"
+ },
+ "meshtastic/meshtastic-site-planner#70": {
+  "renamedFrom": null,
+  "repo": "meshtastic/meshtastic-site-planner",
+  "state": "merged",
+  "title": "Style coverage GeoJSON with simplestyle-spec (fill/stroke)",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/meshtastic-site-planner/pull/70"
+ },
+ "meshtastic/meshtastic-site-planner#72": {
+  "renamedFrom": null,
+  "repo": "meshtastic/meshtastic-site-planner",
+  "state": "merged",
+  "title": "feat(export): send coverage GeoJSON straight to the Meshtastic app",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/meshtastic-site-planner/pull/72"
+ },
+ "meshtastic/meshtastic-site-planner#73": {
+  "renamedFrom": null,
+  "repo": "meshtastic/meshtastic-site-planner",
+  "state": "merged",
+  "title": "feat: app hand-off \u2014 query prefill, autorun on load, source metadata in export",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/meshtastic-site-planner/pull/73"
+ },
+ "meshtastic/meshtastic-site-planner#74": {
+  "renamedFrom": null,
+  "repo": "meshtastic/meshtastic-site-planner",
+  "state": "merged",
+  "title": "feat: native coverage bridge + full flat query contract for the app hand-off",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/meshtastic-site-planner/pull/74"
+ },
+ "meshtastic/protobufs#1060": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/protobufs",
+  "state": "completed",
+  "title": "Add NodeInfo.heard_on_current_lora",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/protobufs/issues/1060"
+ },
+ "meshtastic/protobufs#982": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/protobufs",
+  "state": "completed",
+  "title": "[2.8.0] Add configurable packet signature policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/protobufs/issues/982"
+ },
+ "meshtastic/standalone-ui#35": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/standalone-ui",
+  "state": "open",
+  "title": "[2.8.0] XEdDSA packet signing UI",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/standalone-ui/issues/35"
+ },
+ "meshtastic/standalone-ui#36": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/standalone-ui",
+  "state": "open",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/standalone-ui/issues/36"
+ },
+ "meshtastic/standalone-ui#37": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/standalone-ui",
+  "state": "open",
+  "title": "[2.8.0] - Waypoint Geofences",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/standalone-ui/issues/37"
+ },
+ "meshtastic/standalone-ui#39": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/standalone-ui",
+  "state": "open",
+  "title": "[2.8.0] Add packet authenticity policy settings source",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/standalone-ui/issues/39"
+ },
+ "meshtastic/web#1013": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "completed",
+  "title": "[Feature Request]: Remove number of sats from UI",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1013"
+ },
+ "meshtastic/web#1188": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[2.8.0] XEdDSA packet signing UI",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1188"
+ },
+ "meshtastic/web#1193": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[2.8.0] - Status Message",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1193"
+ },
+ "meshtastic/web#1227": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[2.8.0] - Waypoint Geofences",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1227"
+ },
+ "meshtastic/web#1260": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[2.8.0] Configure packet authenticity policy",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1260"
+ },
+ "meshtastic/web#1313": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "Implement interoperable and safe channel QR sharing/importing for design #128",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1313"
+ },
+ "meshtastic/web#932": {
+  "assigned": true,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "not_planned",
+  "title": "[Bug]:  Clients / apps should auto-favorite nodes upon direct-message except for CLIENT_BASE nodes",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/932"
+ },
+ "meshtastic/web#949": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[Feature Request]: Relay Node ",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/949"
+ }
+}
