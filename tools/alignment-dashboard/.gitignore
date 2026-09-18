@@ -1,0 +1,5 @@
+site/data.json
+site/history.json
+refs-cache.json
+__pycache__/
+*.pyc

@@ -1,0 +1,152 @@
+name: Alignment dashboard
+
+# Rebuilds the cross-platform alignment dashboard and publishes it to Pages.
+# Issue edits in this repository rebuild within a minute; work in the client
+# repositories does not notify us, so the schedule is the real guarantee.
+
+on:
+  schedule:
+    # Offset off the hour to miss the top-of-hour queue on hosted runners.
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+  issues:
+    types: [opened, closed, reopened, edited, labeled, unlabeled]
+  push:
+    branches: [master]
+    paths:
+      - "tools/alignment-dashboard/**"
+      - ".github/workflows/alignment-dashboard.yml"
+
+# Least privilege by default. The build job reads, and only the steps that
+# publish are granted more, in the job that needs it.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Editing several issues fires several runs, and each rebuilds the same
+    # data from scratch, so superseding one in flight loses nothing. This has
+    # to sit on the job: at workflow scope it would cancel the whole run,
+    # deploy included, and a job-level group cannot exempt a job from that.
+    concurrency:
+      group: alignment-dashboard-build
+      cancel-in-progress: true
+    permissions:
+      contents: write
+      issues: read
+    outputs:
+      publish: ${{ steps.gate.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Restore the previous data and reference cache
+        run: |
+          set -euo pipefail
+          mkdir -p previous
+          if git fetch --depth=1 origin dashboard-data 2>/dev/null; then
+            git show origin/dashboard-data:data.json > previous/data.json || true
+            git show origin/dashboard-data:refs-cache.json \
+              > tools/alignment-dashboard/refs-cache.json || true
+            git show origin/dashboard-data:history.json \
+              > tools/alignment-dashboard/site/history.json || true
+          else
+            echo "No dashboard-data branch yet; this is the first run."
+          fi
+
+      - name: Run the parser tests
+        working-directory: tools/alignment-dashboard
+        run: python3 -m unittest discover -s tests
+
+      - name: Build data.json
+        working-directory: tools/alignment-dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 generate.py \
+            --out site/data.json \
+            --cache refs-cache.json \
+            --history site/history.json
+
+      - name: Refuse to publish a truncated dataset
+        id: gate
+        run: |
+          set -euo pipefail
+          new=tools/alignment-dashboard/site/data.json
+          old=previous/data.json
+          if [ ! -s "$old" ]; then
+            echo "First run, nothing to compare against."
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 - "$old" "$new" <<'PY'
+          import json, sys
+          old, new = (json.load(open(p)) for p in sys.argv[1:3])
+          for key in ("topics", "rows"):
+              before, after = old["stats"][key], new["stats"][key]
+              if before and after < before * 0.9:
+                  sys.exit(f"{key} fell from {before} to {after}, more than 10 percent. "
+                           "Refusing to publish; the last good data stays live.")
+          print("Dataset size is within 10 percent of the previous run.")
+          PY
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit the data to the dashboard-data branch
+        if: steps.gate.outputs.publish == 'true'
+        run: |
+          set -euo pipefail
+          # A dedicated branch keeps hundreds of automated commits off master,
+          # while still giving the data a history: git log -p shows the run in
+          # which any cell changed.
+          src="$PWD/tools/alignment-dashboard"
+          url="https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          work="$(mktemp -d)"
+
+          # Append to the branch rather than recreating it, so the data keeps a
+          # history. A shallow clone is enough to commit on top.
+          if ! git clone -q --branch dashboard-data --depth 1 "$url" "$work" 2>/dev/null; then
+            git init -q -b dashboard-data "$work"
+          fi
+
+          cp "$src/site/data.json" "$work/"
+          [ -f "$src/site/history.json" ] && cp "$src/site/history.json" "$work/"
+          [ -f "$src/refs-cache.json" ] && cp "$src/refs-cache.json" "$work/"
+
+          cd "$work"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed since the last run."
+            exit 0
+          fi
+          git commit -q -m "Alignment dashboard data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q "$url" dashboard-data
+
+      # No configure-pages step: the page references data.json relatively and
+      # needs no base URL, so its only effect would be to want pages: write in
+      # a job that otherwise does not.
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.gate.outputs.publish == 'true'
+        with:
+          path: tools/alignment-dashboard/site
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    # A publishing deployment is left to finish.
+    concurrency:
+      group: alignment-dashboard-deploy
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

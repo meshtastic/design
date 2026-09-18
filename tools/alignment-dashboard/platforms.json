@@ -1,0 +1,139 @@
+{
+  "_comment": "Platform normalization for the alignment dashboard. Add aliases here rather than in code. Labels are matched case-insensitively, exactly first and then by longest prefix on a word boundary.",
+  "platforms": [
+    {
+      "id": "android",
+      "label": "Android",
+      "repos": [
+        "meshtastic/Meshtastic-Android"
+      ],
+      "column": true
+    },
+    {
+      "id": "apple",
+      "label": "Apple",
+      "repos": [
+        "meshtastic/Meshtastic-Apple"
+      ],
+      "column": true
+    },
+    {
+      "id": "web",
+      "label": "Web",
+      "repos": [
+        "meshtastic/web"
+      ],
+      "column": true
+    },
+    {
+      "id": "firmware",
+      "label": "Firmware",
+      "repos": [
+        "meshtastic/firmware"
+      ],
+      "column": true
+    },
+    {
+      "id": "mui",
+      "label": "Device UI",
+      "repos": [
+        "meshtastic/device-ui",
+        "meshtastic/standalone-ui"
+      ],
+      "column": true
+    },
+    {
+      "id": "protocol",
+      "label": "Protobufs",
+      "repos": [
+        "meshtastic/protobufs"
+      ],
+      "column": false
+    },
+    {
+      "id": "docs",
+      "label": "Docs",
+      "repos": [
+        "meshtastic/meshtastic"
+      ],
+      "column": false
+    },
+    {
+      "id": "planner",
+      "label": "Planner",
+      "repos": [
+        "meshtastic/meshtastic-site-planner"
+      ],
+      "column": false
+    }
+  ],
+  "aliases": {
+    "android": "android",
+    "meshtastic-android": "android",
+    "apple": "apple",
+    "ios": "apple",
+    "ipados": "apple",
+    "macos": "apple",
+    "meshtastic-apple": "apple",
+    "apple (ios, ipados, macos)": "apple",
+    "web": "web",
+    "meshtastic/web": "web",
+    "meshtastic web": "web",
+    "firmware": "firmware",
+    "baseui": "firmware",
+    "base ui": "firmware",
+    "mui": "mui",
+    "device ui": "mui",
+    "device-ui": "mui",
+    "standalone-ui": "mui",
+    "mui / device-ui": "mui",
+    "protobufs": "protocol",
+    "protocol": "protocol",
+    "documentation": "docs",
+    "docs": "docs",
+    "site planner": "planner",
+    "planner": "planner",
+    "meshtastic apple": "apple",
+    "meshtastic android": "android",
+    "meshtastic firmware": "firmware",
+    "meshtastic-web": "web"
+  },
+  "repo_shorthand": {
+    "Android": "Meshtastic-Android",
+    "Apple": "Meshtastic-Apple"
+  },
+  "tracking_headings": [
+    "platform tracking",
+    "tracking",
+    "sub-tasks",
+    "client status",
+    "per-client status",
+    "per-client tracking (sub-issues)",
+    "supported clients",
+    "status",
+    "per-icon checklist",
+    "cross-platform work"
+  ],
+  "ignored_headings": [
+    "checklist",
+    "code of conduct",
+    "participation",
+    "goals",
+    "acceptance criteria",
+    "required client behavior",
+    "context",
+    "decision",
+    "description",
+    "references",
+    "open question",
+    "open items",
+    "scope",
+    "feature or improvement you want",
+    "why should this be added?",
+    "screenshots / drawings / technical details",
+    "contact details",
+    "tell us your idea.",
+    "additional comments",
+    "os"
+  ]
+}
