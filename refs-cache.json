@@ -329,6 +329,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7163"
  },
+ "meshtastic/Meshtastic-Android#7249": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Maker tier: rank hardware by the registry's isMaker flag",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7249"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
@@ -614,6 +623,15 @@
   "title": "Key conversations to channel identity, not slot index",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2495"
+ },
+ "meshtastic/Meshtastic-Apple#2516": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Maker tier: rank hardware by the registry's isMaker flag",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2516"
  },
  "meshtastic/design#133": {
   "renamedFrom": null,
@@ -1169,5 +1187,13 @@
   "title": "[Feature Request]: Relay Node ",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/949"
+ },
+ "meshtastic/web-flasher#446": {
+  "renamedFrom": null,
+  "repo": "meshtastic/web-flasher",
+  "state": "open",
+  "title": "Add a maker tier to device selection",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/web-flasher/pull/446"
  }
 }
