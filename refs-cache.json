@@ -333,7 +333,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Maker tier: rank hardware by the registry's isMaker flag",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7249"
