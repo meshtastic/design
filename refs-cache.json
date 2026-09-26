@@ -633,6 +633,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2516"
  },
+ "meshtastic/Meshtastic-Apple#2547": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "\ud83d\ude80 [Feature Request]: Expose OTAFIX / Bootloader current version",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2547"
+ },
  "meshtastic/design#133": {
   "renamedFrom": null,
   "repo": "meshtastic/design",
