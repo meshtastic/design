@@ -1012,6 +1012,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/firmware/issues/8556"
  },
+ "meshtastic/firmware#9155": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "Add custom coding rate configuration for LoRa",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/9155"
+ },
  "meshtastic/firmware#9700": {
   "assigned": true,
   "renamedFrom": null,
