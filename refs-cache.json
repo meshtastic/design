@@ -653,7 +653,7 @@
  "meshtastic/Meshtastic-Apple#2548": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "merged",
   "title": "Hide the coding rate override on firmware that ignores it",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2548"
