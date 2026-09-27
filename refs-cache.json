@@ -356,6 +356,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/1601"
  },
+ "meshtastic/Meshtastic-Apple#1929": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Add LoRa coding rate preset override controls",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1929"
+ },
  "meshtastic/Meshtastic-Apple#1983": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -641,6 +649,14 @@
   "title": "\ud83d\ude80 [Feature Request]: Expose OTAFIX / Bootloader current version",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2547"
+ },
+ "meshtastic/Meshtastic-Apple#2548": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Hide the coding rate override on firmware that ignores it",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2548"
  },
  "meshtastic/design#133": {
   "renamedFrom": null,
