@@ -338,6 +338,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7249"
  },
+ "meshtastic/Meshtastic-Android#7408": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Show the installed bootloader next to the latest in the bootloader upgrade",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7408"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
