@@ -245,6 +245,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6676"
  },
+ "meshtastic/Meshtastic-Android#6862": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(remote-shell): mesh terminal for the firmware DMShell module",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6862"
+ },
  "meshtastic/Meshtastic-Android#6931": {
   "assigned": false,
   "renamedFrom": null,
@@ -1028,6 +1036,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/11811"
  },
+ "meshtastic/firmware#11976": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "Dmshell",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/11976"
+ },
  "meshtastic/firmware#7236": {
   "assigned": false,
   "renamedFrom": null,
@@ -1112,6 +1128,14 @@
   "title": "Add NodeInfo.heard_on_current_lora",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/protobufs/issues/1060"
+ },
+ "meshtastic/protobufs#892": {
+  "renamedFrom": null,
+  "repo": "meshtastic/protobufs",
+  "state": "merged",
+  "title": "Remote Shell Protobufs",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/protobufs/pull/892"
  },
  "meshtastic/protobufs#982": {
   "assigned": true,
