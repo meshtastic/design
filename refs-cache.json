@@ -248,7 +248,7 @@
  "meshtastic/Meshtastic-Android#6862": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(remote-shell): mesh terminal for the firmware DMShell module",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6862"
