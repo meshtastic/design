@@ -611,7 +611,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "completed",
   "title": "Mark nodes not heard since the LoRa config changed",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2427"
