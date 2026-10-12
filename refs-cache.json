@@ -355,6 +355,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7408"
  },
+ "meshtastic/Meshtastic-Android#7599": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Scan public discovery presets on the default public channel and slot",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7599"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
