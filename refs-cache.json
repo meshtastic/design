@@ -381,6 +381,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1929"
  },
+ "meshtastic/Meshtastic-Apple#1968": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "feat: Local Mesh Discovery \u2014 noise floor analysis + Scan Current Preset",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1968"
+ },
  "meshtastic/Meshtastic-Apple#1983": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
