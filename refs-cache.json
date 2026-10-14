@@ -354,6 +354,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7249"
  },
+ "meshtastic/Meshtastic-Android#7405": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(settings): raise the coding rate over a modem preset",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7405"
+ },
  "meshtastic/Meshtastic-Android#7408": {
   "assigned": false,
   "renamedFrom": null,
