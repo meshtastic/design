@@ -1140,7 +1140,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/meshtastic",
-  "state": "open",
+  "state": "completed",
   "title": "Document presets, and why the node list can show unreachable nodes",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/meshtastic/issues/2649"
