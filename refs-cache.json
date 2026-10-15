@@ -396,6 +396,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7626"
  },
+ "meshtastic/Meshtastic-Android#7631": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "fix(node): use the traceroute map colors in the traceroute chart",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7631"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
