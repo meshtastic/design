@@ -420,6 +420,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7643"
  },
+ "meshtastic/Meshtastic-Android#7648": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(settings): find MQTT root topics near you",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7648"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
