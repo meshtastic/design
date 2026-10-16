@@ -764,6 +764,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2548"
  },
+ "meshtastic/Meshtastic-Apple#2654": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "[ALIGNMENT]: MQTT topic finder country level, shared directory and neighbor ranking (design#167)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2654"
+ },
  "meshtastic/design#133": {
   "renamedFrom": null,
   "repo": "meshtastic/design",
