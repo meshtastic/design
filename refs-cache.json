@@ -404,6 +404,22 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7631"
  },
+ "meshtastic/Meshtastic-Android#7640": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(node): show unknown traceroute hops as unknown and cool down long-press traceroute",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7640"
+ },
+ "meshtastic/Meshtastic-Android#7643": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(node): record observed and inbound traceroutes in the node's history",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7643"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
