@@ -415,7 +415,7 @@
  "meshtastic/Meshtastic-Android#7643": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(node): record observed and inbound traceroutes in the node's history",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7643"
