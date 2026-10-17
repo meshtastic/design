@@ -1293,7 +1293,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/web",
-  "state": "open",
+  "state": "completed",
   "title": "[2.8.0] XEdDSA packet signing UI",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/1188"
