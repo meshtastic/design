@@ -776,7 +776,7 @@
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
-  "state": "open",
+  "state": "merged",
   "title": "Serve the MQTT root directory clients use to suggest a local topic",
   "type": "PR",
   "url": "https://github.com/meshtastic/api/pull/154"
