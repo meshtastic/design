@@ -1363,7 +1363,7 @@
  "meshtastic/web-flasher#446": {
   "renamedFrom": null,
   "repo": "meshtastic/web-flasher",
-  "state": "open",
+  "state": "merged",
   "title": "Add a maker tier to device selection",
   "type": "PR",
   "url": "https://github.com/meshtastic/web-flasher/pull/446"
