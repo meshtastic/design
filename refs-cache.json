@@ -1,4 +1,13 @@
 {
+ "meshtastic/Meshtastic-Android#1005": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "not_planned",
+  "title": "[Feature Request] ability to apply nicknames to nodes",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/1005"
+ },
  "meshtastic/Meshtastic-Android#3508": {
   "assigned": false,
   "renamedFrom": null,
@@ -68,6 +77,14 @@
   "title": "[Feature Request]: Remove number of sats",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/4597"
+ },
+ "meshtastic/Meshtastic-Android#4743": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "closed",
+  "title": "feat: local display names for nodes",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/4743"
  },
  "meshtastic/Meshtastic-Android#5070": {
   "renamedFrom": null,
@@ -772,6 +789,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2548"
  },
+ "meshtastic/Meshtastic-Apple#2604": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "\ud83d\ude80 [Feature Request]: Display Real Username in detail view when a Display Name is set",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2604"
+ },
  "meshtastic/Meshtastic-Apple#2649": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -788,6 +814,14 @@
   "title": "[ALIGNMENT]: MQTT topic finder country level, shared directory and neighbor ranking (design#167)",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2654"
+ },
+ "meshtastic/Meshtastic-Apple#2669": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show the node's long name in node details when a display name is set",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2669"
  },
  "meshtastic/api#154": {
   "renamedFrom": null,
@@ -1365,6 +1399,15 @@
   "title": "Implement interoperable and safe channel QR sharing/importing for design #128",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/1313"
+ },
+ "meshtastic/web#588": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "[Feature Request]: Ability to add custom label to long/short name. ",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/588"
  },
  "meshtastic/web#932": {
   "assigned": true,
