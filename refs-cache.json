@@ -404,6 +404,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7631"
  },
+ "meshtastic/Meshtastic-Android#7639": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(node): view a device's 3D model, and place it in AR on the google flavor",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7639"
+ },
  "meshtastic/Meshtastic-Android#7640": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
@@ -763,6 +771,14 @@
   "title": "Hide the coding rate override on firmware that ignores it",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2548"
+ },
+ "meshtastic/Meshtastic-Apple#2649": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show the radio's 3D model on node detail",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2649"
  },
  "meshtastic/Meshtastic-Apple#2654": {
   "assigned": false,
@@ -1149,6 +1165,14 @@
   "title": "Dmshell",
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/11976"
+ },
+ "meshtastic/firmware#12186": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "open",
+  "title": "List each board's 3D model files in its images",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/12186"
  },
  "meshtastic/firmware#7236": {
   "assigned": false,
