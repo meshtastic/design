@@ -457,7 +457,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Local display names for nodes",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7760"
