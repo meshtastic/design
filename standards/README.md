@@ -1,8 +1,8 @@
 # Meshtastic Client Design Standards
 
-The current version is v1.5: [meshtastic_design_standards_v1_5.md](meshtastic_design_standards_v1_5.md).
+The current version is v1.6: [meshtastic_design_standards_v1_6.md](meshtastic_design_standards_v1_6.md).
 
-<!-- current-version: meshtastic_design_standards_v1_5.md -->
+<!-- current-version: meshtastic_design_standards_v1_6.md -->
 <!-- Keep this marker and the line above it pointing at the same file as the
      meshtastic_design_standards_latest.md symlink. CI compares them. -->
 
@@ -29,7 +29,8 @@ gh api repos/meshtastic/design/contents/standards/meshtastic_design_standards_la
 
 | Version | File | Status |
 | --- | --- | --- |
-| v1.5 | [meshtastic_design_standards_v1_5.md](meshtastic_design_standards_v1_5.md) | Current |
+| v1.6 | [meshtastic_design_standards_v1_6.md](meshtastic_design_standards_v1_6.md) | Current |
+| v1.5 | [meshtastic_design_standards_v1_5.md](meshtastic_design_standards_v1_5.md) | Superseded |
 | v1.4 | [meshtastic_design_standards_v1_4.md](meshtastic_design_standards_v1_4.md) | Superseded |
 | v1.3 | [meshtastic_design_standards_v1_3.md](meshtastic_design_standards_v1_3.md) | Superseded |
 | v1.2 | [meshtastic_design_standards_v1_2.md](meshtastic_design_standards_v1_2.md) | Superseded |
