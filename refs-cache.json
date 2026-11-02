@@ -1147,7 +1147,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/firmware",
-  "state": "open",
+  "state": "not_planned",
   "title": "[2.8.0] - Waypoint Geofences",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/firmware/issues/10811"
