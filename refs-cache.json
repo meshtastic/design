@@ -577,6 +577,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7970"
  },
+ "meshtastic/Meshtastic-Apple#1486": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show who relayed messages",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/1486"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
@@ -1095,6 +1103,15 @@
   "title": "Show the 3D model's copyright notice in the full-screen view",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2951"
+ },
+ "meshtastic/Meshtastic-Apple#2954": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "[ALIGNMENT]: Request telemetry from a node (design#41)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2954"
  },
  "meshtastic/api#154": {
   "renamedFrom": null,
