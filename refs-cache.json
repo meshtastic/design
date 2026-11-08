@@ -1071,6 +1071,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2949"
  },
+ "meshtastic/Meshtastic-Apple#2950": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "[ALIGNMENT]: Show local display names in messages, notifications, maps and trace routes (design#170)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2950"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
