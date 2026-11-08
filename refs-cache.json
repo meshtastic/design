@@ -569,6 +569,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7965"
  },
+ "meshtastic/Meshtastic-Android#7969": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(node): show traceroute request states and mark MQTT hops",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7969"
+ },
  "meshtastic/Meshtastic-Android#7970": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
@@ -1091,7 +1099,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Show local display names in messages, notifications, maps and trace routes (design#170)",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2950"
