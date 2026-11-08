@@ -487,6 +487,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7940"
  },
+ "meshtastic/Meshtastic-Android#7942": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "chore(node): take the device models from meshtastic/3d-assets",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7942"
+ },
  "meshtastic/Meshtastic-Android#7957": {
   "assigned": true,
   "renamedFrom": null,
