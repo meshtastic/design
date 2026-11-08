@@ -998,6 +998,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2939"
  },
+ "meshtastic/Meshtastic-Apple#2940": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Say how to recover a managed device whose admin key is lost",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2940"
+ },
  "meshtastic/Meshtastic-Apple#2941": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
