@@ -462,6 +462,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7760"
  },
+ "meshtastic/Meshtastic-Android#7763": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(nodes): local display names",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7763"
+ },
  "meshtastic/Meshtastic-Android#7940": {
   "assigned": false,
   "renamedFrom": null,
@@ -889,6 +897,15 @@
   "title": "docs(events): define signed event firmware OTA contract",
   "type": "PR",
   "url": "https://github.com/meshtastic/design/pull/133"
+ },
+ "meshtastic/design#162": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Expose OTAFIX / Bootloader current version",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/162"
  },
  "meshtastic/design#27": {
   "assigned": true,
