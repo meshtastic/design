@@ -521,6 +521,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7959"
  },
+ "meshtastic/Meshtastic-Android#7960": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "fix(mqtt): accept root topics in any script",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7960"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
@@ -826,7 +834,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "completed",
   "title": "Key conversations to channel identity, not slot index",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2495"
@@ -899,6 +907,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2703"
  },
+ "meshtastic/Meshtastic-Apple#2710": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "\ud83d\udc1e [Bug]: MQTT Root Topic no longer accepts Norwegian characters \u00c6\u00d8\u00c5",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2710"
+ },
  "meshtastic/Meshtastic-Apple#2720": {
   "assigned": false,
   "renamedFrom": null,
@@ -949,6 +966,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2939"
  },
+ "meshtastic/Meshtastic-Apple#2941": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Suggest country and community MQTT roots from the shared directory",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2941"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
@@ -956,6 +981,14 @@
   "title": "Serve the MQTT root directory clients use to suggest a local topic",
   "type": "PR",
   "url": "https://github.com/meshtastic/api/pull/154"
+ },
+ "meshtastic/api#171": {
+  "renamedFrom": null,
+  "repo": "meshtastic/api",
+  "state": "open",
+  "title": "fix(mqttRoots): accept roots and segments in any script",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/api/pull/171"
  },
  "meshtastic/design#133": {
   "renamedFrom": null,
