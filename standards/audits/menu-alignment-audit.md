@@ -102,52 +102,49 @@ Row layout (fields hidden if data absent, top-to-bottom):
 
 ### Current State
 
-**iOS (10 items for non-connected node):**
+**iOS (someone else's node):**
 
 | # | Label |
 |---|-------|
-| 1 | Hide alerts / Show alerts |
-| 2 | Share Contact QR |
-| 3 | Add to favorites / Remove from favorites |
+| 1 | Display name |
+| 2 | Add to favorites / Remove from favorites |
+| 3 | Hide alerts / Show alerts |
 | 4 | Message |
-| 5 | Exchange Positions |
-| 6 | Exchange User Info |
-| 7 | Trace Route |
-| 8 | Client History *(conditional: S&F routers only)* |
-| 9 | Ignore Node / Remove from ignored *(destructive)* |
-| 10 | Delete Node *(destructive)* |
+| 5 | Trace Route |
+| 6 | Ignore Node / Remove from ignored *(destructive)* |
+| 7 | Remove *(destructive)* |
 
-**Android (4 items, excluding own node):**
+**Android (someone else's node):**
 
 | # | Label |
 |---|-------|
 | 1 | Add Favorite / Remove Favorite |
-| 2 | Ignore / Remove Ignored |
-| 3 | Mute Always / Unmute *(conditional: capability flag)* |
-| 4 | Remove *(destructive)* |
+| 2 | Mute / Unmute *(conditional: capability flag)* |
+| 3 | Message |
+| 4 | Set display name |
+| 5 | Trace Route |
+| 6 | Compass, Mesh HUD *(conditional: node has a position)* |
+| 7 | Ignore / Remove Ignored |
+| 8 | Remove *(destructive)* |
 
 ### Mismatches
 
-| Issue | Detail |
-|-------|--------|
-| **Action count** | iOS context menu has 10 items; Android has 4. iOS exposes many actions that Android surfaces only within the node detail screen. |
-| **Actions absent from Android context menu** | Message, Share Contact QR, Exchange Positions, Exchange User Info, Trace Route, Client History. |
-| **Mute vs. alert silencing** | iOS uses "Hide alerts / Show alerts"; Android uses "Mute Always / Unmute". Same intent, different wording. |
-| **Order difference** | iOS leads with the alert-mute toggle (position 1) then favourite (position 3); Android leads with favourite (position 1) then ignore (position 2). |
-| **Destructive item label** | iOS uses "Delete Node"; Android uses "Remove". |
+Message is third on Android and fourth on iOS, below the toggles. Display name is first on iOS and fourth on Android. Compass and Mesh HUD are Android only.
 
 ### Recommended Canonical Order
 
-Keeping the menu concise (4–6 items) while surfacing the most-used actions:
+Message comes first, per design#171: messaging a node is the most common reason to open this menu.
 
 | # | Canonical label | Notes |
 |---|-----------------|-------|
-| 1 | **Add to favorites / Remove from favorites** | Most common non-destructive toggle |
-| 2 | **Mute notifications / Unmute** | Alert silencing (merge iOS "Hide alerts" and Android "Mute") |
-| 3 | **Message** | Quick access to chat |
-| 4 | **Trace Route** | Frequently used diagnostic |
-| 5 | **Ignore / Remove from ignored** | Maintenance action |
-| 6 | **Remove** | Destructive; placed last. iOS renames "Delete Node" to match Android and firmware API |
+| 1 | Message | Shown only for nodes the client can message, never for the connected node |
+| 2 | Set display name | Local name from design#170 |
+| 3 | Add to favorites / Remove from favorites | |
+| 4 | Mute notifications / Unmute | |
+| 5 | Trace Route | |
+| — | Platform-only items | For example Android's Compass and Mesh HUD; they go here, before Ignore |
+| 6 | Ignore / Remove from ignored | |
+| 7 | Remove | Destructive; always last |
 
 ### Tracking
 
