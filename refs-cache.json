@@ -548,7 +548,7 @@
  "meshtastic/Meshtastic-Android#7960": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "fix(mqtt): accept root topics in any script",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7960"
@@ -1142,7 +1142,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/design",
-  "state": "open",
+  "state": "not_planned",
   "title": "[Feature Request]: Assign battery chemistry to INA sensor to track alternate battery types",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/design/issues/30"
