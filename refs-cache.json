@@ -1481,7 +1481,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/web",
-  "state": "not_planned",
+  "state": "open",
   "title": "[Bug]:  Clients / apps should auto-favorite nodes upon direct-message except for CLIENT_BASE nodes",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/932"
