@@ -569,6 +569,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7965"
  },
+ "meshtastic/Meshtastic-Android#7970": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "fix(node): put Set display name right after Message in the node menu",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7970"
+ },
  "meshtastic/Meshtastic-Apple#1498": {
   "assigned": true,
   "renamedFrom": null,
