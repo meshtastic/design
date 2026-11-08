@@ -1083,7 +1083,7 @@
  "meshtastic/Meshtastic-Apple#2951": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "merged",
   "title": "Show the 3D model's copyright notice in the full-screen view",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2951"
@@ -1125,7 +1125,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/design",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Cross platform private/pub key pair backup and restoration flow",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/design/issues/27"
@@ -1143,7 +1143,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/design",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Tapback/Reaction Notifications and behavior",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/design/issues/35"
@@ -1161,7 +1161,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/design",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Clients should auto-favorite nodes on direct message except for CLIENT_BASE",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/design/issues/39"
