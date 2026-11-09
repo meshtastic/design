@@ -1171,6 +1171,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2956"
  },
+ "meshtastic/Meshtastic-Apple#2957": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Request and show host metrics from Linux nodes",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2957"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
