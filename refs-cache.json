@@ -623,7 +623,7 @@
  "meshtastic/Meshtastic-Android#7981": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(firmware): show the bootloader version the device reports",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7981"
@@ -631,7 +631,7 @@
  "meshtastic/Meshtastic-Android#7982": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(firmware): upgrade an nRF52 bootloader over BLE",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7982"
@@ -640,7 +640,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Upgrade the nRF52 bootloader over Bluetooth",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7985"
