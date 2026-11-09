@@ -1197,6 +1197,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2958"
  },
+ "meshtastic/Meshtastic-Apple#2959": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Chart each unit on its own axis, add CO2 and eight power channels",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2959"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
