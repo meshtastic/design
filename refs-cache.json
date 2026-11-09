@@ -1230,6 +1230,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2962"
  },
+ "meshtastic/Meshtastic-Apple#2969": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Open meshtastic://meshtastic connect links",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2969"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
