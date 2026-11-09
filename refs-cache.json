@@ -1141,7 +1141,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Request telemetry from a node (design#41)",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2954"
