@@ -620,6 +620,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7977"
  },
+ "meshtastic/Meshtastic-Android#7981": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(firmware): show the bootloader version the device reports",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7981"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1674,6 +1682,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/12303"
  },
+ "meshtastic/firmware#12329": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "merged",
+  "title": "Report the nRF52 bootloader version in DeviceMetadata",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/12329"
+ },
  "meshtastic/firmware#7236": {
   "assigned": false,
   "renamedFrom": null,
@@ -1767,6 +1783,14 @@
   "title": "Add NodeInfo.heard_on_current_lora",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/protobufs/issues/1060"
+ },
+ "meshtastic/protobufs#1166": {
+  "renamedFrom": null,
+  "repo": "meshtastic/protobufs",
+  "state": "merged",
+  "title": "Add DeviceMetadata.bootloader_version",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/protobufs/pull/1166"
  },
  "meshtastic/protobufs#892": {
   "renamedFrom": null,
