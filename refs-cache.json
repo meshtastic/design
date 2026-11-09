@@ -1279,6 +1279,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/api/pull/171"
  },
+ "meshtastic/api#172": {
+  "renamedFrom": null,
+  "repo": "meshtastic/api",
+  "state": "merged",
+  "title": "feat: pin the nRF52 SoftDevice+bootloader packages for BLE upgrades",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/api/pull/172"
+ },
  "meshtastic/design#133": {
   "renamedFrom": null,
   "repo": "meshtastic/design",
