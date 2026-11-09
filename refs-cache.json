@@ -585,6 +585,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7970"
  },
+ "meshtastic/Meshtastic-Android#7971": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Connect links: scanner on the Connect screen, NFC tags, address checks",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7971"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1137,6 +1146,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2954"
  },
+ "meshtastic/Meshtastic-Apple#2955": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Open meshtastic://meshtastic connect links",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2955"
+ },
  "meshtastic/api#154": {
   "renamedFrom": null,
   "repo": "meshtastic/api",
@@ -1438,6 +1456,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/device-ui/issues/403"
  },
+ "meshtastic/device-ui#457": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/device-ui",
+  "state": "open",
+  "title": "Show the connect QR code on MUI",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/device-ui/issues/457"
+ },
  "meshtastic/firmware#10800": {
   "assigned": true,
   "renamedFrom": null,
@@ -1581,6 +1608,15 @@
   "title": "[Feature Request]: Remove number of sats from position",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/firmware/issues/9700"
+ },
+ "meshtastic/labeltastic#32": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/labeltastic",
+  "state": "open",
+  "title": "Default provisioning links to meshtastic://",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/labeltastic/issues/32"
  },
  "meshtastic/meshtastic#2649": {
   "assigned": true,
@@ -1738,6 +1774,15 @@
   "title": "Implement interoperable and safe channel QR sharing/importing for design #128",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/1313"
+ },
+ "meshtastic/web#1498": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/web",
+  "state": "open",
+  "title": "Accept connect links in the connect flow",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/web/issues/1498"
  },
  "meshtastic/web#588": {
   "assigned": false,
