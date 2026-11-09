@@ -628,6 +628,23 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7981"
  },
+ "meshtastic/Meshtastic-Android#7982": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(firmware): upgrade an nRF52 bootloader over BLE",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7982"
+ },
+ "meshtastic/Meshtastic-Android#7985": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Upgrade the nRF52 bootloader over Bluetooth",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7985"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1262,6 +1279,15 @@
   "title": "Ignore a connect link PIN with a leading zero",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2970"
+ },
+ "meshtastic/Meshtastic-Apple#2974": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Upgrade the nRF52 bootloader over Bluetooth",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2974"
  },
  "meshtastic/api#154": {
   "renamedFrom": null,
