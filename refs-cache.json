@@ -1539,6 +1539,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/12186"
  },
+ "meshtastic/firmware#12303": {
+  "renamedFrom": null,
+  "repo": "meshtastic/firmware",
+  "state": "open",
+  "title": "feat(ui): show the BLE connect link as a QR code",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/firmware/pull/12303"
+ },
  "meshtastic/firmware#7236": {
   "assigned": false,
   "renamedFrom": null,
