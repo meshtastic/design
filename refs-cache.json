@@ -1209,10 +1209,18 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
-  "state": "open",
+  "state": "completed",
   "title": "Show local display names on the remaining screens",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2960"
+ },
+ "meshtastic/Meshtastic-Apple#2961": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "merged",
+  "title": "Show local display names on the remaining screens",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2961"
  },
  "meshtastic/api#154": {
   "renamedFrom": null,
