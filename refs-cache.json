@@ -645,6 +645,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7985"
  },
+ "meshtastic/Meshtastic-Android#7995": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "fix(node): follow the design#53 telemetry display rules",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7995"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
