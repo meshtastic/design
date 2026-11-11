@@ -597,7 +597,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Connect links: scanner on the Connect screen, NFC tags, address checks",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7971"
@@ -615,7 +615,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Connect link accepts a PIN with a leading zero (design#177)",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/7977"
