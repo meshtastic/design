@@ -1302,7 +1302,7 @@
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
   "state": "open",
-  "title": "Environment telemetry widget",
+  "title": "Telemetry widget",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/2994"
  },
@@ -1687,7 +1687,7 @@
  "meshtastic/firmware#10972": {
   "renamedFrom": null,
   "repo": "meshtastic/firmware",
-  "state": "open",
+  "state": "closed",
   "title": "Authorize signed plaintext remote admin in licensed mode",
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/10972"
