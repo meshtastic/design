@@ -653,6 +653,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/7995"
  },
+ "meshtastic/Meshtastic-Android#8056": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "completed",
+  "title": "[ALIGNMENT]: Telemetry widget (design#179)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8056"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
