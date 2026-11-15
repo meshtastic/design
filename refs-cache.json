@@ -703,6 +703,14 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8065"
  },
+ "meshtastic/Meshtastic-Android#8066": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(map): signal survey with live map overlay, heatmap and AR ground view",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8066"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1745,7 +1753,7 @@
  "meshtastic/firmware#10972": {
   "renamedFrom": null,
   "repo": "meshtastic/firmware",
-  "state": "closed",
+  "state": "open",
   "title": "Authorize signed plaintext remote admin in licensed mode",
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/10972"
