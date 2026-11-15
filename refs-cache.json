@@ -262,6 +262,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6332"
  },
+ "meshtastic/Meshtastic-Android#6632": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(settings): warn before enabling licensed (ham) mode",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/6632"
+ },
  "meshtastic/Meshtastic-Android#6676": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
@@ -685,6 +693,15 @@
   "title": "feat(widget): add a Telemetry widget",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8057"
+ },
+ "meshtastic/Meshtastic-Android#8065": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "[ALIGNMENT]: Name the relaying node in message details (design#33)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8065"
  },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
