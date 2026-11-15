@@ -711,6 +711,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8066"
  },
+ "meshtastic/Meshtastic-Android#8072": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "Passive signal survey on the map",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8072"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1371,6 +1380,15 @@
   "title": "Add a Telemetry widget with a page button on the large size",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/2997"
+ },
+ "meshtastic/Meshtastic-Apple#3031": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "open",
+  "title": "Passive signal survey on the map",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/3031"
  },
  "meshtastic/api#154": {
   "renamedFrom": null,
