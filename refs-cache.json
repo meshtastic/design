@@ -706,19 +706,43 @@
  "meshtastic/Meshtastic-Android#8066": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(map): signal survey with live map overlay, heatmap and AR ground view",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8066"
+ },
+ "meshtastic/Meshtastic-Android#8067": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(node): plot and show a reported 0 for humidity and radiation",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8067"
+ },
+ "meshtastic/Meshtastic-Android#8071": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(node): show the IAQ band color and label on the node detail tile",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8071"
  },
  "meshtastic/Meshtastic-Android#8072": {
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "Passive signal survey on the map",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8072"
+ },
+ "meshtastic/Meshtastic-Android#8073": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(widget): show the dew point under humidity on the Telemetry widget",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8073"
  },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
