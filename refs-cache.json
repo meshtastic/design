@@ -752,6 +752,14 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8073"
  },
+ "meshtastic/Meshtastic-Android#8076": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "fix(map): draw the traceroute return route dashed",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8076"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
