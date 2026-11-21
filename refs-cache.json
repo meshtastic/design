@@ -698,7 +698,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Name the relaying node in message details (design#33)",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8065"
@@ -759,6 +759,22 @@
   "title": "fix(map): draw the traceroute return route dashed",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8076"
+ },
+ "meshtastic/Meshtastic-Android#8082": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(messaging): show the relaying node in message details",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8082"
+ },
+ "meshtastic/Meshtastic-Android#8210": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(messaging): show the relaying node on received messages and on reactions",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8210"
  },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
