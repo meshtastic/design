@@ -1811,7 +1811,7 @@
  "meshtastic/firmware#10972": {
   "renamedFrom": null,
   "repo": "meshtastic/firmware",
-  "state": "open",
+  "state": "merged",
   "title": "Authorize signed plaintext remote admin in licensed mode",
   "type": "PR",
   "url": "https://github.com/meshtastic/firmware/pull/10972"
