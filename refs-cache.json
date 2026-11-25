@@ -788,7 +788,7 @@
  "meshtastic/Meshtastic-Android#8251": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "merged",
   "title": "feat(settings): manage contacts and favorites on a remote node",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8251"
@@ -797,7 +797,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Manage a remote node's favorites, ignores and contacts over remote admin",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8260"
