@@ -785,6 +785,23 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8210"
  },
+ "meshtastic/Meshtastic-Android#8251": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "feat(settings): manage contacts and favorites on a remote node",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8251"
+ },
+ "meshtastic/Meshtastic-Android#8260": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "[ALIGNMENT]: Manage a remote node's favorites, ignores and contacts over remote admin",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8260"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -2009,6 +2026,14 @@
   "title": "Add DeviceMetadata.bootloader_version",
   "type": "PR",
   "url": "https://github.com/meshtastic/protobufs/pull/1166"
+ },
+ "meshtastic/protobufs#1198": {
+  "renamedFrom": null,
+  "repo": "meshtastic/protobufs",
+  "state": "open",
+  "title": "feat(admin): add get_nodedb_entry_request and NodeDBEntry",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/protobufs/pull/1198"
  },
  "meshtastic/protobufs#892": {
   "renamedFrom": null,
