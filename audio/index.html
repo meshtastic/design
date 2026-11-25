@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meshtastic Chirpy //\ Audio &amp; Ringtone Suite</title>
+  <style>
+    :root {
+      --bg-primary: #121816;
+      --bg-surface: #1a221f;
+      --bg-card: #202b27;
+      --border-color: #2e3d37;
+      --text-primary: #e6f1ec;
+      --text-secondary: #9cb3a8;
+      --accent-green: #67ea94;
+      --accent-green-hover: #7ff0a5;
+      --accent-glow: rgba(103, 234, 148, 0.15);
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      background: rgba(103, 234, 148, 0.15);
+      color: var(--accent-green);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-flagship {
+      background: #67ea94;
+      color: #0d1511;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 740px;
+    }
+
+    .motif-hero {
+      background: linear-gradient(135deg, #18241f 0%, #1a2b24 100%);
+      border: 1px solid #365045;
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .motif-hero h3 {
+      font-size: 1.15rem;
+      color: var(--accent-green);
+      margin-bottom: 0.6rem;
+    }
+
+    .motif-hero p {
+      font-size: 0.95rem;
+      color: #b9cfc5;
+      line-height: 1.6;
+    }
+
+    .slash-diagram {
+      display: flex;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .slash-item {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .slash-glyph {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-bottom: 0.25rem;
+    }
+
+    .slash-label {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .sounds-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .sound-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .sound-card-featured {
+      border-color: #436959;
+      background: #1c2723;
+    }
+
+    .sound-card:hover {
+      border-color: #4c6f60;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .card-title-group h2 {
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .card-description {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    button.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn-primary {
+      background: var(--accent-green);
+      color: #0b130e;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-green-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: #273530;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #31443d;
+      border-color: #40594f;
+    }
+
+    .btn-icon {
+      padding: 0.4rem 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    .rtttl-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .rtttl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .byte-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      background: #141c19;
+      color: var(--accent-green);
+    }
+
+    .rtttl-code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #79e6a2;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .downloads-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .dl-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      background: #17201c;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      transition: all 0.15s;
+    }
+
+    .dl-link:hover {
+      color: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Meshtastic Design System</span>
+      <h1>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#67ea94" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="2"></circle>
+          <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+        </svg>
+        Chirpy Audio &amp; Ringtone Suite
+      </h1>
+      <p class="subtitle">
+        Custom, friendly sounds for Meshtastic. Inspired by mascot <strong>Chirpy</strong> (the anthropomorphic radio node) and the distinctive <strong>//\ (Up, Up, Down)</strong> pattern of the Meshtastic logo and LoRa CSS radio syncwords.
+      </p>
+    </header>
+
+    <div class="motif-hero">
+      <h3>The //\ Motif: Mascot, Logo, and LoRa Physics</h3>
+      <p>
+        <strong>Chirpy</strong> is Meshtastic's mascot: an anthropomorphic radio node (the cute green node with an antenna, OLED screen eyes, hands, and the <strong>//\</strong> logo on his chest). His name and voice originate directly from <strong>LoRa Chirp Spread Spectrum (CSS)</strong> radio modulation. In LoRa physics, packet headers start with ascending frequency sweeps (upchirps <strong>/</strong>) followed by framing downchirps (<strong>\</strong>). The Chirpy sound suite translates this visual logo and electromagnetic signature into a friendly, tactile electronic vocalization.
+      </p>
+
+      <div class="slash-diagram">
+        <div class="slash-item">
+          <div class="slash-glyph">/ Stroke 1</div>
+          <div class="slash-label">First Upchirp (C#6 &rarr; F#6). Greeting chirrup.</div>
+        </div>
+        <div class="slash-item">
+          <div class="slash-glyph">/ Stroke 2</div>
+          <div class="slash-label">Second Upchirp (A#6 &rarr; F#7). Climbing to summit peak.</div>
+        </div>
+        <div class="slash-item">
+          <div class="slash-glyph">\ Stroke 3</div>
+          <div class="slash-label">Downchirp (F#7 &rarr; C#7 &rarr; F#6). Warm cascade settling at home.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sounds-grid">
+
+      <!-- 1. chirpy (FLAGSHIP) -->
+      <div class="sound-card sound-card-featured">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2>Chirpy //\ (Notification Sound)</h2>
+          </div>
+          <span class="badge badge-flagship">Flagship Notification</span>
+        </div>
+        <p class="card-description">
+          The official Meshtastic notification sound. A friendly electronic vocalization from Chirpy the node, embodying the //\ logo and LoRa syncword. Tactile CSS sweeps layered over acoustic bell chimes for phone apps, and a crisp 3-burst arpeggio on hardware node buzzers.
+        </p>
+        <div class="player-controls">
+          <button class="btn btn-primary" onclick="playAudio('dist/chirpy.mp3')">
+            &#9658; Play Studio Audio
+          </button>
+          <button class="btn btn-secondary" onclick="playAudio('dist/piezo_simulated/chirpy_piezo.wav')">
+            &#9654; Piezo Simulator
+          </button>
+          <button class="btn btn-secondary" onclick="playRtttlSynth('Chirpy:d=32,o=6,b=180:c#,f#,p,a#,16f#7,p,c#7,a#,8f#')">
+            &#9835; Web Audio RTTTL
+          </button>
+        </div>
+        <div class="rtttl-section">
+          <div class="rtttl-header">
+            <span>RTTTL STRING (DEVICE / BUZZER)</span>
+            <span class="byte-tag">51 / 230 BYTES</span>
+          </div>
+          <div class="rtttl-code" id="rtttl-1">Chirpy:d=32,o=6,b=180:c#,f#,p,a#,16f#7,p,c#7,a#,8f#</div>
+        </div>
+        <div class="downloads-row">
+          <span>Assets:</span>
+          <a class="dl-link" href="dist/chirpy.mp3" download>MP3 (Android)</a>
+          <a class="dl-link" href="dist/chirpy.caf" download>CAF (Apple)</a>
+          <a class="dl-link" href="dist/chirpy.wav" download>WAV (Studio)</a>
+          <a class="dl-link" href="dist/chirpy.m4a" download>M4A</a>
+          <a class="dl-link" href="dist/chirpy.ogg" download>OGG</a>
+          <a class="dl-link" href="rtttl/chirpy.rtttl" download>RTTTL File</a>
+          <button class="btn btn-secondary btn-icon" onclick="copyText('rtttl-1')">Copy RTTTL</button>
+        </div>
+      </div>
+
+      <!-- 2. chirpy_ringtone -->
+      <div class="sound-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2>Chirpy Song (Ringtone)</h2>
+          </div>
+          <span class="badge">Looping Ringtone</span>
+        </div>
+        <p class="card-description">
+          A melodic 4-bar looping musical song based on Chirpy the node's //\ theme. Designed for incoming calls, repeated alerts, and node external notification ringtones.
+        </p>
+        <div class="player-controls">
+          <button class="btn btn-primary" onclick="playAudio('dist/chirpy_ringtone.mp3')">
+            &#9658; Play Studio Audio
+          </button>
+          <button class="btn btn-secondary" onclick="playAudio('dist/piezo_simulated/chirpy_ringtone_piezo.wav')">
+            &#9654; Piezo Simulator
+          </button>
+          <button class="btn btn-secondary" onclick="playRtttlSynth('ChirpySong:d=16,o=6,b=160:32c#,32f#,32p,32a#,16f#7,32p,32c#7,8f#,4p,f#,c#7,d#7,8c#7,4p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7')">
+            &#9835; Web Audio RTTTL
+          </button>
+        </div>
+        <div class="rtttl-section">
+          <div class="rtttl-header">
+            <span>RTTTL STRING (DEVICE / BUZZER)</span>
+            <span class="byte-tag">135 / 230 BYTES</span>
+          </div>
+          <div class="rtttl-code" id="rtttl-2">ChirpySong:d=16,o=6,b=160:32c#,32f#,32p,32a#,16f#7,32p,32c#7,8f#,4p,f#,c#7,d#7,8c#7,4p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7</div>
+        </div>
+        <div class="downloads-row">
+          <span>Assets:</span>
+          <a class="dl-link" href="dist/chirpy_ringtone.mp3" download>MP3 (Android)</a>
+          <a class="dl-link" href="dist/chirpy_ringtone.caf" download>CAF (Apple)</a>
+          <a class="dl-link" href="dist/chirpy_ringtone.wav" download>WAV (Studio)</a>
+          <a class="dl-link" href="dist/chirpy_ringtone.m4a" download>M4A</a>
+          <a class="dl-link" href="dist/chirpy_ringtone.ogg" download>OGG</a>
+          <a class="dl-link" href="rtttl/chirpy_ringtone.rtttl" download>RTTTL File</a>
+          <button class="btn btn-secondary btn-icon" onclick="copyText('rtttl-2')">Copy RTTTL</button>
+        </div>
+      </div>
+
+      <!-- 3. chirpy_ack -->
+      <div class="sound-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2>Chirpy // (Micro Chirp &amp; ACK)</h2>
+          </div>
+          <span class="badge">Discrete ACK &amp; Reaction</span>
+        </div>
+        <p class="card-description">
+          A compact two-stroke upward LoRa chirp (//) for packet delivery receipts, tapbacks, message reactions, and rapid channel activity.
+        </p>
+        <div class="player-controls">
+          <button class="btn btn-primary" onclick="playAudio('dist/chirpy_ack.mp3')">
+            &#9658; Play Studio Audio
+          </button>
+          <button class="btn btn-secondary" onclick="playAudio('dist/piezo_simulated/chirpy_ack_piezo.wav')">
+            &#9654; Piezo Simulator
+          </button>
+          <button class="btn btn-secondary" onclick="playRtttlSynth('Chirp2:d=32,o=6,b=200:c#,f#,p,a#,16f#7')">
+            &#9835; Web Audio RTTTL
+          </button>
+        </div>
+        <div class="rtttl-section">
+          <div class="rtttl-header">
+            <span>RTTTL STRING (DEVICE / BUZZER)</span>
+            <span class="byte-tag">38 / 230 BYTES</span>
+          </div>
+          <div class="rtttl-code" id="rtttl-3">Chirp2:d=32,o=6,b=200:c#,f#,p,a#,16f#7</div>
+        </div>
+        <div class="downloads-row">
+          <span>Assets:</span>
+          <a class="dl-link" href="dist/chirpy_ack.mp3" download>MP3 (Android)</a>
+          <a class="dl-link" href="dist/chirpy_ack.caf" download>CAF (Apple)</a>
+          <a class="dl-link" href="dist/chirpy_ack.wav" download>WAV (Studio)</a>
+          <a class="dl-link" href="dist/chirpy_ack.m4a" download>M4A</a>
+          <a class="dl-link" href="dist/chirpy_ack.ogg" download>OGG</a>
+          <a class="dl-link" href="rtttl/chirpy_ack.rtttl" download>RTTTL File</a>
+          <button class="btn btn-secondary btn-icon" onclick="copyText('rtttl-3')">Copy RTTTL</button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      Meshtastic Chirpy Sonic Identity &bull; Open Source Sound Design &bull; Released under Apache-2.0 / GPL-3.0
+    </footer>
+  </div>
+
+  <script>
+    let currentAudio = null;
+    let audioCtx = null;
+
+    function playAudio(url) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      currentAudio = new Audio(url);
+      currentAudio.play().catch(e => console.log('Audio play error:', e));
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied RTTTL string to clipboard!');
+      });
+    }
+
+    function playRtttlSynth(rtttlStr) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const parts = rtttlStr.split(':');
+      if (parts.length < 3) return;
+
+      const settings = {};
+      parts[1].split(',').forEach(s => {
+        const [k, v] = s.split('=');
+        if (k && v) settings[k.trim()] = parseInt(v.trim());
+      });
+
+      const defDur = settings['d'] || 4;
+      const defOct = settings['o'] || 6;
+      const bpm = settings['b'] || 63;
+      const wholeNoteMs = (60 * 1000 / bpm) * 4;
+
+      const noteFreqs = {
+        'c': 261.63, 'c#': 277.18, 'd': 293.66, 'd#': 311.13, 'e': 329.63,
+        'f': 349.23, 'f#': 369.99, 'g': 392.00, 'g#': 415.30, 'a': 440.00,
+        'a#': 466.16, 'b': 493.88
+      };
+
+      const notes = parts[2].split(',').filter(Boolean);
+      let curTime = audioCtx.currentTime + 0.05;
+
+      notes.forEach(noteStr => {
+        let i = 0;
+        let durNum = 0;
+        while (i < noteStr.length && noteStr[i] >= '0' && noteStr[i] <= '9') {
+          durNum = durNum * 10 + parseInt(noteStr[i]);
+          i++;
+        }
+        let durMs = durNum > 0 ? (wholeNoteMs / durNum) : (wholeNoteMs / defDur);
+
+        let letter = (noteStr[i] || '').toLowerCase();
+        i++;
+        let isSharp = false;
+        if (i < noteStr.length && noteStr[i] === '#') {
+          isSharp = true;
+          i++;
+        }
+        let noteName = letter + (isSharp ? '#' : '');
+
+        let isDotted = false;
+        if (i < noteStr.length && noteStr[i] === '.') {
+          durMs += durMs / 2;
+          isDotted = true;
+          i++;
+        }
+
+        let oct = defOct;
+        if (i < noteStr.length && noteStr[i] >= '0' && noteStr[i] <= '9') {
+          oct = parseInt(noteStr[i]);
+          i++;
+        }
+
+        if (i < noteStr.length && noteStr[i] === '.' && !isDotted) {
+          durMs += durMs / 2;
+        }
+
+        const durSec = durMs / 1000.0;
+
+        if (letter !== 'p' && noteFreqs[noteName]) {
+          const baseFreq = noteFreqs[noteName];
+          const freq = baseFreq * Math.pow(2, oct - 4);
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(freq, curTime);
+
+          const gateSec = durSec * 0.90;
+          gain.gain.setValueAtTime(0.0001, curTime);
+          gain.gain.exponentialRampToValueAtTime(0.25, curTime + 0.003);
+          gain.gain.setValueAtTime(0.25, curTime + gateSec - 0.003);
+          gain.gain.exponentialRampToValueAtTime(0.0001, curTime + gateSec);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(curTime);
+          osc.stop(curTime + gateSec);
+        }
+
+        curTime += durSec;
+      });
+    }
+  </script>
+</body>
+</html>
