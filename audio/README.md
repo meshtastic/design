@@ -123,7 +123,7 @@ None of the clients or firmware use these yet. Possible follow-ups:
 - iOS can't set a custom vibration on a notification, which always uses the system's. The `.ahap` files are for in-app events only.
 - Firmware could play `pattern_ms` on the vibration motor instead of toggling it at a fixed rate, and a sequence of DRV2605 ramp effects on boards with that driver.
 
-These timings come from the sound, not from feel. Tune them on a device before shipping.
+These timings come from the sound. On a Pixel 6a and a Pixel 9 Pro they were preferred over two alternatives: wider ramps from near zero at twice the length, and Android's built-in rise and fall primitives. The ramps are subtle on both phones; a pattern's rhythm reads more clearly than its intensity.
 
 ## Loudness
 
