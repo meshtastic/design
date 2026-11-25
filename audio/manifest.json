@@ -1,11 +1,31 @@
 [
   {
     "id": "chirpy",
-    "title": "Chirpy //\\ (Notification Sound)",
-    "description": "The official Meshtastic notification sound. A friendly vocalization from Chirpy, the anthropomorphic radio node mascot, embodying the //\\ (Up, Up, Down) logo and LoRa CSS syncword pattern.",
-    "bpm": 180,
-    "rtttl": "Chirpy:d=32,o=6,b=180:c#,f#,p,a#,16f#7,p,c#7,a#,8f#",
-    "rtttl_bytes": 51,
+    "title": "Chirpy",
+    "use": "Message notification. Recommended device default.",
+    "device": true,
+    "loop": false,
+    "rtttl": "Chirpy:d=32,o=6,b=150:c#,f#,p,a#,16f#7,p,c#7,a#,8f#,2p.",
+    "rtttl_bytes": 55,
+    "rtttl_ms": 1850,
+    "rtttl_sounding_ms": 650,
+    "notes": [
+      "c#6",
+      "f#6",
+      "p",
+      "a#6",
+      "f#7",
+      "p",
+      "c#7",
+      "a#6",
+      "f#6",
+      "p"
+    ],
+    "duration_s": 1.108,
+    "tail_peak_dbfs": null,
+    "integrated_lufs": -16.0,
+    "momentary_max_lufs": -14.3,
+    "true_peak_dbtp": -9.8,
     "files": {
       "wav": "dist/chirpy.wav",
       "mp3": "dist/chirpy.mp3",
@@ -14,32 +34,42 @@
       "ogg": "dist/chirpy.ogg",
       "rtttl": "rtttl/chirpy.rtttl",
       "piezo_wav": "dist/piezo_simulated/chirpy_piezo.wav"
-    }
-  },
-  {
-    "id": "chirpy_ringtone",
-    "title": "Chirpy Song (Ringtone)",
-    "description": "Full 4-bar looping musical ringtone based on Chirpy the node's //\\ theme. For incoming calls and node external buzzer notifications.",
-    "bpm": 160,
-    "rtttl": "ChirpySong:d=16,o=6,b=160:32c#,32f#,32p,32a#,16f#7,32p,32c#7,8f#,4p,f#,c#7,d#7,8c#7,4p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7",
-    "rtttl_bytes": 135,
-    "files": {
-      "wav": "dist/chirpy_ringtone.wav",
-      "mp3": "dist/chirpy_ringtone.mp3",
-      "m4a": "dist/chirpy_ringtone.m4a",
-      "caf": "dist/chirpy_ringtone.caf",
-      "ogg": "dist/chirpy_ringtone.ogg",
-      "rtttl": "rtttl/chirpy_ringtone.rtttl",
-      "piezo_wav": "dist/piezo_simulated/chirpy_ringtone_piezo.wav"
+    },
+    "bytes": {
+      "wav": 212780,
+      "mp3": 13869,
+      "m4a": 26467,
+      "caf": 216832,
+      "ogg": 26251
+    },
+    "piezo": {
+      "integrated_lufs": -16.0,
+      "momentary_max_lufs": -14.3,
+      "true_peak_dbtp": -17.3,
+      "duration_s": 1.85,
+      "tail_peak_dbfs": null
     }
   },
   {
     "id": "chirpy_ack",
-    "title": "Chirpy // (Micro Chirp & ACK)",
-    "description": "A compact two-stroke upward LoRa chirp (//) for packet delivery receipts, tapbacks, and message reactions.",
-    "bpm": 200,
-    "rtttl": "Chirp2:d=32,o=6,b=200:c#,f#,p,a#,16f#7",
-    "rtttl_bytes": 38,
+    "title": "Chirpy Ack",
+    "use": "Delivery receipt or reaction. Client apps only.",
+    "device": false,
+    "loop": false,
+    "rtttl": "ChirpyAck:d=32,o=6,b=150:a#,c#7,16f#7",
+    "rtttl_bytes": 37,
+    "rtttl_ms": 200,
+    "rtttl_sounding_ms": 200,
+    "notes": [
+      "a#6",
+      "c#7",
+      "f#7"
+    ],
+    "duration_s": 0.458,
+    "tail_peak_dbfs": null,
+    "integrated_lufs": -16.0,
+    "momentary_max_lufs": -16.0,
+    "true_peak_dbtp": -9.9,
     "files": {
       "wav": "dist/chirpy_ack.wav",
       "mp3": "dist/chirpy_ack.mp3",
@@ -48,6 +78,90 @@
       "ogg": "dist/chirpy_ack.ogg",
       "rtttl": "rtttl/chirpy_ack.rtttl",
       "piezo_wav": "dist/piezo_simulated/chirpy_ack_piezo.wav"
+    },
+    "bytes": {
+      "wav": 87980,
+      "mp3": 6429,
+      "m4a": 11178,
+      "caf": 92032,
+      "ogg": 10949
+    },
+    "piezo": {
+      "integrated_lufs": -70.0,
+      "momentary_max_lufs": -16.0,
+      "true_peak_dbtp": -17.0,
+      "duration_s": 0.25,
+      "tail_peak_dbfs": null
+    }
+  },
+  {
+    "id": "chirpy_ringtone",
+    "title": "Chirpy Song",
+    "use": "Optional longer alert. Loops.",
+    "device": true,
+    "loop": true,
+    "rtttl": "ChirpySong:d=16,o=6,b=150:32c#,32f#,32p,32a#,f#7,32p,32c#7,32a#,8f#,8p.,32p,f#,c#7,d#7,8c#7,4p,p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7.,2p.",
+    "rtttl_bytes": 150,
+    "rtttl_ms": 5000,
+    "rtttl_sounding_ms": 3800,
+    "notes": [
+      "c#6",
+      "f#6",
+      "p",
+      "a#6",
+      "f#7",
+      "p",
+      "c#7",
+      "a#6",
+      "f#6",
+      "p",
+      "p",
+      "f#6",
+      "c#7",
+      "d#7",
+      "c#7",
+      "p",
+      "p",
+      "a#6",
+      "c#7",
+      "f#7",
+      "d#7",
+      "c#7",
+      "p",
+      "c#6",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
+      "p"
+    ],
+    "duration_s": 5.0,
+    "tail_peak_dbfs": null,
+    "integrated_lufs": -16.0,
+    "momentary_max_lufs": -11.6,
+    "true_peak_dbtp": -8.9,
+    "files": {
+      "wav": "dist/chirpy_ringtone.wav",
+      "mp3": "dist/chirpy_ringtone.mp3",
+      "m4a": "dist/chirpy_ringtone.m4a",
+      "caf": "dist/chirpy_ringtone.caf",
+      "ogg": "dist/chirpy_ringtone.ogg",
+      "rtttl": "rtttl/chirpy_ringtone.rtttl",
+      "piezo_wav": "dist/piezo_simulated/chirpy_ringtone_piezo.wav"
+    },
+    "bytes": {
+      "wav": 960044,
+      "mp3": 52725,
+      "m4a": 93359,
+      "caf": 964096,
+      "ogg": 97201
+    },
+    "piezo": {
+      "integrated_lufs": -16.0,
+      "momentary_max_lufs": -13.8,
+      "true_peak_dbtp": -18.1,
+      "duration_s": 5.0,
+      "tail_peak_dbfs": null
     }
   }
 ]

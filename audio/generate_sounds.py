@@ -1,528 +1,535 @@
 #!/usr/bin/env python3
-r"""
-Meshtastic 'Chirpy' Audio & Ringtone Generator
-Exclusively synthesizes the official 'Chirpy' sound suite.
-Chirpy is Meshtastic's anthropomorphic radio node mascot, named after
-LoRa Chirp Spread Spectrum (CSS) radio modulation.
+"""Generate the Chirpy notification sounds.
 
-The sounds embody the iconic //\ (Upchirp, Upchirp, Downchirp)
-LoRa packet syncword and chest logo pattern.
+Each sound is defined by one RTTTL string. The string is parsed the way
+firmware parses it, and the phone/desktop audio, the piezo preview, the
+manifest and the generated parts of README.md and index.html all come
+from that parse.
 
-Zero external dependencies (uses Python standard library: math, wave, struct, json, os).
-Encodes to MP3, M4A, CAF, OGG using system tools (afconvert / ffmpeg) when available.
+Python standard library only. Needs ffmpeg on PATH; uses afconvert for
+CAF when present (macOS) and ffmpeg otherwise.
+
+    python3 generate_sounds.py
 """
 
-import math
-import struct
-import wave
-import os
 import json
+import math
+import os
+import re
+import shutil
+import struct
 import subprocess
+import sys
+import tempfile
+import wave
 
 SAMPLE_RATE = 48000
 TWO_PI = 2.0 * math.pi
 
-# Note frequency table (Hz)
+RTTTL_MAX_BYTES = 230  # RTTTLConfig.ringtone max_size is 231 including the NUL
+TARGET_LUFS = -16.0  # integrated
+MAX_TRUE_PEAK = -1.0  # dBTP
+NO_READING_LUFS = -70.0
+TAIL_SILENCE_S = 0.050  # digital silence appended to every non-looping file
+
+SEMITONE = {"c": 0, "c#": 1, "d": 2, "d#": 3, "e": 4, "f": 5, "f#": 6,
+            "g": 7, "g#": 8, "a": 9, "a#": 10, "b": 11}
+
+# Equal temperament from A4 = 440 Hz, for the octaves firmware can play.
 NOTES = {
-    'c#6': 1108.73, 'f#6': 1479.98,
-    'a#6': 1864.66, 'c#7': 2217.46,
-    'd#7': 2489.02, 'f#7': 2959.96,
-    'p': 0.0 # Rest
+    f"{name}{octave}": 440.0 * 2.0 ** ((12 * (octave - 4) + semi - 9) / 12.0)
+    for octave in range(4, 8)
+    for name, semi in SEMITONE.items()
 }
 
+SUITE = [
+    {
+        "id": "chirpy",
+        "title": "Chirpy",
+        "use": "Message notification. Recommended device default.",
+        "device": True,
+        "loop": False,
+        "bell_s": 0.55,
+        "rtttl": "Chirpy:d=32,o=6,b=150:c#,f#,p,a#,16f#7,p,c#7,a#,8f#,2p.",
+    },
+    {
+        "id": "chirpy_ack",
+        "title": "Chirpy Ack",
+        "use": "Delivery receipt or reaction. Client apps only.",
+        "device": False,
+        "loop": False,
+        "bell_s": 0.25,
+        "rtttl": "ChirpyAck:d=32,o=6,b=150:a#,c#7,16f#7",
+    },
+    {
+        "id": "chirpy_ringtone",
+        "title": "Chirpy Song",
+        "use": "Optional longer alert. Loops.",
+        "device": True,
+        "loop": True,
+        "bell_s": 0.55,
+        "rtttl": (
+            "ChirpySong:d=16,o=6,b=150:"
+            "32c#,32f#,32p,32a#,f#7,32p,32c#7,32a#,8f#,8p.,32p,"
+            "f#,c#7,d#7,8c#7,4p,p,"
+            "a#,c#7,f#7,d#7,8c#7,4p,"
+            "32c#,32f#,32a#,32c#7,4f#7.,2p."
+        ),
+    },
+]
 
-# ==============================================================================
-# 1. Synthesis Engines: Electronic LoRa Node Chirps + Resonant Chimes
-# ==============================================================================
 
-def synth_chirpy_notification(sample_rate=SAMPLE_RATE):
+# ----------------------------------------------------------------------------
+# RTTTL
+# ----------------------------------------------------------------------------
+
+def parse_rtttl(text):
+    """Parse an RTTTL string into note events.
+
+    Follows NonBlockingRTTTL, which the PWM buzzer path uses, including its
+    integer millisecond math. The string is also checked against the subset
+    that the I2S players (ESP8266Audio, NRF52RtttlPlayer) read the same way.
+
+    Returns (name, events, total_ms). Each event is a dict with start_ms,
+    dur_ms, note (such as "f#6", or None for a rest) and freq.
     """
-    Flagship Chirpy //\\ Notification Sound (0.85s).
-    The electronic vocalization of Chirpy the anthropomorphic radio node:
-      Stroke 1 (/): Upward greeting RF chirp (C#6 -> F#6)
-      Stroke 2 (/): Higher upward RF chirp to summit peak (A#6 -> F#7)
-      Stroke 3 (\\): Cascading downward resolution (F#7 -> C#7 -> F#6)
+    if len(text.encode("ascii")) > RTTTL_MAX_BYTES:
+        raise ValueError(f"RTTTL is over {RTTTL_MAX_BYTES} bytes: {text}")
+    name, header, body = text.split(":")
+    if not 0 < len(name) <= 10:
+        raise ValueError(f"RTTTL name must be 1-10 characters: {name}")
+    m = re.fullmatch(r"d=(\d+),o=(\d),b=(\d+)", header)
+    if not m:
+        raise ValueError(f"RTTTL header must be d=,o=,b= in that order: {header}")
+    default_dur, default_oct, bpm = (int(g) for g in m.groups())
+    if 60000 % bpm:
+        # (60000 / bpm) * 4 and 240000 / bpm only agree when this divides.
+        raise ValueError(f"bpm {bpm} gives different timing on different players")
+    wholenote = (60000 // bpm) * 4
+
+    events = []
+    now = 0
+    for token in body.split(","):
+        # A dot before an octave digit is read differently by ESP8266Audio.
+        m = re.fullmatch(r"(\d*)([a-gp]#?)(\.?)([4-7]?)(\.?)", token)
+        if not m or (m.group(3) and m.group(4)) or (m.group(3) and m.group(5)):
+            raise ValueError(f"unsupported RTTTL note: {token!r}")
+        num, pitch, dot_a, octave, dot_b = m.groups()
+        num = int(num) if num else default_dur
+        if num not in (1, 2, 4, 8, 16, 32):
+            raise ValueError(f"unsupported RTTTL duration: {token!r}")
+        dur = wholenote // num
+        if dot_a or dot_b:
+            dur += dur // 2
+        if pitch == "p":
+            if octave:
+                raise ValueError(f"rest with an octave: {token!r}")
+            note, freq = None, 0.0
+        else:
+            note = f"{pitch}{octave or default_oct}"
+            freq = NOTES[note]
+        events.append({"start_ms": now, "dur_ms": dur, "note": note, "freq": freq})
+        now += dur
+    return name, events, now
+
+
+def sounding_ms(events):
+    """End of the last note, ignoring trailing rests."""
+    return max(e["start_ms"] + e["dur_ms"] for e in events if e["note"])
+
+
+def note_groups(events):
+    """Runs of notes with no rest between them. Each run is one stroke."""
+    groups, current = [], []
+    for e in events:
+        if e["note"]:
+            current.append(e)
+        elif current:
+            groups.append(current)
+            current = []
+    if current:
+        groups.append(current)
+    return groups
+
+
+# ----------------------------------------------------------------------------
+# Synthesis
+# ----------------------------------------------------------------------------
+
+def raised_cosine(x):
+    return 0.5 - 0.5 * math.cos(math.pi * max(0.0, min(1.0, x)))
+
+
+def pan_gains(pan):
+    angle = (pan + 1.0) * math.pi / 4.0
+    return math.cos(angle), math.sin(angle)
+
+
+STROKE_PAN = (-0.25, 0.20, 0.05)
+STROKE_AMP = (0.55, 0.70, 0.60)
+GLIDE_S = 0.050  # each note slides to the next over its last 50 ms
+ATTACK_S = 0.008
+RELEASE_S = 0.025
+BELL_PARTIALS = ((1.00, 1.00, 1.0), (2.00, 0.25, 0.6), (2.76, 0.18, 0.4), (4.15, 0.04, 0.3))
+REFLECTIONS = ((0.016, 0.14, 0.06), (0.034, 0.10, 0.12), (0.058, 0.05, 0.05))
+
+
+def add_stroke(left, right, group, pan, amp, sr):
+    """One swept voice through a run of notes, landing on each note's pitch."""
+    start = group[0]["start_ms"] / 1000.0
+    end = (group[-1]["start_ms"] + group[-1]["dur_ms"]) / 1000.0
+    first = int(start * sr)
+    n = int((end - start) * sr)
+    att = int(ATTACK_S * sr)
+    rel = int(RELEASE_S * sr)
+    hold_from = group[-1]["start_ms"] / 1000.0 - start + 0.100
+    gain_l, gain_r = pan_gains(pan)
+
+    # Per-note (start, end, f_from, f_to) with the slide at the end of the note.
+    segments = []
+    for i, e in enumerate(group):
+        t0 = e["start_ms"] / 1000.0 - start
+        t1 = t0 + e["dur_ms"] / 1000.0
+        nxt = group[i + 1]["freq"] if i + 1 < len(group) else e["freq"]
+        segments.append((t0, t1, e["freq"], nxt))
+
+    phase = 0.0
+    seg = 0
+    for i in range(n):
+        t = i / sr
+        while seg + 1 < len(segments) and t >= segments[seg][1]:
+            seg += 1
+        t0, t1, f_from, f_to = segments[seg]
+        glide = min(GLIDE_S, t1 - t0)
+        x = (t - (t1 - glide)) / glide
+        freq = f_from if x <= 0.0 else f_from * (f_to / f_from) ** min(1.0, x)
+        phase += TWO_PI * freq / sr
+
+        env = raised_cosine(i / att) * raised_cosine((n - 1 - i) / rel)
+        if t > hold_from:
+            env *= math.exp(-(t - hold_from) / 0.5)
+        val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
+        left[first + i] += val * gain_l
+        right[first + i] += val * gain_r
+
+
+def add_bell(left, right, start_s, freq, dur_s, pan, amp, sr):
+    """A struck-bell layer. The last 40% fades to zero so it never truncates."""
+    first = int(start_s * sr)
+    n = int(dur_s * sr)
+    att = int(0.004 * sr)
+    rel = int(0.4 * n)
+    tau = 0.25 * (1500.0 / freq) ** 0.3
+    gain_l, gain_r = pan_gains(pan)
+    incs = [TWO_PI * freq * mult / sr for mult, _, _ in BELL_PARTIALS]
+    for i in range(n):
+        t = i / sr
+        val = 0.0
+        for inc, (_, p_amp, d_mult) in zip(incs, BELL_PARTIALS):
+            val += p_amp * math.exp(-t / (tau * d_mult)) * math.sin(inc * i)
+        val *= raised_cosine(i / att) * raised_cosine((n - 1 - i) / rel) * amp * 0.40
+        left[first + i] += val * gain_l
+        right[first + i] += val * gain_r
+
+
+def render_studio(events, total_ms, bell_s, loop, sr=SAMPLE_RATE):
+    """Phone and desktop rendering of the parsed RTTTL events.
+
+    A looping sound is exactly as long as its RTTTL string, trailing rest
+    included. A one-shot drops the trailing rest and ends when its tail does.
     """
-    total_sec = 0.85
-    total_samples = int(total_sec * sample_rate)
-    left = [0.0] * total_samples
-    right = [0.0] * total_samples
+    groups = note_groups(events)
+    sixteenth = min(e["dur_ms"] for e in events) * 2
+    bells = []
+    for gi, group in enumerate(groups):
+        for e in group:
+            if e is group[-1] or e["dur_ms"] >= sixteenth:
+                amp = 0.45 if e is group[-1] else 0.30
+                bells.append((e["start_ms"] / 1000.0, e["freq"], bell_s, -STROKE_PAN[gi % 3], amp))
 
-    # Tactile LoRa CSS sweeps for the //\\ strokes
-    chirp_strokes = [
-        # (start_t, dur, f_start, f_end, pan, amp)
-        (0.000, 0.065, 1108.73, 1568.0, -0.25, 0.55),  # Stroke 1: /
-        (0.085, 0.090, 1760.0,  3136.0,  0.20, 0.70),  # Stroke 2: /
-        (0.190, 0.140, 3136.0,  1479.98, 0.05, 0.60),  # Stroke 3: \
-    ]
+    content_end = max([sounding_ms(events) / 1000.0] + [b[0] + b[2] for b in bells])
+    content_end += REFLECTIONS[-1][0]
+    if loop:
+        total = total_ms / 1000.0
+        if content_end + TAIL_SILENCE_S > total:
+            raise ValueError("loop needs a longer trailing rest for its tail")
+    else:
+        total = content_end + TAIL_SILENCE_S
+    n = int(round(total * sr))
+    dry_l = [0.0] * (n + 1)
+    dry_r = [0.0] * (n + 1)
 
-    for start_t, dur, f0, f1, pan, amp in chirp_strokes:
-        start_idx = int(start_t * sample_rate)
-        n = int(dur * sample_rate)
-        phase = 0.0
-        att = int(0.006 * sample_rate)
-        rel = int(0.020 * sample_rate)
+    for gi, group in enumerate(groups):
+        add_stroke(dry_l, dry_r, group, STROKE_PAN[gi % 3], STROKE_AMP[gi % 3], sr)
+    for start_s, freq, dur_s, pan, amp in bells:
+        add_bell(dry_l, dry_r, start_s, freq, dur_s, pan, amp, sr)
 
-        pan_l = math.cos((pan + 1.0) * math.pi / 4.0)
-        pan_r = math.sin((pan + 1.0) * math.pi / 4.0)
-
-        for i in range(n):
-            idx = start_idx + i
-            if idx >= total_samples:
-                break
-            t = i / n
-            freq = f0 * ((f1 / f0) ** t)
-            phase += TWO_PI * freq / sample_rate
-
-            env = math.sin((i / att) * (math.pi / 2)) if i < att else (
-                  math.sin(((n - i) / rel) * (math.pi / 2)) if i > n - rel else 1.0)
-
-            # Node synthesizer voice: fundamental + gentle 2nd harmonic + tactile sparkle
-            val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
-            left[idx] += val * pan_l
-            right[idx] += val * pan_r
-
-    # Acoustic Bell / Chime Resonance on key F# Major triad anchors
-    chimes = [
-        (0.000, 1479.98, 0.45, -0.20, 0.35), # F#6
-        (0.150, 2959.96, 0.55,  0.25, 0.50), # F#7
-        (0.240, 2217.46, 0.45,  0.10, 0.30), # C#7
-        (0.280, 1479.98, 0.55, -0.10, 0.40), # F#6
-    ]
-
-    add_bell_resonance(left, right, chimes, total_samples, sample_rate)
-    return apply_ambience_and_normalize(left, right, sample_rate)
-
-
-def synth_chirpy_ack(sample_rate=SAMPLE_RATE):
-    """
-    Chirpy Quick // ACK Chirp (0.50s).
-    Two rapid upward strokes (//) for tapbacks, receipts, and fast pings.
-    """
-    total_sec = 0.50
-    total_samples = int(total_sec * sample_rate)
-    left = [0.0] * total_samples
-    right = [0.0] * total_samples
-
-    chirp_strokes = [
-        (0.000, 0.055, 1108.73, 1568.0, -0.20, 0.60),  # Stroke 1: /
-        (0.075, 0.080, 1864.66, 2959.96,  0.20, 0.75),  # Stroke 2: / (bright peak)
-    ]
-
-    for start_t, dur, f0, f1, pan, amp in chirp_strokes:
-        start_idx = int(start_t * sample_rate)
-        n = int(dur * sample_rate)
-        phase = 0.0
-        att = int(0.005 * sample_rate)
-        rel = int(0.018 * sample_rate)
-
-        pan_l = math.cos((pan + 1.0) * math.pi / 4.0)
-        pan_r = math.sin((pan + 1.0) * math.pi / 4.0)
-
-        for i in range(n):
-            idx = start_idx + i
-            if idx >= total_samples:
-                break
-            t = i / n
-            freq = f0 * ((f1 / f0) ** t)
-            phase += TWO_PI * freq / sample_rate
-
-            env = math.sin((i / att) * (math.pi / 2)) if i < att else (
-                  math.sin(((n - i) / rel) * (math.pi / 2)) if i > n - rel else 1.0)
-
-            val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
-            left[idx] += val * pan_l
-            right[idx] += val * pan_r
-
-    chimes = [
-        (0.000, 1479.98, 0.35, -0.15, 0.30),
-        (0.120, 2959.96, 0.40,  0.25, 0.45),
-    ]
-
-    add_bell_resonance(left, right, chimes, total_samples, sample_rate)
-    return apply_ambience_and_normalize(left, right, sample_rate)
-
-
-def synth_chirpy_ringtone(sample_rate=SAMPLE_RATE):
-    """
-    Chirpy Song Ringtone (3.6s loopable).
-    4 melodic phrases featuring Chirpy the node's //\\ theme:
-      Bar 1: Flagship //\\ call
-      Bar 2: Playful answer
-      Bar 3: Mesh hops
-      Bar 4: Grand //\\ ascending finale with sustained singing peak
-    """
-    total_sec = 3.6
-    total_samples = int(total_sec * sample_rate)
-    left = [0.0] * total_samples
-    right = [0.0] * total_samples
-
-    strokes = [
-        # Bar 1: //\
-        (0.000, 0.060, 1108.73, 1568.0, -0.25, 0.55),
-        (0.080, 0.085, 1760.0,  3136.0,  0.20, 0.70),
-        (0.185, 0.130, 3136.0,  1479.98, 0.00, 0.60),
-
-        # Bar 2: Answer
-        (0.850, 0.080, 1479.98, 2217.46, -0.15, 0.50),
-        (0.950, 0.080, 2217.46, 2489.02,  0.15, 0.55),
-        (1.050, 0.140, 2489.02, 2217.46,  0.00, 0.50),
-
-        # Bar 3: Mesh Hops
-        (1.700, 0.060, 1864.66, 2217.46, -0.20, 0.50),
-        (1.780, 0.075, 2217.46, 2959.96,  0.25, 0.65),
-        (1.880, 0.120, 2959.96, 2217.46,  0.05, 0.55),
-
-        # Bar 4: Grand //\ Finale
-        (2.550, 0.050, 1108.73, 1479.98, -0.25, 0.50),
-        (2.620, 0.050, 1479.98, 1864.66, -0.10, 0.55),
-        (2.690, 0.060, 1864.66, 2217.46,  0.10, 0.60),
-        (2.770, 0.380, 2217.46, 2959.96,  0.25, 0.75),
-    ]
-
-    for start_t, dur, f0, f1, pan, amp in strokes:
-        start_idx = int(start_t * sample_rate)
-        n = int(dur * sample_rate)
-        phase = 0.0
-        att = int(0.006 * sample_rate)
-        rel = int(0.025 * sample_rate)
-
-        pan_l = math.cos((pan + 1.0) * math.pi / 4.0)
-        pan_r = math.sin((pan + 1.0) * math.pi / 4.0)
-
-        for i in range(n):
-            idx = start_idx + i
-            if idx >= total_samples:
-                break
-            t = i / n
-            freq = f0 * ((f1 / f0) ** t)
-            if dur > 0.2 and i > att * 2:
-                freq *= (1.0 + 0.015 * math.sin(TWO_PI * 18.0 * (i / sample_rate)))
-
-            phase += TWO_PI * freq / sample_rate
-
-            env = math.sin((i / att) * (math.pi / 2)) if i < att else (
-                  math.sin(((n - i) / rel) * (math.pi / 2)) if i > n - rel else 1.0)
-
-            val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
-            left[idx] += val * pan_l
-            right[idx] += val * pan_r
-
-    chimes = [
-        (0.000, 1479.98, 0.40, -0.20, 0.35),
-        (0.150, 2959.96, 0.50,  0.25, 0.45),
-        (0.260, 1479.98, 0.50, -0.10, 0.40),
-        (0.850, 1479.98, 0.35, -0.15, 0.30),
-        (1.050, 2217.46, 0.50,  0.10, 0.35),
-        (1.700, 1864.66, 0.35, -0.15, 0.30),
-        (1.850, 2959.96, 0.50,  0.20, 0.40),
-        (2.000, 2217.46, 0.45,  0.00, 0.30),
-        (2.550, 1479.98, 0.35, -0.20, 0.35),
-        (2.770, 2959.96, 0.85,  0.30, 0.55),
-    ]
-
-    add_bell_resonance(left, right, chimes, total_samples, sample_rate)
-    return apply_ambience_and_normalize(left, right, sample_rate)
-
-
-def add_bell_resonance(left, right, chimes, total_samples, sample_rate):
-    """Layers physical bell/tine partials underneath the electronic chirp."""
-    bell_partials = [
-        (1.00, 1.00, 1.0),
-        (2.00, 0.25, 0.6),
-        (2.76, 0.18, 0.4),
-        (4.15, 0.04, 0.3)
-    ]
-
-    for start_t, freq, dur_sec, pan, amp in chimes:
-        start_idx = int(start_t * sample_rate)
-        n = int(dur_sec * sample_rate)
-        att = int(0.004 * sample_rate)
-        decay_tau = 0.25 * (1500.0 / freq) ** 0.3
-
-        pan_l = math.cos((pan + 1.0) * math.pi / 4.0)
-        pan_r = math.sin((pan + 1.0) * math.pi / 4.0)
-
-        phases = [0.0] * len(bell_partials)
-        phase_inc = [TWO_PI * (freq * p[0]) / sample_rate for p in bell_partials]
-
-        for i in range(n):
-            idx = start_idx + i
-            if idx >= total_samples:
-                break
-            t = i / sample_rate
-            env = math.sin((i / att) * (math.pi / 2)) if i < att else 1.0
-            val = 0.0
-            for p_idx, (mult, p_amp, d_mult) in enumerate(bell_partials):
-                p_decay = math.exp(-t / (decay_tau * d_mult))
-                val += p_amp * p_decay * math.sin(phases[p_idx])
-                phases[p_idx] += phase_inc[p_idx]
-
-            sample_val = val * env * amp * 0.40
-            left[idx] += sample_val * pan_l
-            right[idx] += sample_val * pan_r
-
-
-def apply_ambience_and_normalize(left, right, sample_rate):
-    """Applies subtle stereo reflections and normalizes peak to -1.0 dBFS."""
-    n = len(left)
-    out_l = list(left)
-    out_r = list(right)
-
-    reflections = [
-        (int(0.016 * sample_rate), 0.14, 0.06),
-        (int(0.034 * sample_rate), 0.10, 0.12),
-        (int(0.058 * sample_rate), 0.05, 0.05),
-    ]
-
-    for delay_s, g_dir, g_cross in reflections:
-        for i in range(delay_s, n):
-            out_l[i] += left[i - delay_s] * g_dir + right[i - delay_s] * g_cross
-            out_r[i] += right[i - delay_s] * g_dir + left[i - delay_s] * g_cross
-
-    max_peak = max(max(abs(l), abs(r)) for l, r in zip(out_l, out_r))
-    if max_peak > 0:
-        gain = 0.89125 / max_peak  # -1.0 dBFS
-        out_l = [s * gain for s in out_l]
-        out_r = [s * gain for s in out_r]
-
+    out_l = list(dry_l[:n])
+    out_r = list(dry_r[:n])
+    for delay_s, g_dir, g_cross in REFLECTIONS:
+        d = int(delay_s * sr)
+        for i in range(d, n):
+            out_l[i] += dry_l[i - d] * g_dir + dry_r[i - d] * g_cross
+            out_r[i] += dry_r[i - d] * g_dir + dry_l[i - d] * g_cross
     return out_l, out_r
 
 
-def render_piezo_simulation(score, bpm, sample_rate=SAMPLE_RATE):
-    """Simulates hardware piezo buzzer (pure square wave with physical damping)."""
-    sec_per_beat = 60.0 / bpm
-    note_events = []
-    current_time = 0.0
+def render_piezo(events, total_ms, sr=SAMPLE_RATE):
+    """Square-wave preview of the string as a buzzer plays it.
 
-    for item in score:
-        note_name = item[0]
-        dur_beats = item[1]
-        dur_sec = dur_beats * sec_per_beat
-        freq = NOTES.get(note_name.lower(), 0.0)
-        note_events.append((current_time, freq, dur_sec))
-        current_time += dur_sec
-
-    total_duration = current_time + 0.1
-    total_samples = int(total_duration * sample_rate)
-    mix = [0.0] * total_samples
-
-    for (start_t, freq, dur_sec) in note_events:
-        if freq <= 0.0:
+    Notes run their full length with no gap, as tone() does. The square is
+    built from odd harmonics below 20 kHz so the preview has no aliasing.
+    """
+    has_trailing_rest = events[-1]["note"] is None
+    total = total_ms / 1000.0 + (0.0 if has_trailing_rest else TAIL_SILENCE_S)
+    n = int(round(total * sr))
+    mix = [0.0] * n
+    ramp = int(0.001 * sr)
+    for e in events:
+        if not e["note"]:
             continue
-        start_idx = int(start_t * sample_rate)
-        note_len = int(dur_sec * sample_rate)
-        gate_samples = int(note_len * 0.90)
-        ramp = int(0.002 * sample_rate)
-
-        phase = 0.0
-        phase_inc = TWO_PI * freq / sample_rate
-
-        for i in range(min(gate_samples, total_samples - start_idx)):
-            sq = 1.0 if math.sin(phase) >= 0.0 else -1.0
-            phase += phase_inc
-
-            env = 1.0
-            if i < ramp:
-                env = i / ramp
-            elif i > gate_samples - ramp:
-                env = (gate_samples - i) / ramp
-
-            mix[start_idx + i] += sq * 0.6 * env
-
-    max_peak = max(abs(s) for s in mix) if mix else 1.0
-    if max_peak > 0:
-        gain = 0.8 / max_peak
-        mix = [s * gain for s in mix]
-
-    return mix, mix
+        first = int(e["start_ms"] * sr / 1000)
+        length = int(e["dur_ms"] * sr / 1000)
+        harmonics = [k for k in range(1, 40, 2) if k * e["freq"] < 20000.0]
+        inc = TWO_PI * e["freq"] / sr
+        for i in range(length):
+            val = sum(math.sin(k * inc * i) / k for k in harmonics)
+            env = min(1.0, i / ramp, (length - 1 - i) / ramp)
+            mix[first + i] += val * env
+    return mix, list(mix)
 
 
-# ==============================================================================
-# 2. File Conversion Utilities
-# ==============================================================================
+# ----------------------------------------------------------------------------
+# Files, loudness
+# ----------------------------------------------------------------------------
 
-def write_wav(filename, left, right, sample_rate=SAMPLE_RATE):
-    """Writes 16-bit stereo PCM WAV file."""
-    n_samples = len(left)
-    with wave.open(filename, 'wb') as wav_file:
-        wav_file.setnchannels(2)
-        wav_file.setsampwidth(2)
-        wav_file.setframerate(sample_rate)
-
-        frames = bytearray()
-        for i in range(n_samples):
-            l_val = max(-32767, min(32767, int(left[i] * 32767.0)))
-            r_val = max(-32767, min(32767, int(right[i] * 32767.0)))
-            frames.extend(struct.pack('<hh', l_val, r_val))
-
-        wav_file.writeframes(frames)
-    print(f"  [WAV] Created: {filename} ({n_samples/sample_rate:.2f}s)")
+def write_wav(path, left, right, gain=1.0, sr=SAMPLE_RATE):
+    frames = bytearray()
+    for l, r in zip(left, right):
+        lv = int(round(l * gain * 32767.0))
+        rv = int(round(r * gain * 32767.0))
+        if abs(lv) > 32767 or abs(rv) > 32767:
+            raise ValueError(f"{path} would clip")
+        frames.extend(struct.pack("<hh", lv, rv))
+    with wave.open(path, "wb") as f:
+        f.setnchannels(2)
+        f.setsampwidth(2)
+        f.setframerate(sr)
+        f.writeframes(frames)
 
 
-def convert_audio(wav_path, output_dir, base_name):
-    """Converts WAV to MP3, M4A, CAF, OGG."""
-    mp3_path = os.path.join(output_dir, f"{base_name}.mp3")
-    m4a_path = os.path.join(output_dir, f"{base_name}.m4a")
-    caf_path = os.path.join(output_dir, f"{base_name}.caf")
-    ogg_path = os.path.join(output_dir, f"{base_name}.ogg")
-
-    # MP3 (Android & Web)
-    subprocess.run(["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-q:a", "2", mp3_path],
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if os.path.exists(mp3_path):
-        print(f"  [MP3] Created: {mp3_path}")
-
-    # M4A / AAC
-    subprocess.run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "aac", "-b:a", "192k", m4a_path],
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if os.path.exists(m4a_path):
-        print(f"  [M4A] Created: {m4a_path}")
-
-    # CAF (Apple CoreAudio Format)
-    caf_success = False
-    try:
-        res = subprocess.run(["afconvert", "-f", "caff", "-d", "LEI16", wav_path, caf_path],
-                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if res.returncode == 0 and os.path.exists(caf_path) and os.path.getsize(caf_path) > 0:
-            caf_success = True
-    except Exception:
-        pass
-    if not caf_success:
-        subprocess.run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "pcm_s16le", caf_path],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if os.path.exists(caf_path) and os.path.getsize(caf_path) > 0:
-        print(f"  [CAF] Created: {caf_path}")
-
-    # OGG / Opus
-    subprocess.run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "libopus", "-b:a", "128k", ogg_path],
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if os.path.exists(ogg_path):
-        print(f"  [OGG] Created: {ogg_path}")
+def run(cmd):
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    if res.returncode != 0:
+        raise RuntimeError(f"{' '.join(cmd)}\n{res.stderr[-2000:]}")
+    return res.stderr
 
 
-# ==============================================================================
-# 3. Dedicated Chirpy Sound Suite
-# ==============================================================================
+def measure(path):
+    """EBU R128 numbers from ffmpeg.
 
-CHIRPY_SUITE = {
-    # 1. Chirpy //\ Flagship Notification Sound
-    "chirpy": {
-        "title": "Chirpy //\\ (Notification Sound)",
-        "description": "The official Meshtastic notification sound. A friendly vocalization from Chirpy, the anthropomorphic radio node mascot, embodying the //\\ (Up, Up, Down) logo and LoRa CSS syncword pattern.",
-        "bpm": 180,
-        "synth_fn": synth_chirpy_notification,
-        "score": [
-            # Stroke 1: /
-            ("c#6", 0.125), ("f#6", 0.125), ("p", 0.0625),
-            # Stroke 2: /
-            ("a#6", 0.125), ("f#7", 0.25),  ("p", 0.0625),
-            # Stroke 3: \
-            ("c#7", 0.125), ("a#6", 0.125), ("f#6", 0.50),
-        ],
-        "rtttl": "Chirpy:d=32,o=6,b=180:c#,f#,p,a#,16f#7,p,c#7,a#,8f#"
-    },
+    integrated and true_peak come from the file as it is. momentary_max is
+    taken with 0.5 s of silence appended, so a sound shorter than the 400 ms
+    momentary window still fills one.
+    """
+    plain = run(["ffmpeg", "-nostats", "-i", path, "-af", "ebur128=peak=true", "-f", "null", "-"])
+    summary = plain[plain.rindex("Summary:"):]
+    integrated = float(re.search(r"I:\s+(-?[\d.]+) LUFS", summary).group(1))
+    true_peak = float(re.search(r"Peak:\s+(-?[\d.]+) dBFS", summary).group(1))
+    padded = run(["ffmpeg", "-nostats", "-i", path, "-af", "apad=pad_dur=0.5,ebur128", "-f", "null", "-"])
+    frames = [float(v) for v in re.findall(r"\bM:\s*(-?\d+\.\d+)", padded)]
+    return {"integrated_lufs": integrated, "momentary_max_lufs": max(frames), "true_peak_dbtp": true_peak}
 
-    # 2. Chirpy Song Ringtone
-    "chirpy_ringtone": {
-        "title": "Chirpy Song (Ringtone)",
-        "description": "Full 4-bar looping musical ringtone based on Chirpy the node's //\\ theme. For incoming calls and node external buzzer notifications.",
-        "bpm": 160,
-        "synth_fn": synth_chirpy_ringtone,
-        "score": [
-            # Bar 1: //\ Call
-            ("c#6", 0.125), ("f#6", 0.125), ("p", 0.0625),
-            ("a#6", 0.125), ("f#7", 0.25),  ("p", 0.0625),
-            ("c#7", 0.125), ("f#6", 0.50),  ("p", 0.25),
-            # Bar 2: Answer
-            ("f#6", 0.25),  ("c#7", 0.25),  ("d#7", 0.25), ("c#7", 0.50), ("p", 0.25),
-            # Bar 3: Mesh Hops
-            ("a#6", 0.25),  ("c#7", 0.25),  ("f#7", 0.25), ("d#7", 0.25), ("c#7", 0.50), ("p", 0.25),
-            # Bar 4: //\ Finale
-            ("c#6", 0.125), ("f#6", 0.125), ("a#6", 0.125), ("c#7", 0.125), ("f#7", 1.00),
-        ],
-        "rtttl": "ChirpySong:d=16,o=6,b=160:32c#,32f#,32p,32a#,16f#7,32p,32c#7,8f#,4p,f#,c#7,d#7,8c#7,4p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7"
-    },
 
-    # 3. Chirpy Quick // (Micro ACK Chirp)
-    "chirpy_ack": {
-        "title": "Chirpy // (Micro Chirp & ACK)",
-        "description": "A compact two-stroke upward LoRa chirp (//) for packet delivery receipts, tapbacks, and message reactions.",
-        "bpm": 200,
-        "synth_fn": synth_chirpy_ack,
-        "score": [
-            ("c#6", 0.125), ("f#6", 0.125), ("p", 0.0625),
-            ("a#6", 0.125), ("f#7", 0.35),
-        ],
-        "rtttl": "Chirp2:d=32,o=6,b=200:c#,f#,p,a#,16f#7"
-    }
-}
+def wav_stats(path):
+    with wave.open(path, "rb") as f:
+        sr, n = f.getframerate(), f.getnframes()
+        f.setpos(n - int(0.030 * sr))
+        tail = struct.unpack(f"<{int(0.030 * sr) * 2}h", f.readframes(int(0.030 * sr)))
+    peak = max(abs(v) for v in tail)
+    tail_db = 20.0 * math.log10(peak / 32768.0) if peak else float("-inf")
+    return n / sr, tail_db
+
+
+def normalize(path, left, right, fallback_momentary=None):
+    """Write the buffers at TARGET_LUFS integrated.
+
+    ffmpeg reports -70 LUFS when a file is too short for one 400 ms gating
+    block. Such a file is matched to fallback_momentary instead.
+    """
+    peak = max(max(abs(v) for v in left), max(abs(v) for v in right))
+    gain = 0.5 / peak
+    with tempfile.TemporaryDirectory() as tmp:
+        probe = os.path.join(tmp, "probe.wav")
+        write_wav(probe, left, right, gain)
+        got = measure(probe)
+    if got["integrated_lufs"] > NO_READING_LUFS:
+        target, key = TARGET_LUFS, "integrated_lufs"
+    elif fallback_momentary is not None:
+        target, key = fallback_momentary, "momentary_max_lufs"
+    else:
+        raise RuntimeError(f"{path} is too short for an integrated reading")
+    gain *= 10.0 ** ((target - got[key]) / 20.0)
+    over = got["true_peak_dbtp"] + (target - got[key]) - MAX_TRUE_PEAK
+    if over > 0.0:
+        print(f"  {os.path.basename(path)}: held {over + 0.1:.1f} dB under target to keep true peak")
+        gain *= 10.0 ** (-(over + 0.1) / 20.0)
+    write_wav(path, left, right, gain)
+    result = measure(path)
+    if result["true_peak_dbtp"] > MAX_TRUE_PEAK:
+        raise RuntimeError(f"{path} true peak {result['true_peak_dbtp']} dBTP")
+    return result
+
+
+def encode(wav_path, out_dir, base):
+    """WAV to MP3, M4A, CAF and OGG. Returns {format: path}."""
+    out = {ext: os.path.join(out_dir, f"{base}.{ext}") for ext in ("mp3", "m4a", "caf", "ogg")}
+    run(["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-q:a", "2", out["mp3"]])
+    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "aac", "-b:a", "192k", out["m4a"]])
+    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "libopus", "-b:a", "128k", out["ogg"]])
+    if shutil.which("afconvert"):
+        run(["afconvert", "-f", "caff", "-d", "LEI16", wav_path, out["caf"]])
+    else:
+        run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "pcm_s16le", out["caf"]])
+    return out
+
+
+# ----------------------------------------------------------------------------
+# Generated documentation blocks
+# ----------------------------------------------------------------------------
+
+def replace_block(path, begin, end, body):
+    with open(path) as f:
+        text = f.read()
+    if text.count(begin) != 1 or text.count(end) != 1:
+        raise RuntimeError(f"{path} needs exactly one {begin} ... {end} block")
+    head, rest = text.split(begin)
+    _, tail = rest.split(end)
+    with open(path, "w") as f:
+        f.write(head + begin + "\n" + body + "\n" + end + tail)
+
+
+def readme_block(manifest):
+    lines = [
+        "| Sound | Use | Phone file | Device RTTTL | RTTTL bytes |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for m in manifest:
+        device = f"{m['rtttl_ms'] / 1000:.2f} s"
+        if m["rtttl_ms"] != m["rtttl_sounding_ms"]:
+            device = f"{m['rtttl_sounding_ms'] / 1000:.2f} s, then {(m['rtttl_ms'] - m['rtttl_sounding_ms']) / 1000:.2f} s rest"
+        if not m["device"]:
+            device += " (reference only)"
+        lines.append(f"| `{m['id']}` | {m['use']} | {m['duration_s']:.2f} s | {device} | {m['rtttl_bytes']} |")
+    for m in manifest:
+        lines += ["", f"`{m['id']}`", "", "```text", m["rtttl"], "```"]
+    lines += [
+        "",
+        "Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:",
+        "",
+        "| File | Length | Integrated | Momentary max | True peak |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for m in manifest:
+        for label, stats in ((m["files"]["wav"], m), (m["files"]["piezo_wav"], m["piezo"])):
+            integrated = "n/a" if stats["integrated_lufs"] <= NO_READING_LUFS else f"{stats['integrated_lufs']:.1f} LUFS"
+            lines.append(
+                f"| `{label}` | {stats['duration_s']:.2f} s | {integrated} "
+                f"| {stats['momentary_max_lufs']:.1f} LUFS | {stats['true_peak_dbtp']:.1f} dBTP |"
+            )
+    return "\n".join(lines)
 
 
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     dist_dir = os.path.join(base_dir, "dist")
+    sim_dir = os.path.join(dist_dir, "piezo_simulated")
     rtttl_dir = os.path.join(base_dir, "rtttl")
-    sim_dir = os.path.join(base_dir, "dist", "piezo_simulated")
-    os.makedirs(dist_dir, exist_ok=True)
-    os.makedirs(rtttl_dir, exist_ok=True)
-    os.makedirs(sim_dir, exist_ok=True)
+    for d in (dist_dir, rtttl_dir):
+        shutil.rmtree(d, ignore_errors=True)
+    for d in (dist_dir, sim_dir, rtttl_dir):
+        os.makedirs(d)
 
-    print("=========================================================")
-    print("      Meshtastic Chirpy (The Node) Audio Suite           ")
-    print("=========================================================\n")
+    rendered = {}
+    for item in SUITE:
+        name, events, total_ms = parse_rtttl(item["rtttl"])
+        rendered[item["id"]] = {
+            "events": events,
+            "total_ms": total_ms,
+            "studio": render_studio(events, total_ms, item["bell_s"], item["loop"]),
+            "piezo": render_piezo(events, total_ms),
+        }
 
     manifest = []
-
-    for key, item in CHIRPY_SUITE.items():
-        print(f"Generating '{key}': {item['title']}...")
-        bpm = item["bpm"]
-        score = item["score"]
-        rtttl = item["rtttl"]
-
-        # 1. High-fidelity Studio Master
-        l_samples, r_samples = item["synth_fn"](sample_rate=SAMPLE_RATE)
+    for item in SUITE:
+        key = item["id"]
+        r = rendered[key]
         wav_path = os.path.join(dist_dir, f"{key}.wav")
-        write_wav(wav_path, l_samples, r_samples)
-        convert_audio(wav_path, dist_dir, key)
+        stats = normalize(wav_path, *r["studio"])
+        duration, tail_db = wav_stats(wav_path)
+        encoded = encode(wav_path, dist_dir, key)
 
-        # 2. Hardware Piezo Simulation
-        piezo_l, piezo_r = render_piezo_simulation(score, bpm)
-        piezo_wav = os.path.join(sim_dir, f"{key}_piezo.wav")
-        write_wav(piezo_wav, piezo_l, piezo_r)
+        piezo_path = os.path.join(sim_dir, f"{key}_piezo.wav")
+        piezo = normalize(piezo_path, *r["piezo"], fallback_momentary=stats["momentary_max_lufs"])
+        piezo["duration_s"], piezo["tail_peak_dbfs"] = wav_stats(piezo_path)
 
-        # 3. Save RTTTL file
-        rtttl_path = os.path.join(rtttl_dir, f"{key}.rtttl")
-        with open(rtttl_path, "w") as f:
-            f.write(rtttl + "\n")
-        print(f"  [RTTTL] String ({len(rtttl)} bytes, max 230):")
-        print(f"          \"{rtttl}\"")
-        print(f"  [RTTTL] File: {rtttl_path}\n")
+        with open(os.path.join(rtttl_dir, f"{key}.rtttl"), "w") as f:
+            f.write(item["rtttl"] + "\n")
 
+        for label, t in ((wav_path, tail_db), (piezo_path, piezo["tail_peak_dbfs"])):
+            if t > -60.0:
+                raise RuntimeError(f"{label} does not end in silence: {t:.1f} dBFS")
+
+        files = {"wav": wav_path, **encoded}
         manifest.append({
             "id": key,
             "title": item["title"],
-            "description": item["description"],
-            "bpm": bpm,
-            "rtttl": rtttl,
-            "rtttl_bytes": len(rtttl),
+            "use": item["use"],
+            "device": item["device"],
+            "loop": item["loop"],
+            "rtttl": item["rtttl"],
+            "rtttl_bytes": len(item["rtttl"].encode("ascii")),
+            "rtttl_ms": r["total_ms"],
+            "rtttl_sounding_ms": sounding_ms(r["events"]),
+            "notes": [e["note"] or "p" for e in r["events"]],
+            "duration_s": round(duration, 3),
+            "tail_peak_dbfs": None if tail_db == float("-inf") else round(tail_db, 1),
+            **stats,
             "files": {
-                "wav": f"dist/{key}.wav",
-                "mp3": f"dist/{key}.mp3",
-                "m4a": f"dist/{key}.m4a",
-                "caf": f"dist/{key}.caf",
-                "ogg": f"dist/{key}.ogg",
+                **{ext: os.path.relpath(p, base_dir) for ext, p in files.items()},
                 "rtttl": f"rtttl/{key}.rtttl",
-                "piezo_wav": f"dist/piezo_simulated/{key}_piezo.wav"
-            }
+                "piezo_wav": os.path.relpath(piezo_path, base_dir),
+            },
+            "bytes": {ext: os.path.getsize(p) for ext, p in files.items()},
+            "piezo": {k: (None if v == float("-inf") else round(v, 3)) for k, v in piezo.items()},
         })
+        print(f"{key}: {duration:.3f} s, I {stats['integrated_lufs']} LUFS, "
+              f"M max {stats['momentary_max_lufs']} LUFS, TP {stats['true_peak_dbtp']} dBTP, "
+              f"RTTTL {manifest[-1]['rtttl_bytes']} bytes / {r['total_ms']} ms")
 
-    # Save manifest.json
-    manifest_path = os.path.join(base_dir, "manifest.json")
-    with open(manifest_path, "w") as f:
+    with open(os.path.join(base_dir, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
-    print(f"Successfully generated Chirpy sound assets and manifest at {manifest_path}!")
+        f.write("\n")
+
+    replace_block(os.path.join(base_dir, "README.md"),
+                  "<!-- BEGIN GENERATED: generate_sounds.py -->", "<!-- END GENERATED -->",
+                  readme_block(manifest))
+    replace_block(os.path.join(base_dir, "index.html"),
+                  "/* BEGIN GENERATED: generate_sounds.py */", "/* END GENERATED */",
+                  "    const SUITE = " + json.dumps(manifest) + ";")
+
+    for doc in ("README.md", "index.html"):
+        with open(os.path.join(base_dir, doc)) as f:
+            text = f.read()
+        for m in manifest:
+            if m["rtttl"] not in text:
+                raise RuntimeError(f"{doc} is missing the {m['id']} RTTTL string")
+        known = {m["rtttl"] for m in manifest}
+        for found in re.findall(r"\w+:d=\d+,o=\d,b=\d+:[a-gp#.,\d]+", text):
+            if found not in known:
+                raise RuntimeError(f"{doc} has a stale RTTTL string: {found}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
