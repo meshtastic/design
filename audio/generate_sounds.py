@@ -51,7 +51,14 @@ SUITE = [
         "loop": False,
         "bell_s": 0.55,
         "antenna": True,
-        "syncword_alt": True,
+        "syncword_alt": {
+            "label": "Alternate: sync-word chirps",
+            "note": (
+                "Not the default. The rising strokes start 2/16 and 11/16 of the way up and wrap around, "
+                "like a LoRa radio's sync word chirps, as a nod to Meshtastic's `0x2b` (it doesn't encode it). "
+                "A wrapped stroke can't run into the fall, so it loses the logo's joined peak."
+            ),
+        },
         "rtttl": "Chirpy:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,2p.",
     },
     {
@@ -65,20 +72,33 @@ SUITE = [
     },
     {
         "id": "chirpy_ringtone",
-        "title": "Chirpy Song",
-        "use": "Optional longer alert. Loops.",
+        "title": "Chirpy Ringtone",
+        "use": "The long alert: a longer device ringtone, and the suggested sound for client alert channels. Loops.",
         "device": True,
         "loop": True,
         "bell_s": 0.55,
-        "rtttl": (
-            "ChirpySong:d=16,o=6,b=150:"
-            "32f#,32a#,32c#7,32f#7,32p,32f#,32a#,32c#7,32f#7,32c#7,32a#,8f#,8p,32p,"
-            "f#,c#7,d#7,8c#7,4p,p,"
-            "a#,c#7,f#7,d#7,8c#7,4p,"
-            "32c#,32f#,32a#,32c#7,4f#7.,2p."
-        ),
+        "name": "ChirpyRing",
+        "header": "d=32,o=6,b=150",
+        # The parts of a LoRa frame, in order. Joined with commas into one string.
+        "phrases": [
+            ("Logo", "`chirpy`, note for note.",
+             "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p"),
+            ("Preamble", "Four identical rising strokes, evenly spaced.",
+             "f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p"),
+            ("Sync word", "Two more rising strokes, spaced like the logo's. The second runs into the first fall.",
+             "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7"),
+            ("Start of frame", "Two full falls and a quarter of one, which stops on D#7.",
+             "c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p"),
+            ("Close", "F#6 held, then a rest before the loop repeats.",
+             "4f#,2p"),
+        ],
     },
 ]
+
+
+for _item in SUITE:
+    if "phrases" in _item:
+        _item["rtttl"] = f"{_item['name']}:{_item['header']}:" + ",".join(p[2] for p in _item["phrases"])
 
 
 # ----------------------------------------------------------------------------
@@ -444,9 +464,12 @@ def normalize(path, left, right, fallback_momentary=None):
 def encode(wav_path, out_dir, base):
     """WAV to MP3, M4A, CAF and OGG. Returns {format: path}."""
     out = {ext: os.path.join(out_dir, f"{base}.{ext}") for ext in ("mp3", "m4a", "caf", "ogg")}
-    run(["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-q:a", "2", out["mp3"]])
-    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "aac", "-b:a", "192k", out["m4a"]])
-    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "libopus", "-b:a", "128k", out["ogg"]])
+    # bitexact keeps the Ogg stream serial and the container tags fixed, so a
+    # rerun with the same ffmpeg writes the same bytes.
+    exact = ["-fflags", "+bitexact", "-flags:a", "+bitexact"]
+    run(["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-q:a", "2", *exact, out["mp3"]])
+    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "aac", "-b:a", "192k", *exact, out["m4a"]])
+    run(["ffmpeg", "-y", "-i", wav_path, "-c:a", "libopus", "-b:a", "128k", *exact, out["ogg"]])
     if shutil.which("afconvert"):
         run(["afconvert", "-f", "caff", "-d", "LEI16", wav_path, out["caf"]])
     else:
@@ -483,6 +506,16 @@ def readme_block(manifest):
         lines.append(f"| `{m['id']}` | {m['use']} | {m['duration_s']:.2f} s | {device} | {m['rtttl_bytes']} |")
     for m in manifest:
         lines += ["", f"`{m['id']}`", "", "```text", m["rtttl"], "```"]
+    for m in manifest:
+        if "syncword_alt" in m:
+            lines += ["", f"`{m['syncword_alt']['wav']}`: {m['syncword_alt']['note']}"]
+    for m in manifest:
+        if "phrases" in m:
+            lines += ["", f"The parts of `{m['id']}`:", "",
+                      "| Part | Starts | Lasts | Notes | What it is |", "| --- | --- | --- | --- | --- |"]
+            for ph in m["phrases"]:
+                lines.append(f"| {ph['part']} | {ph['start_ms'] / 1000:.2f} s | {ph['dur_ms'] / 1000:.2f} s "
+                             f"| `{ph['notes']}` | {ph['what']} |")
     lines += [
         "",
         "Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:",
@@ -581,8 +614,17 @@ def main():
                 for segments, _ in studio_paths(r["events"])
             ],
         })
+        if "phrases" in item:
+            at = 0
+            manifest[-1]["phrases"] = []
+            for label, text, notes in item["phrases"]:
+                _, _, ms = parse_rtttl(f"x:{item['header']}:{notes}")
+                manifest[-1]["phrases"].append(
+                    {"part": label, "what": text, "notes": notes, "start_ms": at, "dur_ms": ms})
+                at += ms
         if alt:
-            manifest[-1]["syncword_alt"] = {k: (None if v == float("-inf") else v) for k, v in alt.items()}
+            manifest[-1]["syncword_alt"] = {**item["syncword_alt"],
+                                            **{k: (None if v == float("-inf") else v) for k, v in alt.items()}}
         print(f"{key}: {duration:.3f} s, I {stats['integrated_lufs']} LUFS, "
               f"M max {stats['momentary_max_lufs']} LUFS, TP {stats['true_peak_dbtp']} dBTP, "
               f"RTTTL {manifest[-1]['rtttl_bytes']} bytes / {r['total_ms']} ms")

@@ -40,10 +40,10 @@
     },
     "bytes": {
       "wav": 236780,
-      "mp3": 16389,
-      "m4a": 29364,
+      "mp3": 16364,
+      "m4a": 29319,
       "caf": 240832,
-      "ogg": 27448
+      "ogg": 27432
     },
     "piezo": {
       "integrated_lufs": -16.0,
@@ -77,6 +77,8 @@
       ]
     ],
     "syncword_alt": {
+      "label": "Alternate: sync-word chirps",
+      "note": "Not the default. The rising strokes start 2/16 and 11/16 of the way up and wrap around, like a LoRa radio's sync word chirps, as a nod to Meshtastic's `0x2b` (it doesn't encode it). A wrapped stroke can't run into the fall, so it loses the logo's joined peak.",
       "integrated_lufs": -16.0,
       "momentary_max_lufs": -14.4,
       "true_peak_dbtp": -11.5,
@@ -116,10 +118,10 @@
     },
     "bytes": {
       "wav": 92780,
-      "mp3": 6189,
-      "m4a": 11650,
+      "mp3": 6164,
+      "m4a": 11600,
       "caf": 96832,
-      "ogg": 10867
+      "ogg": 10851
     },
     "piezo": {
       "integrated_lufs": -70.0,
@@ -141,14 +143,14 @@
   },
   {
     "id": "chirpy_ringtone",
-    "title": "Chirpy Song",
-    "use": "Optional longer alert. Loops.",
+    "title": "Chirpy Ringtone",
+    "use": "The long alert: a longer device ringtone, and the suggested sound for client alert channels. Loops.",
     "device": true,
     "loop": true,
-    "rtttl": "ChirpySong:d=16,o=6,b=150:32f#,32a#,32c#7,32f#7,32p,32f#,32a#,32c#7,32f#7,32c#7,32a#,8f#,8p,32p,f#,c#7,d#7,8c#7,4p,p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7.,2p.",
-    "rtttl_bytes": 170,
-    "rtttl_ms": 5000,
-    "rtttl_sounding_ms": 3800,
+    "rtttl": "ChirpyRing:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p,4f#,2p",
+    "rtttl_bytes": 223,
+    "rtttl_ms": 4700,
+    "rtttl_sounding_ms": 3900,
     "notes": [
       "f#6",
       "a#6",
@@ -165,29 +167,54 @@
       "p",
       "p",
       "f#6",
-      "c#7",
-      "d#7",
-      "c#7",
-      "p",
-      "p",
       "a#6",
       "c#7",
       "f#7",
-      "d#7",
-      "c#7",
       "p",
-      "c#6",
       "f#6",
       "a#6",
       "c#7",
       "f#7",
+      "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
+      "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
+      "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
+      "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
+      "c#7",
+      "a#6",
+      "f#6",
+      "p",
+      "f#7",
+      "c#7",
+      "a#6",
+      "f#6",
+      "p",
+      "f#7",
+      "d#7",
+      "p",
+      "f#6",
       "p"
     ],
-    "duration_s": 5.0,
+    "duration_s": 4.7,
     "tail_peak_dbfs": null,
     "integrated_lufs": -16.0,
-    "momentary_max_lufs": -12.4,
-    "true_peak_dbtp": -9.7,
+    "momentary_max_lufs": -13.0,
+    "true_peak_dbtp": -10.3,
     "files": {
       "wav": "dist/chirpy_ringtone.wav",
       "mp3": "dist/chirpy_ringtone.mp3",
@@ -198,17 +225,17 @@
       "piezo_wav": "dist/piezo_simulated/chirpy_ringtone_piezo.wav"
     },
     "bytes": {
-      "wav": 960044,
-      "mp3": 53949,
-      "m4a": 93637,
-      "caf": 964096,
-      "ogg": 93658
+      "wav": 902444,
+      "mp3": 62252,
+      "m4a": 101113,
+      "caf": 906496,
+      "ogg": 104292
     },
     "piezo": {
       "integrated_lufs": -16.0,
-      "momentary_max_lufs": -14.1,
-      "true_peak_dbtp": -18.4,
-      "duration_s": 5.0,
+      "momentary_max_lufs": -14.2,
+      "true_peak_dbtp": -17.8,
+      "duration_s": 4.7,
       "tail_peak_dbfs": null
     },
     "sweeps": [
@@ -237,57 +264,111 @@
       [
         [
           1.025,
-          1.125,
+          1.175,
           1479.98,
-          2217.46
-        ],
-        [
-          1.125,
-          1.225,
-          2217.46,
-          2489.02
-        ],
-        [
-          1.225,
-          1.325,
-          2489.02,
-          2217.46
+          2959.96
         ]
       ],
       [
         [
-          2.025,
-          2.125,
-          1864.66,
-          2217.46
-        ],
+          1.325,
+          1.475,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
         [
-          2.125,
+          1.625,
+          1.775,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
+        [
+          1.925,
+          2.075,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
+        [
           2.225,
-          2217.46,
+          2.375,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
+        [
+          2.475,
+          2.625,
+          1479.98,
           2959.96
         ],
         [
-          2.225,
-          2.325,
+          2.625,
+          2.775,
+          2959.96,
+          1479.98
+        ]
+      ],
+      [
+        [
+          2.925,
+          3.075,
+          2959.96,
+          1479.98
+        ]
+      ],
+      [
+        [
+          3.225,
+          3.275,
           2959.96,
           2489.02
-        ],
-        [
-          2.325,
-          2.425,
-          2489.02,
-          2217.46
         ]
       ],
-      [
-        [
-          3.025,
-          3.225,
-          1108.73,
-          2959.96
-        ]
-      ]
+      []
+    ],
+    "phrases": [
+      {
+        "part": "Logo",
+        "what": "`chirpy`, note for note.",
+        "notes": "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p",
+        "start_ms": 0,
+        "dur_ms": 1000
+      },
+      {
+        "part": "Preamble",
+        "what": "Four identical rising strokes, evenly spaced.",
+        "notes": "f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p",
+        "start_ms": 1000,
+        "dur_ms": 1200
+      },
+      {
+        "part": "Sync word",
+        "what": "Two more rising strokes, spaced like the logo's. The second runs into the first fall.",
+        "notes": "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7",
+        "start_ms": 2200,
+        "dur_ms": 450
+      },
+      {
+        "part": "Start of frame",
+        "what": "Two full falls and a quarter of one, which stops on D#7.",
+        "notes": "c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p",
+        "start_ms": 2650,
+        "dur_ms": 850
+      },
+      {
+        "part": "Close",
+        "what": "F#6 held, then a rest before the loop repeats.",
+        "notes": "4f#,2p",
+        "start_ms": 3500,
+        "dur_ms": 1200
+      }
     ]
   }
 ]

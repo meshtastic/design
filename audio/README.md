@@ -10,7 +10,7 @@ The sounds draw from three things: the shape of the logo (`logo/logo.svg`), the 
 
 The logo shape is literal. The mark is a `/` on its own, then a joined `/\`, with all three strokes the same height and angle. `chirpy` is a rise from F#6 to F#7, a short gap, the same rise again, and a fall straight from the top back to F#6 with no gap at the peak. In the phone file the three sweeps cover the same octave in the same 150 ms. In RTTTL each stroke is the four notes F#, A#, C#, F#, with the top note shared between the second rise and the fall.
 
-The LoRa part is inspired by, not a model of, the radio. A LoRa packet opens with identical rising chirps and its start-of-frame marker is falling chirps, and a chirp moves through frequency at a constant rate. The sweeps in the phone files are straight lines in frequency for that reason. `dist/alt/chirpy_syncword.wav` goes one step further: its two rising sweeps start part of the way up, run off the top and wrap around to finish where they started, the way LoRa sync symbols are shifted chirps. The starting points are 2/16 and 11/16 of the sweep, after the two digits of the Meshtastic sync word `0x2b`. That is a nod to the number. It does not encode it and is not how a radio places its sync symbols. It is an alternate, not the default, because a wrapped sweep does not end at the peak, so the second stroke can no longer join the fall the way the logo does.
+The LoRa part is inspired by, not a model of, the radio. A LoRa packet opens with identical rising chirps and its start-of-frame marker is falling chirps, and a chirp moves through frequency at a constant rate. The sweeps in the phone files are straight lines in frequency for that reason. `dist/alt/chirpy_syncword.wav` takes the idea further and is described with the strings below.
 
 The last note of `chirpy` in the phone file has a small zigzag in pitch, 6 cents either way for three cycles, after the zigzag antenna in the art.
 
@@ -20,7 +20,17 @@ The last note of `chirpy` in the phone file has a small zigzag in pitch, 6 cents
 
 `chirpy_ack` is for delivery receipts and reactions. It is one rising stroke from A#6 to F#7, so it starts on a different note from `chirpy`. It is for client apps only. Firmware has no slot for a second sound, and the RTTTL string is here as the definition of the sound and for reference.
 
-`chirpy_ringtone` is a longer four-phrase tune that opens with `chirpy`. It is an optional alert for someone who wants more than the short sound. Its file is exactly as long as its RTTTL string, including the closing rest, so it loops.
+`chirpy_ringtone` is the long alert. It is the device ringtone for someone who wants a longer sound, and the suggested sound for the Android Alerts channel and for iOS critical alerts. Its file is exactly as long as its RTTTL string, including the closing rest, so it loops.
+
+It is laid out like a LoRa frame, played with the `chirpy` stroke. Each part is one line:
+
+- Logo: `chirpy`, note for note, so the sound is recognized first.
+- Preamble: four identical rising strokes from F#6 to F#7, evenly spaced.
+- Sync word: two more rising strokes, spaced like the two rises in the logo. The second runs straight into the first fall, which makes the logo's joined `/\` again.
+- Start of frame: two full falls from F#7 to F#6, then a quarter of a fall that stops on D#7.
+- Close: F#6 held, then a rest.
+
+The order of the parts, the direction of the chirps in each part, and the two and a quarter falls are how a LoRa frame is built. The rest is inspired by it. A Meshtastic preamble is 16 chirps and this one is 4. The sync part stands in for the sync word and does not encode `0x2b`. A real quarter fall would stop about 2590 Hz, which is not a note in F# major, so it is rounded to D#7 (2489 Hz). Every stroke has the same span and slope as the strokes in `chirpy`.
 
 The table, the strings and the measurements below are written by `generate_sounds.py`. Don't edit them by hand.
 
@@ -29,7 +39,7 @@ The table, the strings and the measurements below are written by `generate_sound
 | --- | --- | --- | --- | --- |
 | `chirpy` | Message notification. Recommended device default. | 1.23 s | 0.75 s, then 1.20 s rest | 66 |
 | `chirpy_ack` | Delivery receipt or reaction. Client apps only. | 0.48 s | 0.20 s (reference only) | 37 |
-| `chirpy_ringtone` | Optional longer alert. Loops. | 5.00 s | 3.80 s, then 1.20 s rest | 170 |
+| `chirpy_ringtone` | The long alert: a longer device ringtone, and the suggested sound for client alert channels. Loops. | 4.70 s | 3.90 s, then 0.80 s rest | 223 |
 
 `chirpy`
 
@@ -46,8 +56,20 @@ ChirpyAck:d=32,o=6,b=150:a#,c#7,16f#7
 `chirpy_ringtone`
 
 ```text
-ChirpySong:d=16,o=6,b=150:32f#,32a#,32c#7,32f#7,32p,32f#,32a#,32c#7,32f#7,32c#7,32a#,8f#,8p,32p,f#,c#7,d#7,8c#7,4p,p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7.,2p.
+ChirpyRing:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p,4f#,2p
 ```
+
+`dist/alt/chirpy_syncword.wav`: Not the default. The rising strokes start 2/16 and 11/16 of the way up and wrap around, like a LoRa radio's sync word chirps, as a nod to Meshtastic's `0x2b` (it doesn't encode it). A wrapped stroke can't run into the fall, so it loses the logo's joined peak.
+
+The parts of `chirpy_ringtone`:
+
+| Part | Starts | Lasts | Notes | What it is |
+| --- | --- | --- | --- | --- |
+| Logo | 0.00 s | 1.00 s | `f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p` | `chirpy`, note for note. |
+| Preamble | 1.00 s | 1.20 s | `f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p` | Four identical rising strokes, evenly spaced. |
+| Sync word | 2.20 s | 0.45 s | `f#,a#,c#7,f#7,p,f#,a#,c#7,f#7` | Two more rising strokes, spaced like the logo's. The second runs into the first fall. |
+| Start of frame | 2.65 s | 0.85 s | `c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p` | Two full falls and a quarter of one, which stops on D#7. |
+| Close | 3.50 s | 1.20 s | `4f#,2p` | F#6 held, then a rest before the loop repeats. |
 
 Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:
 
@@ -58,8 +80,8 @@ Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:
 | `dist/alt/chirpy_syncword.wav` | 1.23 s | -16.0 LUFS | -14.4 LUFS | -11.5 dBTP |
 | `dist/chirpy_ack.wav` | 0.48 s | -16.0 LUFS | -16.0 LUFS | -10.0 dBTP |
 | `dist/piezo_simulated/chirpy_ack_piezo.wav` | 0.25 s | n/a | -16.0 LUFS | -17.0 dBTP |
-| `dist/chirpy_ringtone.wav` | 5.00 s | -16.0 LUFS | -12.4 LUFS | -9.7 dBTP |
-| `dist/piezo_simulated/chirpy_ringtone_piezo.wav` | 5.00 s | -16.0 LUFS | -14.1 LUFS | -18.4 dBTP |
+| `dist/chirpy_ringtone.wav` | 4.70 s | -16.0 LUFS | -13.0 LUFS | -10.3 dBTP |
+| `dist/piezo_simulated/chirpy_ringtone_piezo.wav` | 4.70 s | -16.0 LUFS | -14.2 LUFS | -17.8 dBTP |
 <!-- END GENERATED -->
 
 The phone file for `chirpy` leaves off the string's closing rest and runs until the bell tail has faded. The piezo previews keep the rest.
@@ -67,7 +89,7 @@ The phone file for `chirpy` leaves off the string's closing rest and runs until 
 ## Files
 
 - `dist/<id>.wav`, `.caf`, `.mp3`, `.m4a`, `.ogg` are the phone and desktop sounds. WAV and CAF are 48 kHz 16-bit stereo PCM. MP3, AAC and Opus add encoder padding, so use WAV or CAF where a seamless loop matters.
-- `dist/alt/chirpy_syncword.wav` is the sync-word variant of `chirpy` described above. WAV only.
+- `dist/alt/chirpy_syncword.wav` is the alternate take on `chirpy` described under the strings above. WAV only.
 - `dist/piezo_simulated/<id>_piezo.wav` is a square-wave preview of the RTTTL string, for hearing roughly what a buzzer will play.
 - `rtttl/<id>.rtttl` holds the string on one line.
 - `manifest.json` lists every sound with its string, lengths, file sizes and measured loudness.
@@ -93,9 +115,13 @@ The strings stay within what all three firmware players read the same way: a `d=
 
 Put the file in `res/raw` and set it with `NotificationChannel.setSound`. A channel's sound is fixed when the channel is created, so an existing install keeps its old sound. Shipping a changed sound needs new channel IDs, with the old channels deleted.
 
+The Alerts channel plays `meshtastic_alert` with `AudioAttributes.USAGE_ALARM`. `chirpy_ringtone` is the suggested replacement for it.
+
 ### iOS and macOS
 
 Add the `.caf` to the app bundle and use `UNNotificationSound(named:)`. The file has to be in the bundle (or the app's `Library/Sounds`) and under 30 seconds, or the system plays the default sound.
+
+Critical alerts use `UNNotificationSound.defaultCritical`. `chirpy_ringtone.caf` with `UNNotificationSound.criticalSoundNamed(_:)` is the suggested replacement.
 
 ### Firmware
 
@@ -113,4 +139,4 @@ Or on a running device:
 meshtastic --set-ringtone "Chirpy:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,2p."
 ```
 
-`chirpy_ringtone` can be set the same way.
+`chirpy_ringtone` can be set the same way, for someone who wants a longer ringtone.
