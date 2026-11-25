@@ -5,27 +5,30 @@
     "use": "Message notification. Recommended device default.",
     "device": true,
     "loop": false,
-    "rtttl": "Chirpy:d=32,o=6,b=150:c#,f#,p,a#,16f#7,p,c#7,a#,8f#,2p.",
-    "rtttl_bytes": 55,
-    "rtttl_ms": 1850,
-    "rtttl_sounding_ms": 650,
+    "rtttl": "Chirpy:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,2p.",
+    "rtttl_bytes": 66,
+    "rtttl_ms": 1950,
+    "rtttl_sounding_ms": 750,
     "notes": [
-      "c#6",
       "f#6",
-      "p",
       "a#6",
+      "c#7",
       "f#7",
       "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
       "c#7",
       "a#6",
       "f#6",
       "p"
     ],
-    "duration_s": 1.108,
+    "duration_s": 1.233,
     "tail_peak_dbfs": null,
     "integrated_lufs": -16.0,
-    "momentary_max_lufs": -14.3,
-    "true_peak_dbtp": -9.8,
+    "momentary_max_lufs": -14.5,
+    "true_peak_dbtp": -11.8,
     "files": {
       "wav": "dist/chirpy.wav",
       "mp3": "dist/chirpy.mp3",
@@ -36,18 +39,50 @@
       "piezo_wav": "dist/piezo_simulated/chirpy_piezo.wav"
     },
     "bytes": {
-      "wav": 212780,
-      "mp3": 13869,
-      "m4a": 26467,
-      "caf": 216832,
-      "ogg": 26251
+      "wav": 236780,
+      "mp3": 16389,
+      "m4a": 29364,
+      "caf": 240832,
+      "ogg": 27448
     },
     "piezo": {
       "integrated_lufs": -16.0,
-      "momentary_max_lufs": -14.3,
-      "true_peak_dbtp": -17.3,
-      "duration_s": 1.85,
+      "momentary_max_lufs": -14.4,
+      "true_peak_dbtp": -18.0,
+      "duration_s": 1.95,
       "tail_peak_dbfs": null
+    },
+    "sweeps": [
+      [
+        [
+          0.025,
+          0.175,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
+        [
+          0.275,
+          0.425,
+          1479.98,
+          2959.96
+        ],
+        [
+          0.425,
+          0.575,
+          2959.96,
+          1479.98
+        ]
+      ]
+    ],
+    "syncword_alt": {
+      "integrated_lufs": -16.0,
+      "momentary_max_lufs": -14.4,
+      "true_peak_dbtp": -11.5,
+      "duration_s": 1.233,
+      "tail_peak_dbfs": null,
+      "wav": "dist/alt/chirpy_syncword.wav"
     }
   },
   {
@@ -65,11 +100,11 @@
       "c#7",
       "f#7"
     ],
-    "duration_s": 0.458,
+    "duration_s": 0.483,
     "tail_peak_dbfs": null,
     "integrated_lufs": -16.0,
     "momentary_max_lufs": -16.0,
-    "true_peak_dbtp": -9.9,
+    "true_peak_dbtp": -10.0,
     "files": {
       "wav": "dist/chirpy_ack.wav",
       "mp3": "dist/chirpy_ack.mp3",
@@ -80,11 +115,11 @@
       "piezo_wav": "dist/piezo_simulated/chirpy_ack_piezo.wav"
     },
     "bytes": {
-      "wav": 87980,
-      "mp3": 6429,
-      "m4a": 11178,
-      "caf": 92032,
-      "ogg": 10949
+      "wav": 92780,
+      "mp3": 6189,
+      "m4a": 11650,
+      "caf": 96832,
+      "ogg": 10867
     },
     "piezo": {
       "integrated_lufs": -70.0,
@@ -92,7 +127,17 @@
       "true_peak_dbtp": -17.0,
       "duration_s": 0.25,
       "tail_peak_dbfs": null
-    }
+    },
+    "sweeps": [
+      [
+        [
+          0.025,
+          0.125,
+          1864.66,
+          2959.96
+        ]
+      ]
+    ]
   },
   {
     "id": "chirpy_ringtone",
@@ -100,17 +145,20 @@
     "use": "Optional longer alert. Loops.",
     "device": true,
     "loop": true,
-    "rtttl": "ChirpySong:d=16,o=6,b=150:32c#,32f#,32p,32a#,f#7,32p,32c#7,32a#,8f#,8p.,32p,f#,c#7,d#7,8c#7,4p,p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7.,2p.",
-    "rtttl_bytes": 150,
+    "rtttl": "ChirpySong:d=16,o=6,b=150:32f#,32a#,32c#7,32f#7,32p,32f#,32a#,32c#7,32f#7,32c#7,32a#,8f#,8p,32p,f#,c#7,d#7,8c#7,4p,p,a#,c#7,f#7,d#7,8c#7,4p,32c#,32f#,32a#,32c#7,4f#7.,2p.",
+    "rtttl_bytes": 170,
     "rtttl_ms": 5000,
     "rtttl_sounding_ms": 3800,
     "notes": [
-      "c#6",
       "f#6",
-      "p",
       "a#6",
+      "c#7",
       "f#7",
       "p",
+      "f#6",
+      "a#6",
+      "c#7",
+      "f#7",
       "c#7",
       "a#6",
       "f#6",
@@ -138,8 +186,8 @@
     "duration_s": 5.0,
     "tail_peak_dbfs": null,
     "integrated_lufs": -16.0,
-    "momentary_max_lufs": -11.6,
-    "true_peak_dbtp": -8.9,
+    "momentary_max_lufs": -12.4,
+    "true_peak_dbtp": -9.7,
     "files": {
       "wav": "dist/chirpy_ringtone.wav",
       "mp3": "dist/chirpy_ringtone.mp3",
@@ -151,17 +199,95 @@
     },
     "bytes": {
       "wav": 960044,
-      "mp3": 52725,
-      "m4a": 93359,
+      "mp3": 53949,
+      "m4a": 93637,
       "caf": 964096,
-      "ogg": 97201
+      "ogg": 93658
     },
     "piezo": {
       "integrated_lufs": -16.0,
-      "momentary_max_lufs": -13.8,
-      "true_peak_dbtp": -18.1,
+      "momentary_max_lufs": -14.1,
+      "true_peak_dbtp": -18.4,
       "duration_s": 5.0,
       "tail_peak_dbfs": null
-    }
+    },
+    "sweeps": [
+      [
+        [
+          0.025,
+          0.175,
+          1479.98,
+          2959.96
+        ]
+      ],
+      [
+        [
+          0.275,
+          0.425,
+          1479.98,
+          2959.96
+        ],
+        [
+          0.425,
+          0.575,
+          2959.96,
+          1479.98
+        ]
+      ],
+      [
+        [
+          1.025,
+          1.125,
+          1479.98,
+          2217.46
+        ],
+        [
+          1.125,
+          1.225,
+          2217.46,
+          2489.02
+        ],
+        [
+          1.225,
+          1.325,
+          2489.02,
+          2217.46
+        ]
+      ],
+      [
+        [
+          2.025,
+          2.125,
+          1864.66,
+          2217.46
+        ],
+        [
+          2.125,
+          2.225,
+          2217.46,
+          2959.96
+        ],
+        [
+          2.225,
+          2.325,
+          2959.96,
+          2489.02
+        ],
+        [
+          2.325,
+          2.425,
+          2489.02,
+          2217.46
+        ]
+      ],
+      [
+        [
+          3.025,
+          3.225,
+          1108.73,
+          2959.96
+        ]
+      ]
+    ]
   }
 ]

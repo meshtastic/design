@@ -50,7 +50,9 @@ SUITE = [
         "device": True,
         "loop": False,
         "bell_s": 0.55,
-        "rtttl": "Chirpy:d=32,o=6,b=150:c#,f#,p,a#,16f#7,p,c#7,a#,8f#,2p.",
+        "antenna": True,
+        "syncword_alt": True,
+        "rtttl": "Chirpy:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,2p.",
     },
     {
         "id": "chirpy_ack",
@@ -70,7 +72,7 @@ SUITE = [
         "bell_s": 0.55,
         "rtttl": (
             "ChirpySong:d=16,o=6,b=150:"
-            "32c#,32f#,32p,32a#,f#7,32p,32c#7,32a#,8f#,8p.,32p,"
+            "32f#,32a#,32c#7,32f#7,32p,32f#,32a#,32c#7,32f#7,32c#7,32a#,8f#,8p,32p,"
             "f#,c#7,d#7,8c#7,4p,p,"
             "a#,c#7,f#7,d#7,8c#7,4p,"
             "32c#,32f#,32a#,32c#7,4f#7.,2p."
@@ -167,47 +169,93 @@ def pan_gains(pan):
 
 STROKE_PAN = (-0.25, 0.20, 0.05)
 STROKE_AMP = (0.55, 0.70, 0.60)
-GLIDE_S = 0.050  # each note slides to the next over its last 50 ms
+ANCHOR_S = 0.025  # a sweep reaches a note's pitch this far into the note
 ATTACK_S = 0.008
 RELEASE_S = 0.025
+JUMP_FADE_S = 0.004
+ANTENNA_CENTS = 6.0
+ANTENNA_CYCLES = 3
+# Where the two rising sweeps start in the sync-word variant, as a fraction
+# of the sweep. 2/16 and 11/16 nod to the nibbles of sync word 0x2b. This is
+# not a model of how a LoRa chip places its sync symbols.
+SYNCWORD_OFFSETS = (2 / 16, 11 / 16)
 BELL_PARTIALS = ((1.00, 1.00, 1.0), (2.00, 0.25, 0.6), (2.76, 0.18, 0.4), (4.15, 0.04, 0.3))
 REFLECTIONS = ((0.016, 0.14, 0.06), (0.034, 0.10, 0.12), (0.058, 0.05, 0.05))
 
 
-def add_stroke(left, right, group, pan, amp, sr):
-    """One swept voice through a run of notes, landing on each note's pitch."""
+def stroke_anchors(group, sixteenth):
+    """The notes a run's sweep has to land on, as (time_s, freq).
+
+    These are the first and last note, every turning point, and any note of
+    a 16th or longer. A run of 32nds between two anchors is one straight
+    sweep, the way a LoRa chirp is.
+    """
+    anchors = []
+    for i, e in enumerate(group):
+        ends = i == 0 or i == len(group) - 1
+        turn = not ends and (group[i - 1]["freq"] < e["freq"]) != (e["freq"] < group[i + 1]["freq"])
+        if ends or turn or e["dur_ms"] >= sixteenth:
+            anchors.append((e["start_ms"] / 1000.0 + ANCHOR_S, e["freq"]))
+    return anchors
+
+
+def stroke_segments(group, anchors, wrap_offsets):
+    """Frequency path of one run as (t0, t1, f0, f1), linear in Hz.
+
+    wrap_offsets is consumed by rising sweeps: each one starts that fraction
+    of the way up, runs to the top, drops to the bottom and finishes where it
+    started, like a cyclically shifted chirp.
+    """
     start = group[0]["start_ms"] / 1000.0
     end = (group[-1]["start_ms"] + group[-1]["dur_ms"]) / 1000.0
-    first = int(start * sr)
-    n = int((end - start) * sr)
+    sweeps = []
+    for (t0, f0), (t1, f1) in zip(anchors, anchors[1:]):
+        if f1 > f0 and wrap_offsets:
+            off = wrap_offsets.pop(0)
+            mid = f0 + off * (f1 - f0)
+            turn = t0 + (1.0 - off) * (t1 - t0)
+            sweeps += [(t0, turn, mid, f1), (turn, t1, f0, mid)]
+        else:
+            sweeps.append((t0, t1, f0, f1))
+    if not sweeps:
+        return [(start, end, anchors[0][1], anchors[0][1])]
+    lead = (start, sweeps[0][0], sweeps[0][2], sweeps[0][2])
+    hold = (sweeps[-1][1], end, sweeps[-1][3], sweeps[-1][3])
+    return [lead] + sweeps + [hold]
+
+
+def add_stroke(left, right, segments, pan, amp, antenna, sr):
+    """One voice following a frequency path, with continuous phase."""
+    start, end = segments[0][0], segments[-1][1]
+    first = int(round(start * sr))
+    n = int(round((end - start) * sr))
     att = int(ATTACK_S * sr)
     rel = int(RELEASE_S * sr)
-    hold_from = group[-1]["start_ms"] / 1000.0 - start + 0.100
+    hold_t0, hold_t1 = segments[-1][0], segments[-1][1]
     gain_l, gain_r = pan_gains(pan)
-
-    # Per-note (start, end, f_from, f_to) with the slide at the end of the note.
-    segments = []
-    for i, e in enumerate(group):
-        t0 = e["start_ms"] / 1000.0 - start
-        t1 = t0 + e["dur_ms"] / 1000.0
-        nxt = group[i + 1]["freq"] if i + 1 < len(group) else e["freq"]
-        segments.append((t0, t1, e["freq"], nxt))
+    # A wrapped sweep jumps in frequency. Duck the level across the jump.
+    jumps = [a[1] for a, b in zip(segments, segments[1:]) if abs(a[3] - b[2]) > 1.0]
 
     phase = 0.0
     seg = 0
     for i in range(n):
-        t = i / sr
+        t = start + i / sr
         while seg + 1 < len(segments) and t >= segments[seg][1]:
             seg += 1
-        t0, t1, f_from, f_to = segments[seg]
-        glide = min(GLIDE_S, t1 - t0)
-        x = (t - (t1 - glide)) / glide
-        freq = f_from if x <= 0.0 else f_from * (f_to / f_from) ** min(1.0, x)
-        phase += TWO_PI * freq / sr
-
+        t0, t1, f0, f1 = segments[seg]
+        freq = f0 + (f1 - f0) * (t - t0) / (t1 - t0) if t1 > t0 else f1
         env = raised_cosine(i / att) * raised_cosine((n - 1 - i) / rel)
-        if t > hold_from:
-            env *= math.exp(-(t - hold_from) / 0.5)
+        for jump in jumps:
+            env *= raised_cosine(abs(t - jump) / JUMP_FADE_S)
+        if t > hold_t0:
+            if antenna:
+                # A zigzag of a few cents on the last note, for the antenna.
+                x = (t - hold_t0) / (hold_t1 - hold_t0) * ANTENNA_CYCLES % 1.0
+                zigzag = 4.0 * x if x < 0.25 else (2.0 - 4.0 * x if x < 0.75 else 4.0 * x - 4.0)
+                freq *= 2.0 ** (ANTENNA_CENTS * zigzag / 1200.0)
+            if t > hold_t0 + 0.075:
+                env *= math.exp(-(t - hold_t0 - 0.075) / 0.5)
+        phase += TWO_PI * freq / sr
         val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
         left[first + i] += val * gain_l
         right[first + i] += val * gain_r
@@ -232,20 +280,31 @@ def add_bell(left, right, start_s, freq, dur_s, pan, amp, sr):
         right[first + i] += val * gain_r
 
 
-def render_studio(events, total_ms, bell_s, loop, sr=SAMPLE_RATE):
+def studio_paths(events, wrap_offsets=()):
+    """Sweep path and bell strikes for each run of notes."""
+    sixteenth = min(e["dur_ms"] for e in events) * 2
+    if min(e["dur_ms"] for e in events if e["note"]) < 2000 * ANCHOR_S:
+        raise ValueError("notes are too short for the sweep anchors")
+    wrap = list(wrap_offsets)
+    paths = []
+    for group in note_groups(events):
+        anchors = stroke_anchors(group, sixteenth)
+        paths.append((stroke_segments(group, anchors, wrap), anchors[1:] or anchors))
+    return paths
+
+
+def render_studio(events, total_ms, bell_s, loop, antenna=False, wrap_offsets=(), sr=SAMPLE_RATE):
     """Phone and desktop rendering of the parsed RTTTL events.
 
     A looping sound is exactly as long as its RTTTL string, trailing rest
     included. A one-shot drops the trailing rest and ends when its tail does.
     """
-    groups = note_groups(events)
-    sixteenth = min(e["dur_ms"] for e in events) * 2
+    paths = studio_paths(events, wrap_offsets)
     bells = []
-    for gi, group in enumerate(groups):
-        for e in group:
-            if e is group[-1] or e["dur_ms"] >= sixteenth:
-                amp = 0.45 if e is group[-1] else 0.30
-                bells.append((e["start_ms"] / 1000.0, e["freq"], bell_s, -STROKE_PAN[gi % 3], amp))
+    for gi, (_, strikes) in enumerate(paths):
+        for t, freq in strikes:
+            amp = 0.45 if (t, freq) == strikes[-1] else 0.30
+            bells.append((t, freq, bell_s, -STROKE_PAN[gi % 3], amp))
 
     content_end = max([sounding_ms(events) / 1000.0] + [b[0] + b[2] for b in bells])
     content_end += REFLECTIONS[-1][0]
@@ -259,8 +318,9 @@ def render_studio(events, total_ms, bell_s, loop, sr=SAMPLE_RATE):
     dry_l = [0.0] * (n + 1)
     dry_r = [0.0] * (n + 1)
 
-    for gi, group in enumerate(groups):
-        add_stroke(dry_l, dry_r, group, STROKE_PAN[gi % 3], STROKE_AMP[gi % 3], sr)
+    for gi, (segments, _) in enumerate(paths):
+        last = gi == len(paths) - 1
+        add_stroke(dry_l, dry_r, segments, STROKE_PAN[gi % 3], STROKE_AMP[gi % 3], antenna and last, sr)
     for start_s, freq, dur_s, pan, amp in bells:
         add_bell(dry_l, dry_r, start_s, freq, dur_s, pan, amp, sr)
 
@@ -431,7 +491,10 @@ def readme_block(manifest):
         "| --- | --- | --- | --- | --- |",
     ]
     for m in manifest:
-        for label, stats in ((m["files"]["wav"], m), (m["files"]["piezo_wav"], m["piezo"])):
+        rows = [(m["files"]["wav"], m), (m["files"]["piezo_wav"], m["piezo"])]
+        if "syncword_alt" in m:
+            rows.append((m["syncword_alt"]["wav"], m["syncword_alt"]))
+        for label, stats in rows:
             integrated = "n/a" if stats["integrated_lufs"] <= NO_READING_LUFS else f"{stats['integrated_lufs']:.1f} LUFS"
             lines.append(
                 f"| `{label}` | {stats['duration_s']:.2f} s | {integrated} "
@@ -447,7 +510,8 @@ def main():
     rtttl_dir = os.path.join(base_dir, "rtttl")
     for d in (dist_dir, rtttl_dir):
         shutil.rmtree(d, ignore_errors=True)
-    for d in (dist_dir, sim_dir, rtttl_dir):
+    alt_dir = os.path.join(dist_dir, "alt")
+    for d in (dist_dir, sim_dir, alt_dir, rtttl_dir):
         os.makedirs(d)
 
     rendered = {}
@@ -456,7 +520,7 @@ def main():
         rendered[item["id"]] = {
             "events": events,
             "total_ms": total_ms,
-            "studio": render_studio(events, total_ms, item["bell_s"], item["loop"]),
+            "studio": render_studio(events, total_ms, item["bell_s"], item["loop"], item.get("antenna", False)),
             "piezo": render_piezo(events, total_ms),
         }
 
@@ -476,7 +540,17 @@ def main():
         with open(os.path.join(rtttl_dir, f"{key}.rtttl"), "w") as f:
             f.write(item["rtttl"] + "\n")
 
-        for label, t in ((wav_path, tail_db), (piezo_path, piezo["tail_peak_dbfs"])):
+        tails = [(wav_path, tail_db), (piezo_path, piezo["tail_peak_dbfs"])]
+        alt = None
+        if item.get("syncword_alt"):
+            alt_path = os.path.join(alt_dir, f"{key}_syncword.wav")
+            alt = normalize(alt_path, *render_studio(r["events"], r["total_ms"], item["bell_s"], item["loop"],
+                                                     item.get("antenna", False), SYNCWORD_OFFSETS))
+            alt["duration_s"], alt["tail_peak_dbfs"] = wav_stats(alt_path)
+            alt["wav"] = os.path.relpath(alt_path, base_dir)
+            tails.append((alt_path, alt["tail_peak_dbfs"]))
+
+        for label, t in tails:
             if t > -60.0:
                 raise RuntimeError(f"{label} does not end in silence: {t:.1f} dBFS")
 
@@ -502,7 +576,13 @@ def main():
             },
             "bytes": {ext: os.path.getsize(p) for ext, p in files.items()},
             "piezo": {k: (None if v == float("-inf") else round(v, 3)) for k, v in piezo.items()},
+            "sweeps": [
+                [[round(t0, 3), round(t1, 3), round(f0, 2), round(f1, 2)] for t0, t1, f0, f1 in segments if f0 != f1]
+                for segments, _ in studio_paths(r["events"])
+            ],
         })
+        if alt:
+            manifest[-1]["syncword_alt"] = {k: (None if v == float("-inf") else v) for k, v in alt.items()}
         print(f"{key}: {duration:.3f} s, I {stats['integrated_lufs']} LUFS, "
               f"M max {stats['momentary_max_lufs']} LUFS, TP {stats['true_peak_dbtp']} dBTP, "
               f"RTTTL {manifest[-1]['rtttl_bytes']} bytes / {r['total_ms']} ms")
