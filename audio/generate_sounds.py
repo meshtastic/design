@@ -59,7 +59,7 @@ SUITE = [
                 "A wrapped stroke can't run into the fall, so it loses the logo's joined peak."
             ),
         },
-        "rtttl": "Chirpy:d=32,o=6,b=150:f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,2p.",
+        "rtttl": "Chirpy:d=32,o=5,b=150:f#,a#,c#6,f#6,p,f#,a#,c#6,f#6,c#6,a#,8f#,2p.",
     },
     {
         "id": "chirpy_ack",
@@ -68,7 +68,7 @@ SUITE = [
         "device": False,
         "loop": False,
         "bell_s": 0.25,
-        "rtttl": "ChirpyAck:d=32,o=6,b=150:a#,c#7,16f#7",
+        "rtttl": "ChirpyAck:d=32,o=5,b=150:a#,c#6,16f#6",
     },
     {
         "id": "chirpy_ringtone",
@@ -78,18 +78,18 @@ SUITE = [
         "loop": True,
         "bell_s": 0.55,
         "name": "ChirpyRing",
-        "header": "d=32,o=6,b=150",
+        "header": "d=32,o=5,b=150",
         # The parts of a LoRa frame, in order. Joined with commas into one string.
         "phrases": [
             ("Logo", "`chirpy`, note for note.",
-             "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7,c#7,a#,8f#,8p,p"),
+             "f#,a#,c#6,f#6,p,f#,a#,c#6,f#6,c#6,a#,8f#,8p,p"),
             ("Preamble", "Four identical rising strokes, evenly spaced.",
-             "f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p,f#,a#,c#7,f#7,16p"),
+             "f#,a#,c#6,f#6,16p,f#,a#,c#6,f#6,16p,f#,a#,c#6,f#6,16p,f#,a#,c#6,f#6,16p"),
             ("Sync word", "Two more rising strokes, spaced like the logo's. The second runs into the first fall.",
-             "f#,a#,c#7,f#7,p,f#,a#,c#7,f#7"),
-            ("Start of frame", "Two full falls and a quarter of one, which stops on D#7.",
-             "c#7,a#,f#,16p,f#7,c#7,a#,f#,16p,f#7,d#7,8p"),
-            ("Close", "F#6 held, then a rest before the loop repeats.",
+             "f#,a#,c#6,f#6,p,f#,a#,c#6,f#6"),
+            ("Start of frame", "Two full falls and a quarter of one, which stops on D#6.",
+             "c#6,a#,f#,16p,f#6,c#6,a#,f#,16p,f#6,d#6,8p"),
+            ("Close", "F#5 held, then a rest before the loop repeats.",
              "4f#,2p"),
         ],
     },
@@ -199,7 +199,7 @@ ANTENNA_CYCLES = 3
 # of the sweep. 2/16 and 11/16 nod to the nibbles of sync word 0x2b. This is
 # not a model of how a LoRa chip places its sync symbols.
 SYNCWORD_OFFSETS = (2 / 16, 11 / 16)
-BELL_PARTIALS = ((1.00, 1.00, 1.0), (2.00, 0.25, 0.6), (2.76, 0.18, 0.4), (4.15, 0.04, 0.3))
+BELL_PARTIALS = ((1.00, 1.00, 1.0), (2.00, 0.12, 0.6), (2.76, 0.05, 0.4))
 REFLECTIONS = ((0.016, 0.14, 0.06), (0.034, 0.10, 0.12), (0.058, 0.05, 0.05))
 
 
@@ -276,7 +276,7 @@ def add_stroke(left, right, segments, pan, amp, antenna, sr):
             if t > hold_t0 + 0.075:
                 env *= math.exp(-(t - hold_t0 - 0.075) / 0.5)
         phase += TWO_PI * freq / sr
-        val = (math.sin(phase) + 0.22 * math.sin(2.0 * phase) + 0.05 * math.sin(3.0 * phase)) * env * amp
+        val = (math.sin(phase) + 0.08 * math.sin(2.0 * phase)) * env * amp
         left[first + i] += val * gain_l
         right[first + i] += val * gain_r
 
