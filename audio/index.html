@@ -5,18 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chirpy notification sounds</title>
   <style>
+    /* Colors are the v1.6 palette (standards section 7), mapped to the section 8 light and dark roles. */
     :root {
-      --bg-primary: #121816;
-      --bg-surface: #1a221f;
-      --bg-card: #202b27;
-      --border-color: #2e3d37;
-      --text-primary: #e6f1ec;
-      --text-secondary: #9cb3a8;
-      --accent-green: #67ea94;
-      --accent-green-hover: #7ff0a5;
-      --accent-glow: rgba(103, 234, 148, 0.15);
+      color-scheme: light dark;
+      --neutral-950: #0F1017;
+      --neutral-900: #1A1B26;
+      --neutral-800: #2C2D3C;
+      --neutral-700: #3D3E50;
+      --neutral-200: #D5D6E0;
+      --neutral-100: #ECEDF3;
+      --neutral-50: #F5F6FA;
+      --nv-700: #444660;
+      --nv-600: #5C5E78;
+      --nv-500: #767892;
+      --nv-300: #BDBFCF;
+      --nv-200: #DADBE7;
+      --surface-container-high-light: #E0E1EB;
+      --green-950: #002E13;
+      --green-800: #005C2E;
+      --green-700: #2D8F52;
+      --green-500: #67EA94;
+      --green-400: #8FF0B2;
+      --green-100: #E5FCEE;
+      --white: #FFFFFF;
+
+      /* Light roles (section 8.2). Buttons use Green 800: white on Green 700 is 4.07:1, under 4.5:1 for 16px text. */
+      --bg-primary: var(--neutral-50);
+      --bg-surface: var(--neutral-100);
+      --bg-card: var(--surface-container-high-light);
+      --border-color: var(--nv-300);
+      --border-strong: var(--nv-500);
+      --text-primary: var(--neutral-800);
+      --text-secondary: var(--nv-600);
+      --text-green: var(--green-800);
+      --btn-primary-bg: var(--green-800);
+      --btn-primary-bg-hover: var(--green-950);
+      --btn-primary-text: var(--white);
+      --btn-secondary-bg: var(--neutral-200);
+      --btn-secondary-bg-hover: var(--nv-200);
+      --badge-bg: var(--green-100);
+      --focus-ring: var(--green-800);
       --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --target-min: 44px;
+    }
+
+    /* Dark roles (section 8.3). */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: var(--neutral-900);
+        --bg-surface: var(--neutral-800);
+        --bg-card: var(--neutral-700);
+        --border-color: var(--nv-700);
+        --border-strong: var(--nv-500);
+        --text-primary: var(--neutral-100);
+        --text-secondary: var(--nv-300);
+        --text-green: var(--green-500);
+        --btn-primary-bg: var(--green-500);
+        --btn-primary-bg-hover: var(--green-400);
+        --btn-primary-text: var(--neutral-950);
+        --btn-secondary-bg: var(--neutral-700);
+        --btn-secondary-bg-hover: var(--nv-700);
+        --badge-bg: var(--neutral-700);
+        --focus-ring: var(--green-500);
+      }
     }
 
     * {
@@ -47,10 +99,10 @@
     .badge {
       display: inline-block;
       padding: 0.25rem 0.6rem;
-      background: rgba(103, 234, 148, 0.15);
-      color: var(--accent-green);
+      background: var(--badge-bg);
+      color: var(--text-green);
       border-radius: 4px;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -75,23 +127,22 @@
     }
 
     .motif-hero {
-      background: linear-gradient(135deg, #18241f 0%, #1a2b24 100%);
-      border: 1px solid #365045;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1.75rem;
       margin-bottom: 2.5rem;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
     }
 
-    .motif-hero h3 {
+    .motif-hero h2 {
       font-size: 1.15rem;
-      color: var(--accent-green);
+      color: var(--text-green);
       margin-bottom: 0.6rem;
     }
 
     .motif-hero p {
-      font-size: 0.95rem;
-      color: #b9cfc5;
+      font-size: 1rem;
+      color: var(--text-primary);
       line-height: 1.6;
     }
 
@@ -103,7 +154,7 @@
     }
 
     .slash-item {
-      background: rgba(0, 0, 0, 0.25);
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 0.85rem 1.1rem;
@@ -115,12 +166,12 @@
       font-family: var(--font-mono);
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--accent-green);
+      color: var(--text-green);
       margin-bottom: 0.25rem;
     }
 
     .slash-label {
-      font-size: 0.82rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
       line-height: 1.4;
     }
@@ -136,17 +187,12 @@
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 1.5rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s;
     }
 
-    .sound-card-featured {
-      border-color: #436959;
-      background: #1c2723;
-    }
-
+    .sound-card-featured,
     .sound-card:hover {
-      border-color: #4c6f60;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      border-color: var(--border-strong);
     }
 
     .card-header {
@@ -165,7 +211,7 @@
     }
 
     .card-description {
-      font-size: 0.92rem;
+      font-size: 1rem;
       color: var(--text-secondary);
       margin-bottom: 1.25rem;
     }
@@ -182,39 +228,40 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.55rem 1rem;
+      min-height: var(--target-min);
+      padding: 0.5rem 1rem;
       border-radius: 6px;
-      font-size: 0.88rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: all 0.15s ease-in-out;
+      transition: background 0.15s ease-in-out;
     }
 
     .btn-primary {
-      background: var(--accent-green);
-      color: #0b130e;
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
     }
 
     .btn-primary:hover {
-      background: var(--accent-green-hover);
-      box-shadow: 0 0 12px var(--accent-glow);
+      background: var(--btn-primary-bg-hover);
     }
 
     .btn-secondary {
-      background: #273530;
+      background: var(--btn-secondary-bg);
       color: var(--text-primary);
       border: 1px solid var(--border-color);
     }
 
     .btn-secondary:hover {
-      background: #31443d;
-      border-color: #40594f;
+      background: var(--btn-secondary-bg-hover);
+      border-color: var(--border-strong);
     }
 
-    .btn-icon {
-      padding: 0.4rem 0.65rem;
-      font-size: 0.8rem;
+    button.btn:focus-visible,
+    .dl-link:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
     }
 
     .rtttl-section {
@@ -230,23 +277,25 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.5rem;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .byte-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       padding: 0.1rem 0.4rem;
       border-radius: 3px;
-      background: #141c19;
-      color: var(--accent-green);
+      background: var(--bg-surface);
+      color: var(--text-green);
     }
 
     .rtttl-code {
       font-family: var(--font-mono);
-      font-size: 0.88rem;
-      color: #79e6a2;
+      font-size: 1rem;
+      color: var(--text-green);
       word-break: break-all;
       user-select: all;
     }
@@ -256,23 +305,29 @@
       align-items: center;
       gap: 0.5rem;
       flex-wrap: wrap;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
     }
 
     .dl-link {
-      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--target-min);
+      min-width: var(--target-min);
+      padding: 0 0.9rem;
+      font-size: 1rem;
+      color: var(--text-primary);
       text-decoration: none;
-      padding: 0.2rem 0.5rem;
-      background: #17201c;
-      border-radius: 4px;
+      background: var(--btn-secondary-bg);
+      border-radius: 6px;
       border: 1px solid var(--border-color);
-      transition: all 0.15s;
+      transition: background 0.15s;
     }
 
     .dl-link:hover {
-      color: var(--accent-green);
-      border-color: var(--accent-green);
+      background: var(--btn-secondary-bg-hover);
+      border-color: var(--border-strong);
     }
 
     footer {
@@ -280,7 +335,7 @@
       padding-top: 1.5rem;
       border-top: 1px solid var(--border-color);
       color: var(--text-secondary);
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       text-align: center;
     }
   </style>
@@ -296,7 +351,7 @@
     </header>
 
     <div class="motif-hero">
-      <h3>The logo shape in <code>chirpy</code></h3>
+      <h2>The logo shape in <code>chirpy</code></h2>
       <p>The mark is a / on its own, then a joined /\. All three strokes are the same height. The sweeps are straight lines in frequency, like LoRa chirps.</p>
       <div class="slash-diagram">
         <div class="slash-item">
