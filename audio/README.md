@@ -73,6 +73,14 @@ The parts of `chirpy_ringtone`:
 | Start of frame | 2.65 s | 0.85 s | `c#6,a#,f#,16p,f#6,c#6,a#,f#,16p,f#6,d#6,8p` | Two full falls and a quarter of one, which stops on D#6. |
 | Close | 3.50 s | 1.20 s | `4f#,2p` | F#5 held, then a rest before the loop repeats. |
 
+Haptics, from the same strokes:
+
+| Sound | On/off pattern (ms: wait, on, off, on, ...) | Core Haptics |
+| --- | --- | --- |
+| `chirpy` | `25, 150, 100, 300` | `haptics/chirpy.ahap` |
+| `chirpy_ack` | `25, 100` | `haptics/chirpy_ack.ahap` |
+| `chirpy_ringtone` | `25, 150, 100, 300, 450, 150, 150, 150, 150, 150, 150, 150, 150, 150, 100, 300, 150, 150, 150, 50, 225, 200` | `haptics/chirpy_ringtone.ahap` |
+
 Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:
 
 | File | Length | Integrated | Momentary max | True peak |
@@ -94,8 +102,28 @@ The phone file for `chirpy` leaves off the string's closing rest and runs until 
 - `dist/alt/chirpy_syncword.wav` is the alternate take on `chirpy` described under the strings above. WAV only.
 - `dist/piezo_simulated/<id>_piezo.wav` is a square-wave preview of the RTTTL string, for hearing roughly what a buzzer will play.
 - `rtttl/<id>.rtttl` holds the string on one line.
-- `manifest.json` lists every sound with its string, lengths, file sizes and measured loudness.
-- `index.html` plays all of the above. Open it from disk.
+- `haptics/<id>.ahap` is the vibration for each sound as a Core Haptics pattern.
+- `manifest.json` lists every sound with its string, lengths, file sizes, measured loudness and haptic patterns.
+- `index.html` plays all of the above. Open it from disk. Its Vibrate button works where the browser supports `navigator.vibrate`, which is Chrome on Android.
+
+## Haptics
+
+Each sound has a vibration made from the same strokes, so the `//\` shape can be felt as well as heard. A motor can't follow pitch, so each stroke is one buzz and the pitch becomes intensity: a rise gets stronger, a fall gets weaker. `chirpy` is a 150 ms buzz, a 100 ms gap, then a 300 ms buzz that swells and fades. Strokes closer than 60 ms are merged, since a motor can't stop and restart faster than that.
+
+There are three forms, all in `manifest.json` under `haptics`:
+
+- `pattern_ms` is on and off only: wait, on, off, on, and so on. It fits Android's `NotificationChannel.setVibrationPattern` and a plain vibration motor on a GPIO pin.
+- `waveform_timings_ms` and `waveform_amplitudes` add strength in 25 ms steps, for Android's `VibrationEffect.createWaveform` inside the app.
+- `haptics/<id>.ahap` adds intensity and sharpness curves that follow the pitch, for Core Haptics on iOS inside the app.
+
+None of the clients or firmware use these yet. Possible follow-ups:
+
+- Android could set `pattern_ms` on its notification channels. As with sounds, a channel's vibration is fixed when the channel is created, so this needs new channel IDs.
+- Android could play the waveform for in-app events.
+- iOS can't set a custom vibration on a notification, which always uses the system's. The `.ahap` files are for in-app events only.
+- Firmware could play `pattern_ms` on the vibration motor instead of toggling it at a fixed rate, and a sequence of DRV2605 ramp effects on boards with that driver.
+
+These timings come from the sound, not from feel. Tune them on a device before shipping.
 
 ## Loudness
 

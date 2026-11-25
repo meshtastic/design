@@ -1,0 +1,58 @@
+{
+  "Version": 1.0,
+  "Metadata": {
+    "Project": "Meshtastic Chirpy",
+    "Description": "Chirpy Ack"
+  },
+  "Pattern": [
+    {
+      "Event": {
+        "Time": 0.025,
+        "EventType": "HapticContinuous",
+        "EventDuration": 0.1,
+        "EventParameters": [
+          {
+            "ParameterID": "HapticIntensity",
+            "ParameterValue": 1.0
+          },
+          {
+            "ParameterID": "HapticSharpness",
+            "ParameterValue": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "ParameterCurve": {
+        "ParameterID": "HapticIntensityControl",
+        "Time": 0.025,
+        "ParameterCurveControlPoints": [
+          {
+            "Time": 0.0,
+            "ParameterValue": 0.45
+          },
+          {
+            "Time": 0.1,
+            "ParameterValue": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "ParameterCurve": {
+        "ParameterID": "HapticSharpnessControl",
+        "Time": 0.025,
+        "ParameterCurveControlPoints": [
+          {
+            "Time": 0.0,
+            "ParameterValue": -0.25
+          },
+          {
+            "Time": 0.1,
+            "ParameterValue": 0.25
+          }
+        ]
+      }
+    }
+  ]
+}

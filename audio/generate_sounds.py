@@ -383,6 +383,108 @@ def render_piezo(events, total_ms, sr=SAMPLE_RATE):
 # Files, loudness
 # ----------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------
+# Haptics
+# ----------------------------------------------------------------------------
+
+HAPTIC_INTENSITY = (0.45, 1.0)  # at the lowest and highest pitch of the sound
+HAPTIC_SHARPNESS = (0.25, 0.75)
+HAPTIC_SINGLE_NOTE_S = 0.2  # a held note with no sweep buzzes this long at most
+HAPTIC_MIN_GAP_MS = 60  # shorter gaps are merged; a motor can't stop and restart faster
+HAPTIC_STEP_MS = 25  # waveform resolution
+
+
+def haptic_events(events):
+    """One continuous vibration per stroke, following the studio sweep path.
+
+    Returns (start_s, end_s, points), where points are (time_s, freq) at
+    each sweep boundary. Held notes after a sweep are left out.
+    """
+    out = []
+    for segments, _ in studio_paths(events):
+        sweeps = [s for s in segments if s[2] != s[3]]
+        if sweeps:
+            points = [(sweeps[0][0], sweeps[0][2])] + [(s[1], s[3]) for s in sweeps]
+            out.append((sweeps[0][0], sweeps[-1][1], points))
+        else:
+            t0, t1, f, _ = segments[0]
+            t1 = min(t1, t0 + HAPTIC_SINGLE_NOTE_S)
+            out.append((t0, t1, [(t0, f), (t1, f)]))
+    return out
+
+
+def _scale(f, lo, hi, out_range):
+    x = 0.0 if hi == lo else (f - lo) / (hi - lo)
+    return out_range[0] + x * (out_range[1] - out_range[0])
+
+
+def haptic_pattern_ms(hev):
+    """Android channel / firmware motor pattern: [delay, on, off, on, ...]."""
+    spans = []
+    for t0, t1, _ in hev:
+        a, b = int(round(t0 * 1000)), int(round(t1 * 1000))
+        if spans and a - spans[-1][1] < HAPTIC_MIN_GAP_MS:
+            spans[-1][1] = b
+        else:
+            spans.append([a, b])
+    pattern, at = [], 0
+    for a, b in spans:
+        pattern += [a - at, b - a]
+        at = b
+    return pattern
+
+
+def haptic_waveform(hev, lo, hi):
+    """Android VibrationEffect.createWaveform timings and amplitudes (1-255, 0 = off)."""
+    end = max(t1 for _, t1, _ in hev)
+    steps = int(math.ceil(end * 1000 / HAPTIC_STEP_MS))
+    amps = []
+    for k in range(steps):
+        t = (k + 0.5) * HAPTIC_STEP_MS / 1000.0
+        amp = 0
+        for t0, t1, pts in hev:
+            if t0 <= t < t1:
+                for (pa, fa), (pb, fb) in zip(pts, pts[1:]):
+                    if pa <= t <= pb:
+                        f = fa + (fb - fa) * (t - pa) / (pb - pa) if pb > pa else fb
+                        amp = max(1, int(round(255 * _scale(f, lo, hi, HAPTIC_INTENSITY))))
+                        break
+        amps.append(amp)
+    timings, amplitudes = [], []
+    for a in amps:
+        if amplitudes and amplitudes[-1] == a:
+            timings[-1] += HAPTIC_STEP_MS
+        else:
+            timings.append(HAPTIC_STEP_MS)
+            amplitudes.append(a)
+    return timings, amplitudes
+
+
+def haptic_ahap(hev, lo, hi, title):
+    """Core Haptics pattern: one continuous event per stroke, intensity and
+    sharpness curves following the pitch."""
+    pattern = []
+    base_sharp = 0.5
+    for t0, t1, pts in hev:
+        pattern.append({"Event": {
+            "Time": round(t0, 3), "EventType": "HapticContinuous", "EventDuration": round(t1 - t0, 3),
+            "EventParameters": [
+                {"ParameterID": "HapticIntensity", "ParameterValue": 1.0},
+                {"ParameterID": "HapticSharpness", "ParameterValue": base_sharp},
+            ]}})
+        pattern.append({"ParameterCurve": {
+            "ParameterID": "HapticIntensityControl", "Time": round(t0, 3),
+            "ParameterCurveControlPoints": [
+                {"Time": round(t - t0, 3), "ParameterValue": round(_scale(f, lo, hi, HAPTIC_INTENSITY), 3)}
+                for t, f in pts]}})
+        pattern.append({"ParameterCurve": {
+            "ParameterID": "HapticSharpnessControl", "Time": round(t0, 3),
+            "ParameterCurveControlPoints": [
+                {"Time": round(t - t0, 3), "ParameterValue": round(_scale(f, lo, hi, HAPTIC_SHARPNESS) - base_sharp, 3)}
+                for t, f in pts]}})
+    return {"Version": 1.0, "Metadata": {"Project": "Meshtastic Chirpy", "Description": title}, "Pattern": pattern}
+
+
 def write_wav(path, left, right, gain=1.0, sr=SAMPLE_RATE):
     frames = bytearray()
     for l, r in zip(left, right):
@@ -516,6 +618,11 @@ def readme_block(manifest):
             for ph in m["phrases"]:
                 lines.append(f"| {ph['part']} | {ph['start_ms'] / 1000:.2f} s | {ph['dur_ms'] / 1000:.2f} s "
                              f"| `{ph['notes']}` | {ph['what']} |")
+    lines += ["", "Haptics, from the same strokes:", "",
+              "| Sound | On/off pattern (ms: wait, on, off, on, ...) | Core Haptics |", "| --- | --- | --- |"]
+    for m in manifest:
+        h = m["haptics"]
+        lines.append(f"| `{m['id']}` | `{', '.join(str(x) for x in h['pattern_ms'])}` | `{h['ahap']}` |")
     lines += [
         "",
         "Measured with `ffmpeg -af ebur128=peak=true` on the WAV files:",
@@ -541,10 +648,11 @@ def main():
     dist_dir = os.path.join(base_dir, "dist")
     sim_dir = os.path.join(dist_dir, "piezo_simulated")
     rtttl_dir = os.path.join(base_dir, "rtttl")
-    for d in (dist_dir, rtttl_dir):
+    haptics_dir = os.path.join(base_dir, "haptics")
+    for d in (dist_dir, rtttl_dir, haptics_dir):
         shutil.rmtree(d, ignore_errors=True)
     alt_dir = os.path.join(dist_dir, "alt")
-    for d in (dist_dir, sim_dir, alt_dir, rtttl_dir):
+    for d in (dist_dir, sim_dir, alt_dir, rtttl_dir, haptics_dir):
         os.makedirs(d)
 
     rendered = {}
@@ -614,6 +722,20 @@ def main():
                 for segments, _ in studio_paths(r["events"])
             ],
         })
+        hev = haptic_events(r["events"])
+        freqs = [e["freq"] for e in r["events"] if e["note"]]
+        lo, hi = min(freqs), max(freqs)
+        ahap_path = os.path.join(haptics_dir, f"{key}.ahap")
+        with open(ahap_path, "w") as f:
+            json.dump(haptic_ahap(hev, lo, hi, item["title"]), f, indent=2)
+            f.write("\n")
+        timings, amplitudes = haptic_waveform(hev, lo, hi)
+        manifest[-1]["haptics"] = {
+            "pattern_ms": haptic_pattern_ms(hev),
+            "waveform_timings_ms": timings,
+            "waveform_amplitudes": amplitudes,
+            "ahap": os.path.relpath(ahap_path, base_dir),
+        }
         if "phrases" in item:
             at = 0
             manifest[-1]["phrases"] = []
