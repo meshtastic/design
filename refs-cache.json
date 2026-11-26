@@ -1522,6 +1522,15 @@
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/design/issues/162"
  },
+ "meshtastic/design#185": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/design",
+  "state": "open",
+  "title": "[ALIGNMENT]: Labeltastic for Mobile",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/design/issues/185"
+ },
  "meshtastic/design#27": {
   "assigned": true,
   "renamedFrom": null,
