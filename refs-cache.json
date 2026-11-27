@@ -2119,7 +2119,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/web",
-  "state": "open",
+  "state": "completed",
   "title": "[2.8.0] - Status Message",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/1193"
@@ -2191,7 +2191,7 @@
   "assigned": true,
   "renamedFrom": null,
   "repo": "meshtastic/web",
-  "state": "open",
+  "state": "completed",
   "title": "[Bug]:  Clients / apps should auto-favorite nodes upon direct-message except for CLIENT_BASE nodes",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/web/issues/932"
