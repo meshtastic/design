@@ -806,7 +806,7 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Warn when the connected node is in transparent mode",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8294"
@@ -815,10 +815,26 @@
   "assigned": false,
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Android",
-  "state": "open",
+  "state": "completed",
   "title": "[ALIGNMENT]: Print name tags and channel labels on a Niimbot label printer",
   "type": "ISSUE",
   "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8295"
+ },
+ "meshtastic/Meshtastic-Android#8298": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(share): print name tags and channel labels on a Niimbot label printer",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8298"
+ },
+ "meshtastic/Meshtastic-Android#8300": {
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "merged",
+  "title": "feat(connections): warn when the connected node is in transparent mode",
+  "type": "PR",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8300"
  },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
