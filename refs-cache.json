@@ -836,6 +836,15 @@
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Android/pull/8300"
  },
+ "meshtastic/Meshtastic-Android#8303": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Android",
+  "state": "open",
+  "title": "[ALIGNMENT]: One plain firmware update flow for every radio (design#186)",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Android/issues/8303"
+ },
  "meshtastic/Meshtastic-Apple#1486": {
   "renamedFrom": null,
   "repo": "meshtastic/Meshtastic-Apple",
@@ -1531,6 +1540,15 @@
   "title": "Print name tags and channel labels on a Niimbot label printer",
   "type": "PR",
   "url": "https://github.com/meshtastic/Meshtastic-Apple/pull/3101"
+ },
+ "meshtastic/Meshtastic-Apple#3110": {
+  "assigned": false,
+  "renamedFrom": null,
+  "repo": "meshtastic/Meshtastic-Apple",
+  "state": "completed",
+  "title": "Make every firmware update screen one simple flow",
+  "type": "ISSUE",
+  "url": "https://github.com/meshtastic/Meshtastic-Apple/issues/3110"
  },
  "meshtastic/Meshtastic-Apple#3118": {
   "assigned": false,
